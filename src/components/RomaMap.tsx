@@ -114,7 +114,7 @@ const RomaMap = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-[525px] md:h-[525px] sm:h-screen sm:aspect-square rounded-lg overflow-hidden shadow-roma border border-border/50">
+    <div className="relative w-full h-[400px] md:h-[400px] sm:h-screen sm:aspect-square rounded-lg overflow-hidden shadow-roma border border-border/50">
       <div ref={mapContainer} className="absolute inset-0" />
       
       {/* Legend - responsive positioning */}

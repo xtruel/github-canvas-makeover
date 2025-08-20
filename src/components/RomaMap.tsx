@@ -38,15 +38,15 @@ const RomaMap = () => {
       coords: [12.4924, 41.8902], 
       type: 'historical', 
       color: '#6B7280',
-      description: 'L\'Anfiteatro Flavio (I secolo d.C.) è il simbolo immortale di Roma. Questo colosso di pietra travertina, alto 50 metri con quattro piani di arcate, poteva ospitare fino a 75.000 spettatori che assistevano ai leggendari combattimenti gladiatori, alle venationes con bestie esotiche e ai spettacoli navali. I sotterranei conservano ancora i meccanismi che facevano emergere nell\'arena belve feroci e scenografie spettacolari. Patrimonio UNESCO dal 1980, rappresenta l\'ingegneria romana al suo apice.',
-      image: colosseocolosseoImage
+      description: 'L\'Amphitheatrum Flavium, vero nome del Colosseo, fu costruito dall\'imperatore Vespasiano nel 72 d.C. e inaugurato dal figlio Tito nell\'80 d.C. Questo colosso architettonico, alto 50 metri con quattro ordini di arcate (dorico, ionico, corinzio e composito), poteva ospitare tra 50.000 e 80.000 spettatori. I complessi sotterranei (hypogeum) conservano ancora i meccanismi di elevazione che facevano apparire nell\'arena gladiatori, bestie feroci e scenografie spettacolari. Il nome "Colosseo" deriva dalla colossale statua di Nerone (Colosso di Nerone) che sorgeva nelle vicinanze. Patrimonio UNESCO dal 1980.',
+      image: 'https://turismoroma.it/sites/default/files/colosseo_slide_0.jpg'
     },
     { 
       name: 'Pantheon', 
       coords: [12.4768, 41.8986], 
       type: 'historical', 
       color: '#6B7280',
-      description: 'Miracolo architettonico dell\'antichità, il Pantheon (126 d.C.) sotto Adriano è il tempio meglio conservato di Roma. La sua cupola in calcestruzzo non armato, con un diametro di 43,3 metri, rimane la più grande mai costruita. L\'oculo centrale di 9 metri crea un fascio di luce che attraversa l\'interno come un orologio solare celeste. Trasformato in basilica cristiana nel 609, custodisce la tomba di Raffaello Sanzio e dei primi re d\'Italia. L\'iscrizione "M·AGRIPPA·L·F·COS·TERTIVM·FECIT" richiama la prima costruzione augustea.',
+      description: 'Capolavoro assoluto dell\'ingegneria romana, il Pantheon fu ricostruito dall\'imperatore Adriano tra il 112 e il 124 d.C. La sua cupola emisferica in calcestruzzo, con diametro di 43,3 metri, rimane la più grande mai costruita senza armature metalliche. L\'oculo centrale di 9 metri di diametro crea effetti di luce straordinari e funge da "orologio solare" naturale. Originariamente dedicato a tutte le divinità (pan-theon), fu trasformato nella basilica cristiana di Santa Maria ad Martyres nel 609 d.C. Custodisce le tombe del pittore Raffaello Sanzio, dei re Vittorio Emanuele II e Umberto I.',
       image: pantheonImage
     },
     { 
@@ -54,8 +54,8 @@ const RomaMap = () => {
       coords: [12.4833, 41.9009], 
       type: 'historical', 
       color: '#6B7280',
-      description: 'Capolavoro del tardo barocco romano (1732-1762), la Fontana di Trevi è la più spettacolare delle oltre 2000 fontane della Città Eterna. Progettata da Nicola Salvi, questa scenografia teatrale alta 26 metri e larga 49 metri rappresenta Nettuno (Oceano) con i suoi cavalli marini e tritoni tra rocce naturalistiche. L\'acqua Vergine scorre qui da oltre 2000 anni. La tradizione vuole che lanciare una moneta con la mano destra sopra la spalla sinistra garantisca il ritorno a Roma - vengono raccolte circa 3000 euro al giorno devoluti in beneficenza.',
-      image: fontanaTreviImage
+      description: 'Opera barocca monumentale progettata da Nicola Salvi e commissionata da Papa Clemente XII nel 1732. Completata trent\'anni dopo da Giuseppe Pannini (Salvi morì nel 1751), misura 26 metri di altezza per 49 di larghezza. Il finanziamento avvenne anche attraverso una tassa sul vino, che fece dire a qualche romano: "Dal vino nasce l\'acqua!". La fontana rappresenta il trionfo di Nettuno (chiamato anche Oceano) con i suoi cavalli marini. L\'Acqua Vergine che l\'alimenta scorre da oltre 2000 anni. Secondo la tradizione, lanciare una moneta assicura il ritorno a Roma - vengono raccolti circa 3000 euro al giorno, devoluti in beneficenza.',
+      image: 'https://turismoroma.it/sites/default/files/Fontane%20-%20Fontana%20di%20Trevi_1920x1080mba-07410189%20%C2%A9%20Clickalps%20_%20AGF%20foto.jpg'
     },
     { 
       name: 'Piazza di Spagna', 
@@ -102,7 +102,7 @@ const RomaMap = () => {
       coords: [12.4922, 41.9142],
       type: 'historical',
       color: '#6B7280',
-      description: 'Il più grande parco pubblico di Roma con 80 ettari di verde incantevole e ville liberty. Creato nel XVII secolo dal cardinale Scipione Borghese, ospita la celeberrima Galleria Borghese con capolavori di Bernini, Caravaggio e Tiziano. Qui si trovano anche il Bioparco (zoo storico), il Museo Etrusco di Villa Giulia, il Globe Theatre per Shakespeare, il laghetto con le tartarughe e il Pincio con le sue terrazze panoramiche che offrono una vista mozzafiato su Roma e San Pietro. Un\'oasi di pace dove romani e turisti passeggiano tra fontane, statue e giardini all\'italiana.',
+      description: 'Magnifico parco di 80 ettari nel cuore di Roma, creato all\'inizio del XVII secolo dal Cardinale Scipione Borghese, nipote di Papa Paolo V. Progettato da Flaminio Ponzio e Giovanni Vasanzio, ospita la celebre Galleria Borghese con capolavori assoluti di Gian Lorenzo Bernini (Apollo e Dafne, Ratto di Proserpina), Caravaggio (Ragazzo con canestro di frutta, San Girolamo), Tiziano e Raffaello. Il parco include anche il Bioparco (zoo storico), il Museo Etrusco di Villa Giulia, il Globe Theatre shakespeariano, il laghetto delle tartarughe e il Pincio con terrazze panoramiche mozzafiato su Roma e San Pietro.',
       image: villaBorgheseImage
     },
     {
@@ -244,7 +244,7 @@ const RomaMap = () => {
       coords: [12.4692, 41.8896], 
       type: 'neighborhood', 
       color: '#16A34A',
-      description: 'Il quartiere più autentico e pittoresco di Roma, dove il tempo sembra essersi fermato al Medioevo. Le stradine acciottolate di sampietrini conducono a piazzette nascoste illuminate da lanterne, trattorie familiari dove nonna stende ancora la pasta a mano, e osteriacce che servono il vino dei Castelli in brocche di ceramica. Santa Maria in Trastevere con i suoi mosaici dorati veglia sulla piazza principale, mentre la sera il quartiere si trasforma nel cuore pulsante della movida romana, con locali che restano aperti fino all\'alba e una folla cosmopolita che si riversa nelle vie.',
+      description: 'Il Rione XIII, il più esteso di Roma, conserva l\'anima autentica della città eterna. "Trans Tiberim" (oltre il Tevere) era anticamente il quartiere operaio e popolare che ha ispirato poeti come Giuseppe Gioachino Belli e Carlo Alberto Salustri (Trilussa). Le stradine di sampietrini conducono a Santa Maria in Trastevere (XII secolo) con i suoi mosaici dorati medievali. Di sera si trasforma nel cuore pulsante della movida romana: osteriacce che servono vino dei Castelli, trattorie dove "sora Lella" prepara ancora carbonara e amatriciana come una volta, locali aperti fino all\'alba frequentati da romani doc e turisti internazionali.',
       image: trastevereImage
     },
     { 
@@ -302,7 +302,7 @@ const RomaMap = () => {
       coords: [12.4547, 41.9342], 
       type: 'stadium', 
       color: '#D97706',
-      description: 'Tempio del calcio romano e teatro di emozioni infinite. Lo Stadio Olimpico (capienza 70.634 spettatori) è la casa di AS Roma e Lazio, scenario di derby infuocati che dividono la città. Costruito per le Olimpiadi del 1960 e ristrutturato per i Mondiali del 1990, ha ospitato la finale mondiale Italia-Germania Ovest. La Curva Sud giallorossa e la Curva Nord biancoceleste creano un\'atmosfera elettrizzante. Qui Totti ha scritto pagine di storia, qui risuonano i cori che fanno tremare le fondamenta. Oltre al calcio, ospita concerti memorabili e la finale di Coppa Italia.',
+      description: 'Tempio del calcio capitolino con capienza di 70.634 spettatori, inaugurato nel 1927 e ristrutturato per i Mondiali di Italia \'90. Situato nel Foro Italico, è la casa di AS Roma e SS Lazio, teatro dei derby più accesi d\'Italia che dividono la città in due. La Curva Sud giallorossa e la Curva Nord biancoceleste creano un\'atmosfera elettrizzante durante le partite. Ha ospitato le Olimpiadi del 1960, la finale dei Mondiali 1990 (Germania Ovest-Argentina), due finali di Champions League (1996, 2009) e concerti memorabili di artisti internazionali. Proprietà del CONI, è considerato uno degli stadi più belli e suggestivi d\'Europa.',
       image: stadioOlimpicoImage
     },
     {
@@ -372,12 +372,20 @@ const RomaMap = () => {
       image: barRomanoImage
     },
     {
-      name: 'Scholars Lounge Irish Pub',
+      name: 'The Highlander Scottish Pub',
       coords: [12.4823, 41.9034],
       type: 'roma-men',
       color: '#DC2626',
-      description: 'Irish pub nel centro storico con maxischermi per le partite della Roma e atmosfera da stadio.',
-      image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=500'
+      description: 'Storico pub scozzese nel cuore di Roma, aperto 365 giorni all\'anno. Punto di riferimento per vedere tutte le partite della Roma su maxischermi, con atmosfera autentica da pub e ottima selezione di birre. "There can be only one" dove non berrai mai da solo.',
+      image: barRomanoImage
+    },
+    {
+      name: 'Akab Club',
+      coords: [12.4856, 41.8745],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Storico club di Testaccio, punto fisso della nightlife romana da anni. Famoso per la qualità dell\'intrattenimento dal vivo e per i DJ set di musica elettronica. Una delle discoteche più popolari e longeve di Roma, frequentata da giovani romani e internazionali.',
+      image: clubNotturnoImage
     },
     {
       name: 'The Drunken Ship',

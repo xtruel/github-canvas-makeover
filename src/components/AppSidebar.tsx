@@ -31,15 +31,15 @@ export function AppSidebar() {
   const isActive = (path: string) => currentPath === path
   
   const getNavCls = ({ isActive }: { isActive: boolean }) =>
-    isActive ? "bg-primary/20 text-roma-gold font-medium border-l-2 border-roma-gold" : "text-roma-yellow/80 hover:bg-muted/50 hover:text-roma-gold"
+    isActive ? "bg-sidebar-accent text-sidebar-primary font-medium border-l-2 border-sidebar-primary" : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-primary"
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarTrigger className="m-2 self-end text-roma-gold" />
+    <Sidebar collapsible="icon" className="bg-sidebar-background border-sidebar-border">
+      <SidebarTrigger className="m-2 self-end text-sidebar-foreground" />
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-roma-gold font-semibold">
+          <SidebarGroupLabel className="text-sidebar-primary font-semibold">
             Ovunque Romanisti
           </SidebarGroupLabel>
 

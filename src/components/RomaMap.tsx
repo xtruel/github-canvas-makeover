@@ -22,6 +22,7 @@ const RomaMap = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [drawerHeight, setDrawerHeight] = useState(0.3); // 30% of screen height
+  const [isMapLoading, setIsMapLoading] = useState(true);
 
   // Token Mapbox
   const MAPBOX_TOKEN = 'pk.eyJ1IjoiZnVyaWVyb21hbmUiLCJhIjoiY21lanVmMWVnMDFsdjJrczc2Mm12Y3QyNyJ9.J1I-1msTs5pOeccQAuQ4yg';
@@ -504,64 +505,117 @@ const RomaMap = () => {
 
   // Initialize map
   useEffect(() => {
-    if (!mapContainer.current) return;
+    if (!mapContainer.current) {
+      console.log('❌ Map container not found');
+      return;
+    }
+    
+    console.log('🗺️ Initializing map, isMobile:', isMobile);
     
     // Set token
     mapboxgl.accessToken = MAPBOX_TOKEN;
+    console.log('🔑 Mapbox token set');
     
-    // Create map
+    // Create map with mobile-optimized settings
     const mapInstance = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/light-v11',
       center: [12.4964, 41.9028],
-      zoom: 12,
-      pitch: 45,
+      zoom: isMobile ? 11 : 12, // Lower zoom for mobile
+      pitch: isMobile ? 0 : 45, // No pitch on mobile for better performance
+      antialias: !isMobile, // Disable antialiasing on mobile
+      preserveDrawingBuffer: false, // Better performance
+      renderWorldCopies: false, // Better performance
+      maxZoom: isMobile ? 16 : 18, // Limit zoom on mobile
     });
 
-    // Add navigation controls
-    mapInstance.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    console.log('🗺️ Map instance created');
+
+    // Add navigation controls only on desktop
+    if (!isMobile) {
+      mapInstance.addControl(new mapboxgl.NavigationControl(), 'top-right');
+      console.log('🧭 Navigation controls added');
+    }
 
     // Wait for map to load before adding markers
     mapInstance.on('load', () => {
+      console.log('✅ Map loaded successfully');
+      setIsMapLoading(false);
+      
+      // Add fewer markers on mobile for better performance
+      const placesToShow = isMobile ? romaPlaces.slice(0, 25) : romaPlaces;
+      console.log(`📍 Adding ${placesToShow.length} markers`);
+      
       // Add markers
-      romaPlaces.forEach((place) => {
-        const markerEl = document.createElement('div');
-        markerEl.className = 'custom-marker';
-        markerEl.style.cssText = `
-          background-color: ${place.color};
-          width: 20px;
-          height: 20px;
-          border-radius: 50% 50% 50% 0;
-          transform: rotate(-45deg);
-          border: 2px solid white;
-          cursor: pointer;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        `;
+      placesToShow.forEach((place, index) => {
+        try {
+          const markerEl = document.createElement('div');
+          markerEl.className = 'custom-marker';
+          markerEl.style.cssText = `
+            background-color: ${place.color};
+            width: ${isMobile ? '16px' : '20px'};
+            height: ${isMobile ? '16px' : '20px'};
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 2px solid white;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+          `;
 
-        markerEl.addEventListener('click', (e) => {
-          e.stopPropagation();
-          setSelectedPlace(place);
-        });
+          markerEl.addEventListener('click', (e) => {
+            e.stopPropagation();
+            console.log('📍 Marker clicked:', place.name);
+            setSelectedPlace(place);
+            if (isMobile) {
+              setIsDrawerOpen(true);
+            }
+          });
 
-        new mapboxgl.Marker(markerEl)
-          .setLngLat(place.coords as [number, number])
-          .addTo(mapInstance);
+          new mapboxgl.Marker(markerEl)
+            .setLngLat(place.coords as [number, number])
+            .addTo(mapInstance);
+            
+          if (index === 0) console.log('✅ First marker added successfully');
+        } catch (error) {
+          console.error('❌ Error adding marker:', place.name, error);
+        }
       });
 
-      // Add fog effect
-      mapInstance.setFog({
-        color: 'rgb(255, 255, 255)',
-        'high-color': 'rgb(200, 200, 225)',
-        'horizon-blend': 0.1,
-      });
+      // Add fog effect only on desktop
+      if (!isMobile) {
+        try {
+          mapInstance.setFog({
+            color: 'rgb(255, 255, 255)',
+            'high-color': 'rgb(200, 200, 225)',
+            'horizon-blend': 0.1,
+          });
+          console.log('🌫️ Fog effect added');
+        } catch (error) {
+          console.error('❌ Error adding fog:', error);
+        }
+      }
+    });
+
+    mapInstance.on('error', (e) => {
+      console.error('❌ Map error:', e);
+    });
+
+    mapInstance.on('sourcedata', (e) => {
+      if (e.isSourceLoaded) {
+        console.log('📊 Map source loaded:', e.sourceId);
+      }
     });
 
     map.current = mapInstance;
 
     return () => {
-      mapInstance.remove();
+      console.log('🧹 Cleaning up map');
+      setIsMapLoading(true);
+      if (mapInstance) {
+        mapInstance.remove();
+      }
     };
-  }, []);
+  }, [isMobile]); // Add isMobile as dependency
 
   return (
     <div className="relative w-full h-screen bg-background">
@@ -579,6 +633,16 @@ const RomaMap = () => {
               ref={mapContainer} 
               className="w-full h-full"
             />
+            
+            {/* Loading indicator */}
+            {isMapLoading && (
+              <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-30">
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-roma-gold mx-auto mb-2"></div>
+                  <p className="text-sm text-muted-foreground">Caricamento mappa...</p>
+                </div>
+              </div>
+            )}
             
             {/* Floating Legend */}
             <div className="absolute top-4 left-4 bg-background/95 backdrop-blur-sm rounded-lg p-2 shadow-lg border border-border/50 max-w-[180px] z-20">

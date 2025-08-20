@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { MapPin, Calendar, Users, Trophy, MessageCircle, Settings } from "lucide-react";
+import { MapPin, Calendar, Users, Trophy, MessageCircle, Settings, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Index = () => {
@@ -35,65 +35,134 @@ const Index = () => {
     }
   ];
 
+  const breakingNews = [
+    {
+      title: "Roma Prepara Derby della Capitale",
+      description: "La squadra si allena intensamente per la sfida contro la Lazio",
+      category: "Training",
+      time: "2 ore fa"
+    },
+    {
+      title: "Nuovo Store Ufficiale a Milano",
+      description: "Aperto il nuovo punto vendita per i tifosi del nord",
+      category: "Fan Zone", 
+      time: "5 ore fa"
+    },
+    {
+      title: "Raduno Romanisti Domenica",
+      description: "Tutti i tifosi sono invitati al raduno settimanale",
+      category: "Community",
+      time: "1 giorno fa"
+    }
+  ];
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Hero Section */}
-      <div className="text-center mb-12">
-        <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-roma-gold to-roma-yellow bg-clip-text text-transparent">
-          Ovunque Romanisti
-        </h1>
-        <p className="text-xl text-muted-foreground mb-8">
-          La community globale dei tifosi giallorossi
-        </p>
-        <div className="mb-6">
-          <img 
-            src="/lovable-uploads/af321201-3c36-40c5-862e-fed415398b56.png"
-            alt="AS Roma Official Logo" 
-            className="w-48 h-48 mx-auto object-contain"
-          />
+    <div className="min-h-screen">
+      {/* Hero Section with Gradient */}
+      <div className="relative bg-gradient-to-br from-roma-red via-red-500 to-yellow-400 text-white py-20 px-4">
+        <div className="container mx-auto text-center">
+          <div className="mb-8">
+            <img 
+              src="/lovable-uploads/af321201-3c36-40c5-862e-fed415398b56.png"
+              alt="AS Roma Official Logo" 
+              className="w-32 h-32 mx-auto object-contain mb-6"
+            />
+          </div>
+          
+          <h1 className="text-6xl font-bold mb-6">
+            FORZA ROMA
+          </h1>
+          
+          <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
+            La tua destinazione definitiva per notizie, eventi e contenuti esclusivi dell'AS Roma
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild size="lg" className="bg-white text-roma-red hover:bg-gray-100">
+              <Link to="/eventi">Ultimi Eventi</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-roma-red">
+              <Link to="/community">Entra nella Community</Link>
+            </Button>
+          </div>
         </div>
       </div>
 
-      {/* Features Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-        {features.map((feature, index) => (
-          <Card key={index} className="shadow-glow border-border/50 hover:shadow-roma transition-all duration-300 hover:scale-105">
-            <CardHeader className="text-center">
-              <feature.icon className={`h-12 w-12 mx-auto mb-4 ${feature.color}`} />
-              <CardTitle className="text-roma-gold">{feature.title}</CardTitle>
-              <CardDescription>{feature.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button asChild className="w-full shadow-roma">
-                <Link to={feature.link}>Esplora</Link>
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {/* Stats Section */}
-      <Card className="shadow-roma border-border/50 bg-gradient-to-r from-roma-red/10 to-roma-gold/10">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl text-roma-gold mb-4">Forza Roma Sempre</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="text-3xl font-bold text-roma-gold">1927</div>
-              <div className="text-muted-foreground">Fondata</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-roma-yellow">3</div>
-              <div className="text-muted-foreground">Scudetti</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-roma-gold">∞</div>
-              <div className="text-muted-foreground">Passione</div>
-            </div>
+      <div className="container mx-auto px-4 py-12">
+        {/* Breaking News Section */}
+        <div className="mb-16">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-bold text-foreground">Ultime Notizie</h2>
+            <Button variant="ghost" className="text-roma-gold hover:text-roma-red">
+              Vedi Tutto <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
           </div>
-        </CardContent>
-      </Card>
+          
+          <div className="grid md:grid-cols-3 gap-6">
+            {breakingNews.map((news, index) => (
+              <Card key={index} className="shadow-glow border-border/50 hover:shadow-roma transition-all duration-300 hover:scale-105">
+                <CardHeader>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs bg-roma-red text-white px-2 py-1 rounded-full">{news.category}</span>
+                    <span className="text-xs text-muted-foreground">{news.time}</span>
+                  </div>
+                  <CardTitle className="text-lg text-foreground">{news.title}</CardTitle>
+                  <CardDescription>{news.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button variant="ghost" className="text-roma-gold hover:text-roma-red p-0">
+                    Leggi tutto <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        {/* Features Section */}
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold mb-8 text-center text-foreground">Esplora la Community</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((feature, index) => (
+              <Card key={index} className="shadow-glow border-border/50 hover:shadow-roma transition-all duration-300 hover:scale-105">
+                <CardHeader className="text-center">
+                  <feature.icon className={`h-12 w-12 mx-auto mb-4 ${feature.color}`} />
+                  <CardTitle className="text-roma-gold">{feature.title}</CardTitle>
+                  <CardDescription>{feature.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button asChild className="w-full shadow-roma">
+                    <Link to={feature.link}>Esplora</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        {/* Stats Section */}
+        <Card className="shadow-roma border-border/50 bg-gradient-to-r from-roma-red/10 to-roma-gold/10">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl text-roma-gold mb-4">Forza Roma Sempre</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-3 gap-8 text-center">
+              <div>
+                <div className="text-3xl font-bold text-roma-gold">1927</div>
+                <div className="text-muted-foreground">Fondata</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-roma-yellow">3</div>
+                <div className="text-muted-foreground">Scudetti</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-roma-gold">∞</div>
+                <div className="text-muted-foreground">Passione</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

@@ -374,64 +374,100 @@ const RomaMap = () => {
   }, []);
 
   useEffect(() => {
-    if (!mapContainer.current || map.current) return;
-
-    mapboxgl.accessToken = MAPBOX_TOKEN;
+    console.log('Map useEffect starting...');
     
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/light-v11',
-      center: [12.4964, 41.9028], // Centro di Roma
-      zoom: 12,
-      pitch: 45,
-    });
+    if (!mapContainer.current) {
+      console.log('Map container ref not available');
+      return;
+    }
+    
+    if (map.current) {
+      console.log('Map already exists, skipping initialization');
+      return;
+    }
 
-    // Add navigation controls
-    map.current.addControl(
-      new mapboxgl.NavigationControl({
-        visualizePitch: true,
-      }),
-      'top-right'
-    );
-
-    // Add markers for each place
-    romaPlaces.forEach((place) => {
-      // Create marker element
-      const markerEl = document.createElement('div');
-      markerEl.className = 'custom-marker';
-      markerEl.style.backgroundColor = place.color;
-      markerEl.style.width = '20px';
-      markerEl.style.height = '20px';
-      markerEl.style.borderRadius = '50% 50% 50% 0';
-      markerEl.style.transform = 'rotate(-45deg)';
-      markerEl.style.border = '2px solid white';
-      markerEl.style.cursor = 'pointer';
-      markerEl.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
-
-      // Add click handler for both mobile and desktop
-      markerEl.addEventListener('click', (e) => {
-        e.stopPropagation();
-        setSelectedPlace(place);
+    console.log('Initializing Mapbox with token:', MAPBOX_TOKEN ? 'Token available' : 'No token');
+    
+    try {
+      mapboxgl.accessToken = MAPBOX_TOKEN;
+      
+      console.log('Creating new map instance...');
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/light-v11',
+        center: [12.4964, 41.9028], // Centro di Roma
+        zoom: 12,
+        pitch: 45,
       });
 
-      // Add marker to map
-      new mapboxgl.Marker(markerEl)
-        .setLngLat(place.coords as [number, number])
-        .addTo(map.current!);
-    });
+      console.log('Map instance created, adding controls...');
 
-    // Add atmosphere effect
-    map.current.on('style.load', () => {
-      map.current?.setFog({
-        color: 'rgb(255, 255, 255)',
-        'high-color': 'rgb(200, 200, 225)',
-        'horizon-blend': 0.1,
+      // Add navigation controls
+      map.current.addControl(
+        new mapboxgl.NavigationControl({
+          visualizePitch: true,
+        }),
+        'top-right'
+      );
+
+      console.log('Adding markers...');
+      // Add markers for each place
+      romaPlaces.forEach((place, index) => {
+        console.log(`Adding marker ${index + 1}/${romaPlaces.length}: ${place.name}`);
+        
+        // Create marker element
+        const markerEl = document.createElement('div');
+        markerEl.className = 'custom-marker';
+        markerEl.style.backgroundColor = place.color;
+        markerEl.style.width = '20px';
+        markerEl.style.height = '20px';
+        markerEl.style.borderRadius = '50% 50% 50% 0';
+        markerEl.style.transform = 'rotate(-45deg)';
+        markerEl.style.border = '2px solid white';
+        markerEl.style.cursor = 'pointer';
+        markerEl.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
+
+        // Add click handler for both mobile and desktop
+        markerEl.addEventListener('click', (e) => {
+          e.stopPropagation();
+          console.log('Marker clicked:', place.name);
+          setSelectedPlace(place);
+        });
+
+        // Add marker to map
+        new mapboxgl.Marker(markerEl)
+          .setLngLat(place.coords as [number, number])
+          .addTo(map.current!);
       });
-    });
+
+      // Add atmosphere effect
+      map.current.on('style.load', () => {
+        console.log('Map style loaded, adding fog effect...');
+        map.current?.setFog({
+          color: 'rgb(255, 255, 255)',
+          'high-color': 'rgb(200, 200, 225)',
+          'horizon-blend': 0.1,
+        });
+      });
+
+      map.current.on('load', () => {
+        console.log('Map fully loaded!');
+      });
+
+      map.current.on('error', (e) => {
+        console.error('Map error:', e);
+      });
+
+    } catch (error) {
+      console.error('Error initializing map:', error);
+    }
 
     return () => {
-      map.current?.remove();
-      map.current = null;
+      console.log('Cleaning up map...');
+      if (map.current) {
+        map.current.remove();
+        map.current = null;
+      }
     };
   }, []);
 
@@ -445,7 +481,15 @@ const RomaMap = () => {
         <div className={`relative rounded-lg overflow-hidden shadow-roma border border-border/50 transition-all duration-300 ${
           !isMobile && selectedPlace ? 'w-2/3' : 'w-full'
         }`}>
-          <div ref={mapContainer} className="w-full h-full" />
+          <div 
+            ref={mapContainer} 
+            className="w-full h-full" 
+            style={{ 
+              minHeight: '400px',
+              position: 'relative',
+              backgroundColor: '#f0f0f0' // Fallback color to see the container
+            }}
+          />
           
           {/* Legend - Desktop only */}
           {!isMobile && (

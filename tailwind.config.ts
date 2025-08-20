@@ -55,6 +55,7 @@ export default {
 				roma: {
 					red: 'hsl(var(--roma-red))',
 					yellow: 'hsl(var(--roma-yellow))',
+					gold: 'hsl(var(--roma-gold))',
 					dark: 'hsl(var(--roma-dark))'
 				},
 				sidebar: {

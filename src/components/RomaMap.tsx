@@ -1,10 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { X } from 'lucide-react';
 
 const RomaMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
+  const [selectedPlace, setSelectedPlace] = useState<any>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Token Mapbox fornito dall'utente
   const MAPBOX_TOKEN = 'pk.eyJ1IjoiZnVyaWVyb21hbmUiLCJhIjoiY21lanVmMWVnMDFsdjJrczc2Mm12Y3QyNyJ9.J1I-1msTs5pOeccQAuQ4yg';
@@ -192,6 +195,17 @@ const RomaMap = () => {
   };
 
   useEffect(() => {
+    // Check if mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
     mapboxgl.accessToken = MAPBOX_TOKEN;
@@ -226,7 +240,7 @@ const RomaMap = () => {
       markerEl.style.cursor = 'pointer';
       markerEl.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
 
-      // Create popup with image and description
+      // Create popup for desktop, handle click for mobile
       const popup = new mapboxgl.Popup({ offset: 25, maxWidth: '300px' }).setHTML(
         `<div class="p-3 max-w-sm">
           ${place.image ? `<img src="${place.image}" alt="${place.name}" class="w-full h-32 object-cover rounded-md mb-2" />` : ''}
@@ -236,11 +250,22 @@ const RomaMap = () => {
         </div>`
       );
 
+      // Add click handler for mobile
+      markerEl.addEventListener('click', () => {
+        if (window.innerWidth < 640) {
+          setSelectedPlace(place);
+        }
+      });
+
       // Add marker to map
-      new mapboxgl.Marker(markerEl)
+      const marker = new mapboxgl.Marker(markerEl)
         .setLngLat(place.coords as [number, number])
-        .setPopup(popup)
         .addTo(map.current!);
+      
+      // Only add popup for desktop
+      if (window.innerWidth >= 640) {
+        marker.setPopup(popup);
+      }
     });
 
     // Add atmosphere effect
@@ -258,43 +283,78 @@ const RomaMap = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-[400px] md:h-[400px] sm:h-screen sm:aspect-square rounded-lg overflow-hidden shadow-roma border border-border/50">
-      <div ref={mapContainer} className="absolute inset-0" />
-      
-      {/* Legend - responsive positioning */}
-      <div className="absolute top-4 left-4 sm:top-2 sm:left-2 bg-background/95 backdrop-blur-sm rounded-lg p-3 sm:p-2 shadow-lg border border-border/50 max-w-[200px] sm:max-w-[150px]">
-        <h4 className="text-sm font-bold mb-2 text-roma-gold">Legenda</h4>
-        <div className="space-y-1 text-xs">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-red-600 border border-white flex-shrink-0"></div>
-            <span className="truncate">Partite Roma</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-purple-600 border border-white flex-shrink-0"></div>
-            <span className="truncate">Roma Femminile</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-blue-600 border border-white flex-shrink-0"></div>
-            <span className="truncate">Pub & Bar</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-pink-500 border border-white flex-shrink-0"></div>
-            <span className="truncate">Club</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-green-600 border border-white flex-shrink-0"></div>
-            <span className="truncate">Quartieri</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-gray-500 border border-white flex-shrink-0"></div>
-            <span className="truncate">Luoghi Storici</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-orange-500 border border-white flex-shrink-0"></div>
-            <span className="truncate">Punti d'Interesse</span>
+    <div className="relative w-full">
+      {/* Map Container */}
+      <div className="relative h-[400px] md:h-[400px] sm:h-[60vh] rounded-lg overflow-hidden shadow-roma border border-border/50">
+        <div ref={mapContainer} className="absolute inset-0" />
+        
+        {/* Legend - responsive positioning */}
+        <div className="absolute top-4 left-4 sm:top-2 sm:left-2 bg-background/95 backdrop-blur-sm rounded-lg p-3 sm:p-2 shadow-lg border border-border/50 max-w-[200px] sm:max-w-[150px]">
+          <h4 className="text-sm font-bold mb-2 text-roma-gold">Legenda</h4>
+          <div className="space-y-1 text-xs">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-red-600 border border-white flex-shrink-0"></div>
+              <span className="truncate">Partite Roma</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-purple-600 border border-white flex-shrink-0"></div>
+              <span className="truncate">Roma Femminile</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-blue-600 border border-white flex-shrink-0"></div>
+              <span className="truncate">Pub & Bar</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-pink-500 border border-white flex-shrink-0"></div>
+              <span className="truncate">Club</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-green-600 border border-white flex-shrink-0"></div>
+              <span className="truncate">Quartieri</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-gray-500 border border-white flex-shrink-0"></div>
+              <span className="truncate">Luoghi Storici</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-orange-500 border border-white flex-shrink-0"></div>
+              <span className="truncate">Punti d'Interesse</span>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Mobile Place Details */}
+      {isMobile && selectedPlace && (
+        <div className="mt-4 bg-background/95 backdrop-blur-sm rounded-lg p-4 shadow-lg border border-border/50">
+          <div className="flex justify-between items-start mb-3">
+            <div>
+              <h3 className="text-lg font-bold text-foreground">{selectedPlace.name}</h3>
+              <p className="text-sm text-blue-600 font-medium">{getTypeLabel(selectedPlace.type)}</p>
+            </div>
+            <button 
+              onClick={() => setSelectedPlace(null)}
+              className="p-1 rounded-full hover:bg-muted transition-colors"
+            >
+              <X className="w-5 h-5 text-muted-foreground" />
+            </button>
+          </div>
+          
+          {selectedPlace.image && (
+            <img 
+              src={selectedPlace.image} 
+              alt={selectedPlace.name}
+              className="w-full h-48 object-cover rounded-md mb-3"
+            />
+          )}
+          
+          {selectedPlace.description && (
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {selectedPlace.description}
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 };

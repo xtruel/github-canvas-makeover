@@ -577,7 +577,7 @@ const RomaMap = () => {
           <div className="relative flex-1 max-h-[50vh]">
             <div 
               ref={mapContainer} 
-              className="w-full h-full rounded-none"
+              className="w-full h-full"
             />
             
             {/* Floating Legend */}
@@ -711,9 +711,13 @@ const RomaMap = () => {
           )}
         </div>
       ) : (
-        /* Desktop Layout - Keep existing */
-        <div className="container mx-auto px-4 py-8">
-          <div className={`flex gap-4 transition-all duration-300 h-[400px]`}>
+        /* Desktop Layout */
+        <div className="container mx-auto px-4 py-8 h-full">
+          <h1 className="text-4xl font-bold mb-8 text-roma-gold">
+            Mappa di Roma
+          </h1>
+          
+          <div className={`flex gap-4 transition-all duration-300 h-[500px]`}>
             {/* Map Container */}
             <div className={`relative rounded-lg overflow-hidden shadow-roma border border-border/50 transition-all duration-300 ${
               selectedPlace ? 'w-2/3' : 'w-full'
@@ -721,7 +725,6 @@ const RomaMap = () => {
               <div 
                 ref={mapContainer} 
                 className="w-full h-full"
-                style={{ minHeight: '400px' }}
               />
               
               {/* Legend - Desktop only */}

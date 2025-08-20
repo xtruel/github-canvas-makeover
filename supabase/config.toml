@@ -47,5 +47,8 @@ jwt_expiry = 3600
 enable_signup = true
 enable_confirmations = false
 
+[functions.scrape-roma-events]
+verify_jwt = false
+
 [functions.fetch-roma-matches]
 verify_jwt = false

@@ -3,6 +3,17 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { X } from 'lucide-react';
 
+// Import local images
+import colosseocolosseoImage from '@/assets/colosseo-roma.jpg';
+import pantheonImage from '@/assets/pantheon-interno.jpg';
+import fontanaTreviImage from '@/assets/fontana-trevi-roma.jpg';
+import piazzaSpagnaImage from '@/assets/piazza-spagna-roma.jpg';
+import vitorianoImage from '@/assets/vittoriano-altare.jpg';
+import trastevereImage from '@/assets/trastevere-roma.jpg';
+import barRomanoImage from '@/assets/bar-romano.jpg';
+import clubNotturnoImage from '@/assets/club-notturno.jpg';
+import quartiereStoricoImage from '@/assets/quartiere-storico.jpg';
+
 const RomaMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
@@ -21,7 +32,7 @@ const RomaMap = () => {
       type: 'historical', 
       color: '#6B7280',
       description: 'L\'Anfiteatro Flavio (I secolo d.C.), costruito dagli imperatori della dinastia flavia, è il simbolo eterno di Roma. Alto 50 metri e lungo 189, poteva ospitare fino a 75.000 spettatori per i leggendari combattimenti gladiatori e le cacce selvagge (venationes). Patrimonio UNESCO dal 1980.',
-      image: 'https://cdn.pixabay.com/photo/2020/06/05/10/01/colosseum-5264712_1280.jpg'
+      image: colosseocolosseoImage
     },
     { 
       name: 'Pantheon', 
@@ -29,7 +40,7 @@ const RomaMap = () => {
       type: 'historical', 
       color: '#6B7280',
       description: 'Miracolo dell\'architettura antica, il Pantheon (126 d.C.) vanta la cupola in calcestruzzo non armato più grande al mondo (43,3 metri di diametro). L\'oculo centrale illumina naturalmente questo tempio romano trasformato in basilica cristiana. Tomba di Raffaello e dei re d\'Italia.',
-      image: 'https://cdn.pixabay.com/photo/2020/04/20/11/49/pantheon-5067173_1280.jpg'
+      image: pantheonImage
     },
     { 
       name: 'Fontana di Trevi', 
@@ -37,7 +48,7 @@ const RomaMap = () => {
       type: 'historical', 
       color: '#6B7280',
       description: 'Capolavoro del tardo barocco (1732-1762) progettato da Nicola Salvi, è la più grandiosa delle 2000+ fontane romane. Alta 26 metri e larga 49, rappresenta Nettuno con i tritoni. La leggenda vuole che lanciare una moneta con la mano destra sopra la spalla sinistra garantisca il ritorno a Roma.',
-      image: 'https://cdn.pixabay.com/photo/2020/02/06/15/52/trevi-fountain-4825089_1280.jpg'
+      image: fontanaTreviImage
     },
     { 
       name: 'Piazza di Spagna', 
@@ -45,7 +56,7 @@ const RomaMap = () => {
       type: 'historical', 
       color: '#6B7280',
       description: 'Cuore elegante di Roma con la famosa scalinata di Trinità dei Monti (135 gradini, 1723-1726). Ai piedi, la Fontana della Barcaccia del Bernini padre. Via dei Condotti offre shopping di lusso dalle grandi maison internazionali. Dimora di Keats e Byron nell\'800.',
-      image: 'https://cdn.pixabay.com/photo/2016/02/17/21/38/spanish-steps-1205648_1280.jpg'
+      image: piazzaSpagnaImage
     },
     { 
       name: 'Castel Sant\'Angelo', 
@@ -61,7 +72,7 @@ const RomaMap = () => {
       type: 'historical', 
       color: '#6B7280',
       description: 'Altare della Patria dedicato a Vittorio Emanuele II, primo re d\'Italia unita. Inaugurato nel 1935, è soprannominato "Macchina da scrivere" dai romani. Ospita il Milite Ignoto, il Museo del Risorgimento e terrazze panoramiche con ascensori panoramici che offrono vista a 360° su Roma.',
-      image: 'https://cdn.pixabay.com/photo/2018/07/14/17/46/rome-3537430_1280.jpg'
+      image: vitorianoImage
     },
     
     // Pub e Bar (marker blu)
@@ -71,7 +82,7 @@ const RomaMap = () => {
       type: 'pub', 
       color: '#2563EB',
       description: 'Storica birreria artigianale nel cuore di Trastevere, famosa per le birre craft e l\'atmosfera autentica.',
-      image: 'https://cdn.pixabay.com/photo/2016/11/21/16/21/bar-1846137_1280.jpg'
+      image: barRomanoImage
     },
     { 
       name: 'Jerry Thomas Project', 
@@ -79,7 +90,7 @@ const RomaMap = () => {
       type: 'pub', 
       color: '#2563EB',
       description: 'Cocktail bar speakeasy nascosto, uno dei migliori cocktail bar d\'Europa con atmosfera vintage.',
-      image: 'https://cdn.pixabay.com/photo/2015/03/26/14/24/bar-690699_1280.jpg'
+      image: barRomanoImage
     },
     { 
       name: 'Drink Kong', 
@@ -87,7 +98,7 @@ const RomaMap = () => {
       type: 'pub', 
       color: '#2563EB',
       description: 'Cocktail bar futuristico nel centro storico, famoso per i drink innovativi e il design moderno.',
-      image: 'https://cdn.pixabay.com/photo/2016/11/29/05/36/bar-1867408_1280.jpg'
+      image: barRomanoImage
     },
     
     // Caffè Storici di Roma (marker blu)
@@ -97,7 +108,7 @@ const RomaMap = () => {
       type: 'pub', 
       color: '#2563EB',
       description: 'Antica torrefazione a legna nata nel 1938, uno dei caffè più amati di Roma in Piazza Sant\'Eustachio.',
-      image: 'https://cdn.pixabay.com/photo/2017/08/06/12/06/people-2592247_1280.jpg'
+      image: barRomanoImage
     },
     { 
       name: 'Antico Caffè Greco', 
@@ -105,7 +116,7 @@ const RomaMap = () => {
       type: 'pub', 
       color: '#2563EB',
       description: 'Il più antico caffè di Roma (1760), frequentato da D\'Annunzio, Casanova, Nietzsche e Pasolini. La più grande galleria d\'arte aperta al pubblico.',
-      image: 'https://cdn.pixabay.com/photo/2018/09/29/22/52/rome-3711108_1280.jpg'
+      image: barRomanoImage
     },
     { 
       name: 'Caffè Museo Atelier Canova Tadolini', 
@@ -113,7 +124,7 @@ const RomaMap = () => {
       type: 'pub', 
       color: '#2563EB',
       description: 'Caffè-museo in via del Babuino, nell\'antico studio di Canova. Si sorseggia il caffè tra arte e sculture.',
-      image: 'https://cdn.pixabay.com/photo/2018/07/14/17/46/rome-3537430_1280.jpg'
+      image: barRomanoImage
     },
     { 
       name: 'Bar Rosati', 
@@ -121,7 +132,7 @@ const RomaMap = () => {
       type: 'pub', 
       color: '#2563EB',
       description: 'Storico bar dal 1922, frequentato da artisti e intellettuali. Punto di ritrovo dei pittori di via Margutta negli anni \'30.',
-      image: 'https://cdn.pixabay.com/photo/2017/03/27/14/33/bar-2179309_1280.jpg'
+      image: barRomanoImage
     },
     { 
       name: 'Caffè Palombini', 
@@ -129,7 +140,7 @@ const RomaMap = () => {
       type: 'pub', 
       color: '#2563EB',
       description: 'Nato nel 1963 all\'EUR, simbolo del quartiere e punto di ritrovo vicino al Palazzo della Civiltà (Colosseo Quadrato).',
-      image: 'https://cdn.pixabay.com/photo/2016/02/13/12/26/aurora-1197753_1280.jpg'
+      image: barRomanoImage
     },
     { 
       name: 'Sciascia Caffè', 
@@ -137,7 +148,7 @@ const RomaMap = () => {
       type: 'pub', 
       color: '#2563EB',
       description: 'Dal 1919 nel quartiere Prati, torrefazione con ambientazione retrò e specialità come il caffè con cioccolato fondente.',
-      image: 'https://cdn.pixabay.com/photo/2015/07/02/20/57/club-829978_1280.jpg'
+      image: barRomanoImage
     },
     { 
       name: 'Castroni', 
@@ -145,7 +156,7 @@ const RomaMap = () => {
       type: 'pub', 
       color: '#2563EB',
       description: 'Nato nel 1932, storico locale in via Cola di Rienzo. Drogheria, caffetteria e torrefazione, sinonimo di "caffè buono".',
-      image: 'https://cdn.pixabay.com/photo/2015/05/15/14/27/nightclub-768434_1280.jpg'
+      image: barRomanoImage
     },
     { 
       name: 'Harry\'s Bar', 
@@ -153,7 +164,7 @@ const RomaMap = () => {
       type: 'pub', 
       color: '#2563EB',
       description: 'Il bar della Dolce Vita fondato nel 1959 in via Veneto, frequentato da Fellini e comparse nei suoi film.',
-      image: 'https://cdn.pixabay.com/photo/2018/04/18/13/18/rome-3331148_1280.jpg'
+      image: barRomanoImage
     },
     { 
       name: 'Caffè Tazza D\'Oro', 
@@ -161,7 +172,7 @@ const RomaMap = () => {
       type: 'pub', 
       color: '#2563EB',
       description: 'Storica torrefazione zona Pantheon, famosa per il caffè e la granita con doppia panna. C\'è sempre fila nel weekend.',
-      image: 'https://cdn.pixabay.com/photo/2020/02/06/15/52/trevi-fountain-4825089_1280.jpg'
+      image: barRomanoImage
     },
     { 
       name: 'Babingtons Tea Room', 
@@ -169,7 +180,7 @@ const RomaMap = () => {
       type: 'pub', 
       color: '#2563EB',
       description: 'In Piazza di Spagna, punto di riferimento per il rito del tè inglese. Frequentato da Keats, Byron, Goethe e De Chirico.',
-      image: 'https://cdn.pixabay.com/photo/2016/02/17/21/38/spanish-steps-1205648_1280.jpg'
+      image: barRomanoImage
     },
     
     // Club e Vita Notturna (marker rosa)
@@ -179,7 +190,7 @@ const RomaMap = () => {
       type: 'club', 
       color: '#EC4899',
       description: 'Club iconico di Roma con musica elettronica, frequentato da DJ internazionali e giovani romani.',
-      image: 'https://cdn.pixabay.com/photo/2015/07/02/20/57/club-829978_1280.jpg'
+      image: clubNotturnoImage
     },
     { 
       name: 'Akab Club', 
@@ -187,7 +198,7 @@ const RomaMap = () => {
       type: 'club', 
       color: '#EC4899',
       description: 'Locale notturno storico di Roma, punto di riferimento per la movida romana da oltre 30 anni.',
-      image: 'https://cdn.pixabay.com/photo/2015/05/15/14/27/nightclub-768434_1280.jpg'
+      image: clubNotturnoImage
     },
     
     // Quartieri storici e moderni (marker verdi)
@@ -197,7 +208,7 @@ const RomaMap = () => {
       type: 'neighborhood', 
       color: '#16A34A',
       description: 'Quartiere bohémien con boutique vintage, ristoranti caratteristici e atmosfera artistica.',
-      image: 'https://cdn.pixabay.com/photo/2018/04/18/13/18/rome-3331148_1280.jpg'
+      image: quartiereStoricoImage
     },
     { 
       name: 'San Lorenzo', 
@@ -205,7 +216,7 @@ const RomaMap = () => {
       type: 'neighborhood', 
       color: '#16A34A',
       description: 'Quartiere universitario vivace, ricco di pub, ristoranti economici e vita notturna studentesca.',
-      image: 'https://cdn.pixabay.com/photo/2018/09/29/22/52/rome-3711108_1280.jpg'
+      image: quartiereStoricoImage
     },
     { 
       name: 'Trastevere', 
@@ -213,7 +224,7 @@ const RomaMap = () => {
       type: 'neighborhood', 
       color: '#16A34A',
       description: 'Quartiere medievale pittoresco con stradine acciottolate, trattorie tradizionali e vita notturna.',
-      image: 'https://cdn.pixabay.com/photo/2018/07/26/07/45/trastevere-3562345_1280.jpg'
+      image: trastevereImage
     },
     
     // Stadi di Roma (marker arancioni scuri)

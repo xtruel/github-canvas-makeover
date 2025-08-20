@@ -93,32 +93,32 @@ export const RomaMatches = () => {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       {/* Partite Maschili - Sezione Principale */}
       <section>
-        <div className="flex items-center gap-2 mb-6">
-          <Trophy className="w-6 h-6 text-roma-red" />
-          <h2 className="text-2xl font-bold text-foreground">Prossime Partite AS Roma</h2>
+        <div className="flex items-center gap-2 mb-3">
+          <Trophy className="w-4 h-4 text-roma-red" />
+          <h2 className="text-lg font-bold text-foreground">Prossime Partite AS Roma</h2>
         </div>
         
         {matches.menMatches.length === 0 ? (
           <Card>
-            <CardContent className="p-6 text-center">
-              <p className="text-muted-foreground">Nessuna partita programmata al momento</p>
+            <CardContent className="p-3 text-center">
+              <p className="text-sm text-muted-foreground">Nessuna partita programmata al momento</p>
             </CardContent>
           </Card>
         ) : (
-          <div className="grid gap-4">
+          <div className="grid gap-2">
             {matches.menMatches.map((match) => {
               const { date, time } = formatDate(match.eventDate);
               const romaHome = isRomaHome(match);
               
               return (
-                <Card key={match.id} className="border-2 hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <Card key={match.id} className="hover:shadow-md transition-shadow">
+                  <CardContent className="p-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
+                        <div className="flex items-center gap-2 mb-1">
                           <Badge variant="secondary" className="text-xs">
                             {match.competition}
                           </Badge>
@@ -129,29 +129,19 @@ export const RomaMatches = () => {
                           )}
                         </div>
                         
-                        <div className="text-lg font-semibold mb-2">
+                        <div className="text-sm font-semibold mb-1">
                           <span className={romaHome ? "text-roma-red font-bold" : ""}>
                             {match.homeTeam}
                           </span>
-                          <span className="mx-3 text-muted-foreground">vs</span>
+                          <span className="mx-2 text-muted-foreground">vs</span>
                           <span className={!romaHome ? "text-roma-red font-bold" : ""}>
                             {match.awayTeam}
                           </span>
                         </div>
                         
-                        <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                          <div className="flex items-center gap-1">
-                            <Calendar className="w-4 h-4" />
-                            <span>{date}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Clock className="w-4 h-4" />
-                            <span>{time}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <MapPin className="w-4 h-4" />
-                            <span>{match.venue}</span>
-                          </div>
+                        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                          <span>{date} • {time}</span>
+                          <span>• {match.venue}</span>
                         </div>
                       </div>
                     </div>
@@ -164,30 +154,30 @@ export const RomaMatches = () => {
       </section>
 
       {/* Partite Femminili - Sezione Secondaria */}
-      <section className="border-t pt-6">
-        <div className="flex items-center gap-2 mb-4">
-          <Trophy className="w-5 h-5 text-roma-yellow" />
-          <h3 className="text-lg font-semibold text-foreground">AS Roma Femminile</h3>
+      <section className="border-t pt-3">
+        <div className="flex items-center gap-2 mb-2">
+          <Trophy className="w-4 h-4 text-roma-yellow" />
+          <h3 className="text-sm font-semibold text-foreground">AS Roma Femminile</h3>
         </div>
         
         {matches.womenMatches.length === 0 ? (
           <Card className="bg-muted/30">
-            <CardContent className="p-4 text-center">
-              <p className="text-sm text-muted-foreground">Nessuna partita programmata</p>
+            <CardContent className="p-2 text-center">
+              <p className="text-xs text-muted-foreground">Nessuna partita programmata</p>
             </CardContent>
           </Card>
         ) : (
-          <div className="grid gap-3">
+          <div className="grid gap-2">
             {matches.womenMatches.map((match) => {
               const { date, time } = formatDate(match.eventDate);
               const romaHome = isRomaHome(match);
               
               return (
                 <Card key={match.id} className="bg-muted/30 hover:bg-muted/50 transition-colors">
-                  <CardContent className="p-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <CardContent className="p-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex items-center gap-1 mb-1">
                           <Badge variant="outline" className="text-xs">
                             {match.competition}
                           </Badge>
@@ -198,7 +188,7 @@ export const RomaMatches = () => {
                           )}
                         </div>
                         
-                        <div className="text-sm font-medium mb-1">
+                        <div className="text-xs font-medium mb-1">
                           <span className={romaHome ? "text-roma-yellow font-semibold" : ""}>
                             {match.homeTeam}
                           </span>
@@ -208,7 +198,7 @@ export const RomaMatches = () => {
                           </span>
                         </div>
                         
-                        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
                           <span>{date} • {time}</span>
                           <span>• {match.venue}</span>
                         </div>

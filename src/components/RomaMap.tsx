@@ -21,7 +21,7 @@ const RomaMap = () => {
       type: 'historical', 
       color: '#6B7280',
       description: 'Anfiteatro romano del I secolo, simbolo di Roma e patrimonio UNESCO. Qui si svolgevano i combattimenti gladiatori.',
-      image: 'https://images.unsplash.com/photo-1539650116574-75c0c6d36a4c?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2020/06/05/10/01/colosseum-5264712_1280.jpg'
     },
     { 
       name: 'Pantheon', 
@@ -29,7 +29,7 @@ const RomaMap = () => {
       type: 'historical', 
       color: '#6B7280',
       description: 'Tempio romano del II secolo con la cupola più grande in calcestruzzo non armato al mondo.',
-      image: 'https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2020/04/20/11/49/pantheon-5067173_1280.jpg'
     },
     { 
       name: 'Fontana di Trevi', 
@@ -37,7 +37,7 @@ const RomaMap = () => {
       type: 'historical', 
       color: '#6B7280',
       description: 'La più grande e famosa fontana barocca di Roma. Lanciare una moneta garantisce il ritorno nella Città Eterna.',
-      image: 'https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2020/02/06/15/52/trevi-fountain-4825089_1280.jpg'
     },
     { 
       name: 'Piazza di Spagna', 
@@ -45,7 +45,7 @@ const RomaMap = () => {
       type: 'historical', 
       color: '#6B7280',
       description: 'Famosa piazza con la scalinata di Trinità dei Monti, centro dello shopping di lusso romano.',
-      image: 'https://images.unsplash.com/photo-1529260830199-42c24126f198?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2016/02/17/21/38/spanish-steps-1205648_1280.jpg'
     },
     { 
       name: 'Castel Sant\'Angelo', 
@@ -53,7 +53,7 @@ const RomaMap = () => {
       type: 'historical', 
       color: '#6B7280',
       description: 'Mausoleo di Adriano trasformato in fortezza papale, collegato al Vaticano dal Passetto.',
-      image: 'https://images.unsplash.com/photo-1548706651-9acd1b8da9e2?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2020/07/04/07/02/castel-santangelo-5369688_1280.jpg'
     },
     { 
       name: 'Vittoriano', 
@@ -61,7 +61,7 @@ const RomaMap = () => {
       type: 'historical', 
       color: '#6B7280',
       description: 'Monumento nazionale dedicato a Vittorio Emanuele II, con vista panoramica dalla terrazza.',
-      image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2018/07/14/17/46/rome-3537430_1280.jpg'
     },
     
     // Pub e Bar (marker blu)
@@ -71,7 +71,7 @@ const RomaMap = () => {
       type: 'pub', 
       color: '#2563EB',
       description: 'Storica birreria artigianale nel cuore di Trastevere, famosa per le birre craft e l\'atmosfera autentica.',
-      image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2016/11/21/16/21/bar-1846137_1280.jpg'
     },
     { 
       name: 'Jerry Thomas Project', 
@@ -79,7 +79,7 @@ const RomaMap = () => {
       type: 'pub', 
       color: '#2563EB',
       description: 'Cocktail bar speakeasy nascosto, uno dei migliori cocktail bar d\'Europa con atmosfera vintage.',
-      image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2015/03/26/14/24/bar-690699_1280.jpg'
     },
     { 
       name: 'Drink Kong', 
@@ -87,7 +87,7 @@ const RomaMap = () => {
       type: 'pub', 
       color: '#2563EB',
       description: 'Cocktail bar futuristico nel centro storico, famoso per i drink innovativi e il design moderno.',
-      image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2016/11/29/05/36/bar-1867408_1280.jpg'
     },
     
     // Club e Vita Notturna (marker rosa)
@@ -97,7 +97,7 @@ const RomaMap = () => {
       type: 'club', 
       color: '#EC4899',
       description: 'Club iconico di Roma con musica elettronica, frequentato da DJ internazionali e giovani romani.',
-      image: 'https://images.unsplash.com/photo-1571266028243-d220bc1dbe53?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2015/07/02/20/57/club-829978_1280.jpg'
     },
     { 
       name: 'Akab Club', 
@@ -105,7 +105,7 @@ const RomaMap = () => {
       type: 'club', 
       color: '#EC4899',
       description: 'Locale notturno storico di Roma, punto di riferimento per la movida romana da oltre 30 anni.',
-      image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2015/05/15/14/27/nightclub-768434_1280.jpg'
     },
     
     // Quartieri storici e moderni (marker verdi)
@@ -115,7 +115,7 @@ const RomaMap = () => {
       type: 'neighborhood', 
       color: '#16A34A',
       description: 'Quartiere bohémien con boutique vintage, ristoranti caratteristici e atmosfera artistica.',
-      image: 'https://images.unsplash.com/photo-1467269204594-9dcb9a5e4b96?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2018/04/18/13/18/rome-3331148_1280.jpg'
     },
     { 
       name: 'San Lorenzo', 
@@ -123,7 +123,7 @@ const RomaMap = () => {
       type: 'neighborhood', 
       color: '#16A34A',
       description: 'Quartiere universitario vivace, ricco di pub, ristoranti economici e vita notturna studentesca.',
-      image: 'https://images.unsplash.com/photo-1555400080-1e9ccbba1de4?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2018/09/29/22/52/rome-3711108_1280.jpg'
     },
     { 
       name: 'Trastevere', 
@@ -131,7 +131,7 @@ const RomaMap = () => {
       type: 'neighborhood', 
       color: '#16A34A',
       description: 'Quartiere medievale pittoresco con stradine acciottolate, trattorie tradizionali e vita notturna.',
-      image: 'https://images.unsplash.com/photo-1516306580123-e6036e65fb85?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2018/07/26/07/45/trastevere-3562345_1280.jpg'
     },
     
     // Locali per vedere partite Roma maschile (marker rossi)
@@ -141,7 +141,7 @@ const RomaMap = () => {
       type: 'roma-men', 
       color: '#DC2626',
       description: 'Casa dell\'AS Roma e della Lazio, stadio olimpico con capacità di 70.000 spettatori.',
-      image: 'https://images.unsplash.com/photo-1576783970982-20c5d7f4b4bc?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2016/06/07/14/14/stadium-1442616_1280.jpg'
     },
     { 
       name: 'Bar del Fico', 
@@ -149,7 +149,7 @@ const RomaMap = () => {
       type: 'roma-men', 
       color: '#DC2626',
       description: 'Bar storico nel centro di Roma, punto di ritrovo dei tifosi giallorossi per le partite.',
-      image: 'https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2017/03/27/14/33/bar-2179309_1280.jpg'
     },
     
     // Locali Roma femminile (marker viola/magenta)
@@ -159,7 +159,7 @@ const RomaMap = () => {
       type: 'roma-women', 
       color: '#9333EA',
       description: 'Centro di allenamento dell\'AS Roma Femminile, sede degli allenamenti e delle partite casalinghe.',
-      image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2016/02/13/12/26/aurora-1197753_1280.jpg'
     },
     
     // Altri punti d\'interesse (marker arancioni)
@@ -169,7 +169,7 @@ const RomaMap = () => {
       type: 'other', 
       color: '#F97316',
       description: 'Piazza storica con mercato mattutino e vita notturna serale, centro della movida romana.',
-      image: 'https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2020/01/09/01/00/campo-de-fiori-4751848_1280.jpg'
     },
     { 
       name: 'Villa Borghese', 
@@ -177,7 +177,7 @@ const RomaMap = () => {
       type: 'other', 
       color: '#F97316',
       description: 'Parco pubblico più famoso di Roma con musei, giardini e la Galleria Borghese.',
-      image: 'https://images.unsplash.com/photo-1549577802-1c660e4d8bbf?w=300&h=200&fit=crop'
+      image: 'https://cdn.pixabay.com/photo/2018/05/30/15/31/villa-borghese-3441799_1280.jpg'
     },
   ];
 
@@ -345,6 +345,9 @@ const RomaMap = () => {
               src={selectedPlace.image} 
               alt={selectedPlace.name}
               className="w-full h-48 object-cover rounded-md mb-3"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
             />
           )}
           

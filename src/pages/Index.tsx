@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Calendar, Users, Trophy, MessageCircle, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
-import romaLogo from "@/assets/roma-logo.png";
 
 const Index = () => {
   const features = [
@@ -48,8 +47,8 @@ const Index = () => {
         </p>
         <div className="mb-6">
           <img 
-            src={romaLogo} 
-            alt="AS Roma Logo" 
+            src="/lovable-uploads/af321201-3c36-40c5-862e-fed415398b56.png"
+            alt="AS Roma Official Logo" 
             className="w-24 h-24 mx-auto object-contain"
           />
         </div>

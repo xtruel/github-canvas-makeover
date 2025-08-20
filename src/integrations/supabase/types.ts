@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      sports_events: {
+        Row: {
+          away_score: number | null
+          away_team: string
+          competition: string
+          created_at: string
+          event_date: string
+          event_id: number | null
+          home_score: number | null
+          home_team: string
+          id: string
+          status: string | null
+          updated_at: string
+          venue: string | null
+        }
+        Insert: {
+          away_score?: number | null
+          away_team: string
+          competition: string
+          created_at?: string
+          event_date: string
+          event_id?: number | null
+          home_score?: number | null
+          home_team: string
+          id?: string
+          status?: string | null
+          updated_at?: string
+          venue?: string | null
+        }
+        Update: {
+          away_score?: number | null
+          away_team?: string
+          competition?: string
+          created_at?: string
+          event_date?: string
+          event_id?: number | null
+          home_score?: number | null
+          home_team?: string
+          id?: string
+          status?: string | null
+          updated_at?: string
+          venue?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

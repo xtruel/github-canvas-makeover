@@ -20,7 +20,7 @@ const RomaMap = () => {
       coords: [12.4924, 41.8902], 
       type: 'historical', 
       color: '#6B7280',
-      description: 'Anfiteatro romano del I secolo, simbolo di Roma e patrimonio UNESCO. Qui si svolgevano i combattimenti gladiatori.',
+      description: 'L\'Anfiteatro Flavio (I secolo d.C.), costruito dagli imperatori della dinastia flavia, è il simbolo eterno di Roma. Alto 50 metri e lungo 189, poteva ospitare fino a 75.000 spettatori per i leggendari combattimenti gladiatori e le cacce selvagge (venationes). Patrimonio UNESCO dal 1980.',
       image: 'https://cdn.pixabay.com/photo/2020/06/05/10/01/colosseum-5264712_1280.jpg'
     },
     { 
@@ -28,7 +28,7 @@ const RomaMap = () => {
       coords: [12.4768, 41.8986], 
       type: 'historical', 
       color: '#6B7280',
-      description: 'Tempio romano del II secolo con la cupola più grande in calcestruzzo non armato al mondo.',
+      description: 'Miracolo dell\'architettura antica, il Pantheon (126 d.C.) vanta la cupola in calcestruzzo non armato più grande al mondo (43,3 metri di diametro). L\'oculo centrale illumina naturalmente questo tempio romano trasformato in basilica cristiana. Tomba di Raffaello e dei re d\'Italia.',
       image: 'https://cdn.pixabay.com/photo/2020/04/20/11/49/pantheon-5067173_1280.jpg'
     },
     { 
@@ -36,7 +36,7 @@ const RomaMap = () => {
       coords: [12.4833, 41.9009], 
       type: 'historical', 
       color: '#6B7280',
-      description: 'La più grande e famosa fontana barocca di Roma. Lanciare una moneta garantisce il ritorno nella Città Eterna.',
+      description: 'Capolavoro del tardo barocco (1732-1762) progettato da Nicola Salvi, è la più grandiosa delle 2000+ fontane romane. Alta 26 metri e larga 49, rappresenta Nettuno con i tritoni. La leggenda vuole che lanciare una moneta con la mano destra sopra la spalla sinistra garantisca il ritorno a Roma.',
       image: 'https://cdn.pixabay.com/photo/2020/02/06/15/52/trevi-fountain-4825089_1280.jpg'
     },
     { 
@@ -44,7 +44,7 @@ const RomaMap = () => {
       coords: [12.4823, 41.9063], 
       type: 'historical', 
       color: '#6B7280',
-      description: 'Famosa piazza con la scalinata di Trinità dei Monti, centro dello shopping di lusso romano.',
+      description: 'Cuore elegante di Roma con la famosa scalinata di Trinità dei Monti (135 gradini, 1723-1726). Ai piedi, la Fontana della Barcaccia del Bernini padre. Via dei Condotti offre shopping di lusso dalle grandi maison internazionali. Dimora di Keats e Byron nell\'800.',
       image: 'https://cdn.pixabay.com/photo/2016/02/17/21/38/spanish-steps-1205648_1280.jpg'
     },
     { 
@@ -52,7 +52,7 @@ const RomaMap = () => {
       coords: [12.4663, 41.9031], 
       type: 'historical', 
       color: '#6B7280',
-      description: 'Mausoleo di Adriano trasformato in fortezza papale, collegato al Vaticano dal Passetto.',
+      description: 'Nato come Mausoleo di Adriano (139 d.C.), divenne fortezza medievale e residenza papale rinascimentale. Il Passetto di Borgo lo collegava al Vaticano per le fughe papali. Oggi museo con 58 stanze affrescate, terrazza panoramica e la statua dell\'Arcangelo Michele che domina il Tevere.',
       image: 'https://cdn.pixabay.com/photo/2020/07/04/07/02/castel-santangelo-5369688_1280.jpg'
     },
     { 
@@ -60,7 +60,7 @@ const RomaMap = () => {
       coords: [12.4828, 41.8956], 
       type: 'historical', 
       color: '#6B7280',
-      description: 'Monumento nazionale dedicato a Vittorio Emanuele II, con vista panoramica dalla terrazza.',
+      description: 'Altare della Patria dedicato a Vittorio Emanuele II, primo re d\'Italia unita. Inaugurato nel 1935, è soprannominato "Macchina da scrivere" dai romani. Ospita il Milite Ignoto, il Museo del Risorgimento e terrazze panoramiche con ascensori panoramici che offrono vista a 360° su Roma.',
       image: 'https://cdn.pixabay.com/photo/2018/07/14/17/46/rome-3537430_1280.jpg'
     },
     

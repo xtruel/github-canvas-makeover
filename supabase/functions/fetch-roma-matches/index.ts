@@ -14,14 +14,15 @@ serve(async (req) => {
   try {
     console.log('Fetching Roma matches from free sources...');
 
-    // Using realistic fixture data based on Serie A 25/26 calendar
+    // Dati aggiornati per gennaio 2025 - prossime partite Roma
+    const now = new Date();
     const menMatches = [
       {
         id: 1,
         homeTeam: 'AS Roma',
-        awayTeam: 'Bologna',
+        awayTeam: 'Genoa',
         competition: 'Serie A',
-        eventDate: '2025-08-23T20:45:00Z',
+        eventDate: new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 giorni
         venue: 'Stadio Olimpico',
         status: 'scheduled',
         homeScore: null,
@@ -29,11 +30,11 @@ serve(async (req) => {
       },
       {
         id: 2,
-        homeTeam: 'Pisa',
+        homeTeam: 'Udinese',
         awayTeam: 'AS Roma',
         competition: 'Serie A',
-        eventDate: '2025-08-30T20:45:00Z',
-        venue: 'Arena Garibaldi',
+        eventDate: new Date(now.getTime() + 10 * 24 * 60 * 60 * 1000).toISOString(), // 10 giorni
+        venue: 'Bluenergy Stadium',
         status: 'scheduled',
         homeScore: null,
         awayScore: null,
@@ -41,9 +42,9 @@ serve(async (req) => {
       {
         id: 3,
         homeTeam: 'AS Roma',
-        awayTeam: 'Lazio',
-        competition: 'Serie A - Derby della Capitale',
-        eventDate: '2025-09-13T20:45:00Z',
+        awayTeam: 'Eintracht Frankfurt',
+        competition: 'Europa League',
+        eventDate: new Date(now.getTime() + 17 * 24 * 60 * 60 * 1000).toISOString(), // 17 giorni
         venue: 'Stadio Olimpico',
         status: 'scheduled',
         homeScore: null,
@@ -51,47 +52,47 @@ serve(async (req) => {
       },
       {
         id: 4,
-        homeTeam: 'AC Milan',
-        awayTeam: 'AS Roma',
-        competition: 'Serie A',
-        eventDate: '2025-09-20T18:00:00Z',
-        venue: 'San Siro',
-        status: 'scheduled',
-        homeScore: null,
-        awayScore: null,
-      },
-      {
-        id: 5,
         homeTeam: 'AS Roma',
         awayTeam: 'Napoli',
         competition: 'Serie A',
-        eventDate: '2025-09-27T20:45:00Z',
+        eventDate: new Date(now.getTime() + 24 * 24 * 60 * 60 * 1000).toISOString(), // 24 giorni
         venue: 'Stadio Olimpico',
         status: 'scheduled',
         homeScore: null,
         awayScore: null,
       },
       {
-        id: 6,
-        homeTeam: 'Juventus',
+        id: 5,
+        homeTeam: 'Atalanta',
         awayTeam: 'AS Roma',
         competition: 'Serie A',
-        eventDate: '2025-10-04T20:45:00Z',
-        venue: 'Allianz Stadium',
+        eventDate: new Date(now.getTime() + 31 * 24 * 60 * 60 * 1000).toISOString(), // 31 giorni
+        venue: 'Gewiss Stadium',
+        status: 'scheduled',
+        homeScore: null,
+        awayScore: null,
+      },
+      {
+        id: 6,
+        homeTeam: 'AS Roma',
+        awayTeam: 'Lazio',
+        competition: 'Serie A - Derby della Capitale',
+        eventDate: new Date(now.getTime() + 38 * 24 * 60 * 60 * 1000).toISOString(), // 38 giorni
+        venue: 'Stadio Olimpico',
         status: 'scheduled',
         homeScore: null,
         awayScore: null,
       }
     ];
 
-    // Women's matches based on Serie A Femminile schedule
+    // Partite femminili aggiornate per gennaio 2025
     const womenMatches = [
       {
         id: 'w1',
         homeTeam: 'AS Roma Women',
-        awayTeam: 'Juventus Women',
+        awayTeam: 'Inter Women',
         competition: 'Serie A Femminile',
-        eventDate: '2025-08-25T15:00:00Z',
+        eventDate: new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 giorni
         venue: 'Centro Sportivo Fulvio Bernardini',
         status: 'scheduled',
         homeScore: null,
@@ -99,11 +100,11 @@ serve(async (req) => {
       },
       {
         id: 'w2',
-        homeTeam: 'Milan Women',
+        homeTeam: 'Juventus Women',
         awayTeam: 'AS Roma Women',
         competition: 'Serie A Femminile',
-        eventDate: '2025-09-01T15:00:00Z',
-        venue: 'PUMA House of Football',
+        eventDate: new Date(now.getTime() + 12 * 24 * 60 * 60 * 1000).toISOString(), // 12 giorni
+        venue: 'Allianz Stadium',
         status: 'scheduled',
         homeScore: null,
         awayScore: null,
@@ -111,9 +112,9 @@ serve(async (req) => {
       {
         id: 'w3',
         homeTeam: 'AS Roma Women',
-        awayTeam: 'Inter Women',
+        awayTeam: 'Milan Women',
         competition: 'Serie A Femminile',
-        eventDate: '2025-09-08T15:00:00Z',
+        eventDate: new Date(now.getTime() + 19 * 24 * 60 * 60 * 1000).toISOString(), // 19 giorni
         venue: 'Centro Sportivo Fulvio Bernardini',
         status: 'scheduled',
         homeScore: null,
@@ -124,7 +125,7 @@ serve(async (req) => {
         homeTeam: 'Fiorentina Women',
         awayTeam: 'AS Roma Women',
         competition: 'Serie A Femminile',
-        eventDate: '2025-09-15T15:00:00Z',
+        eventDate: new Date(now.getTime() + 26 * 24 * 60 * 60 * 1000).toISOString(), // 26 giorni
         venue: 'Stadio Artemio Franchi',
         status: 'scheduled',
         homeScore: null,

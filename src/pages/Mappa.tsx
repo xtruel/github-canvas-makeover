@@ -4,42 +4,57 @@ const Mappa = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-8 text-roma-gold">
-        Mappa Romanisti nel Mondo
+        Mappa di Roma
       </h1>
       
       <div className="grid gap-6">
         <Card className="shadow-glow border-border/50">
           <CardHeader>
-            <CardTitle className="text-roma-gold">Mappa Interattiva</CardTitle>
+            <CardTitle className="text-roma-gold">Discover the Eternal City</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
-              <p className="text-roma-yellow/80">
-                Mappa interattiva in arrivo - Trova i romanisti più vicini a te!
-              </p>
+          <CardContent className="p-0">
+            <div className="relative w-full h-[700px] rounded-lg overflow-hidden">
+              <iframe
+                src="https://mappa-roma.pages.dev/"
+                className="w-full h-full border-0"
+                title="Mappa Interattiva di Roma"
+                loading="lazy"
+                allowFullScreen
+              />
             </div>
           </CardContent>
         </Card>
         
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-3 gap-6">
           <Card className="shadow-roma border-border/50">
             <CardHeader>
-              <CardTitle className="text-primary">Club Locali</CardTitle>
+              <CardTitle className="text-primary">Luoghi Storici</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                Scopri i club di tifosi romanisti nella tua città
+                Esplora i luoghi storici della città eterna legati alla Roma
               </p>
             </CardContent>
           </Card>
           
           <Card className="shadow-roma border-border/50">
             <CardHeader>
-              <CardTitle className="text-primary">Locali Partite</CardTitle>
+              <CardTitle className="text-primary">Partite Roma</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground">
-                Trova i migliori locali dove guardare le partite della Roma
+                Scopri dove guardare le partite della Roma maschile in città
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-roma border-border/50">
+            <CardHeader>
+              <CardTitle className="text-primary">Roma Femminile</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground">
+                Trova i luoghi dove seguire la Roma Femminile
               </p>
             </CardContent>
           </Card>

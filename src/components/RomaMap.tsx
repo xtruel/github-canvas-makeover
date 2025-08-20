@@ -20,10 +20,10 @@ const RomaMap = () => {
   const [selectedPlace, setSelectedPlace] = useState<any>(null);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Token Mapbox fornito dall'utente
+  // Token Mapbox
   const MAPBOX_TOKEN = 'pk.eyJ1IjoiZnVyaWVyb21hbmUiLCJhIjoiY21lanVmMWVnMDFsdjJrczc2Mm12Y3QyNyJ9.J1I-1msTs5pOeccQAuQ4yg';
 
-  // Luoghi di Roma con marker colorati - Database completo con Google Places
+  // Luoghi di Roma
   const romaPlaces = [
     // Luoghi storici e monumenti (marker grigi)
     { 
@@ -85,32 +85,6 @@ const RomaMap = () => {
       image: barRomanoImage
     },
     { 
-      name: 'Jerry Thomas Project', 
-      coords: [12.4756, 41.8934], 
-      type: 'pub', 
-      color: '#2563EB',
-      description: 'Cocktail bar speakeasy nascosto, uno dei migliori cocktail bar d\'Europa con atmosfera vintage.',
-      image: barRomanoImage
-    },
-    { 
-      name: 'Drink Kong', 
-      coords: [12.4724, 41.8955], 
-      type: 'pub', 
-      color: '#2563EB',
-      description: 'Cocktail bar futuristico nel centro storico, famoso per i drink innovativi e il design moderno.',
-      image: barRomanoImage
-    },
-    
-    // Caffè Storici di Roma (marker blu)
-    { 
-      name: 'Caffè Sant\'Eustachio', 
-      coords: [12.4751, 41.8986], 
-      type: 'pub', 
-      color: '#2563EB',
-      description: 'Antica torrefazione a legna nata nel 1938, uno dei caffè più amati di Roma in Piazza Sant\'Eustachio.',
-      image: barRomanoImage
-    },
-    { 
       name: 'Antico Caffè Greco', 
       coords: [12.4823, 41.9058], 
       type: 'pub', 
@@ -119,67 +93,11 @@ const RomaMap = () => {
       image: barRomanoImage
     },
     { 
-      name: 'Caffè Museo Atelier Canova Tadolini', 
-      coords: [12.4804, 41.9078], 
+      name: 'Caffè Sant\'Eustachio', 
+      coords: [12.4751, 41.8986], 
       type: 'pub', 
       color: '#2563EB',
-      description: 'Caffè-museo in via del Babuino, nell\'antico studio di Canova. Si sorseggia il caffè tra arte e sculture.',
-      image: barRomanoImage
-    },
-    { 
-      name: 'Bar Rosati', 
-      coords: [12.4812, 41.9123], 
-      type: 'pub', 
-      color: '#2563EB',
-      description: 'Storico bar dal 1922, frequentato da artisti e intellettuali. Punto di ritrovo dei pittori di via Margutta negli anni \'30.',
-      image: barRomanoImage
-    },
-    { 
-      name: 'Caffè Palombini', 
-      coords: [12.4623, 41.8389], 
-      type: 'pub', 
-      color: '#2563EB',
-      description: 'Nato nel 1963 all\'EUR, simbolo del quartiere e punto di ritrovo vicino al Palazzo della Civiltà (Colosseo Quadrato).',
-      image: barRomanoImage
-    },
-    { 
-      name: 'Sciascia Caffè', 
-      coords: [12.4634, 41.9089], 
-      type: 'pub', 
-      color: '#2563EB',
-      description: 'Dal 1919 nel quartiere Prati, torrefazione con ambientazione retrò e specialità come il caffè con cioccolato fondente.',
-      image: barRomanoImage
-    },
-    { 
-      name: 'Castroni', 
-      coords: [12.4645, 41.9078], 
-      type: 'pub', 
-      color: '#2563EB',
-      description: 'Nato nel 1932, storico locale in via Cola di Rienzo. Drogheria, caffetteria e torrefazione, sinonimo di "caffè buono".',
-      image: barRomanoImage
-    },
-    { 
-      name: 'Harry\'s Bar', 
-      coords: [12.4889, 41.9089], 
-      type: 'pub', 
-      color: '#2563EB',
-      description: 'Il bar della Dolce Vita fondato nel 1959 in via Veneto, frequentato da Fellini e comparse nei suoi film.',
-      image: barRomanoImage
-    },
-    { 
-      name: 'Caffè Tazza D\'Oro', 
-      coords: [12.4756, 41.8992], 
-      type: 'pub', 
-      color: '#2563EB',
-      description: 'Storica torrefazione zona Pantheon, famosa per il caffè e la granita con doppia panna. C\'è sempre fila nel weekend.',
-      image: barRomanoImage
-    },
-    { 
-      name: 'Babingtons Tea Room', 
-      coords: [12.4823, 41.9063], 
-      type: 'pub', 
-      color: '#2563EB',
-      description: 'In Piazza di Spagna, punto di riferimento per il rito del tè inglese. Frequentato da Keats, Byron, Goethe e De Chirico.',
+      description: 'Antica torrefazione a legna nata nel 1938, uno dei caffè più amati di Roma in Piazza Sant\'Eustachio.',
       image: barRomanoImage
     },
     
@@ -192,32 +110,8 @@ const RomaMap = () => {
       description: 'Club iconico di Roma con musica elettronica, frequentato da DJ internazionali e giovani romani.',
       image: clubNotturnoImage
     },
-    { 
-      name: 'Akab Club', 
-      coords: [12.4756, 41.8789], 
-      type: 'club', 
-      color: '#EC4899',
-      description: 'Locale notturno storico di Roma, punto di riferimento per la movida romana da oltre 30 anni.',
-      image: clubNotturnoImage
-    },
     
     // Quartieri storici e moderni (marker verdi)
-    { 
-      name: 'Monti', 
-      coords: [12.4856, 41.8956], 
-      type: 'neighborhood', 
-      color: '#16A34A',
-      description: 'Quartiere bohémien con boutique vintage, ristoranti caratteristici e atmosfera artistica.',
-      image: quartiereStoricoImage
-    },
-    { 
-      name: 'San Lorenzo', 
-      coords: [12.5234, 41.8934], 
-      type: 'neighborhood', 
-      color: '#16A34A',
-      description: 'Quartiere universitario vivace, ricco di pub, ristoranti economici e vita notturna studentesca.',
-      image: quartiereStoricoImage
-    },
     { 
       name: 'Trastevere', 
       coords: [12.4692, 41.8896], 
@@ -225,6 +119,14 @@ const RomaMap = () => {
       color: '#16A34A',
       description: 'Quartiere medievale pittoresco con stradine acciottolate, trattorie tradizionali e vita notturna.',
       image: trastevereImage
+    },
+    { 
+      name: 'Monti', 
+      coords: [12.4856, 41.8956], 
+      type: 'neighborhood', 
+      color: '#16A34A',
+      description: 'Quartiere bohémien con boutique vintage, ristoranti caratteristici e atmosfera artistica.',
+      image: quartiereStoricoImage
     },
     
     // Stadi di Roma (marker arancioni scuri)
@@ -236,79 +138,7 @@ const RomaMap = () => {
       description: 'Stadio principale di Roma, casa di AS Roma e Lazio. Ospitò i Giochi Olimpici del 1960 e la finale dei Mondiali 1990.',
       image: 'https://cdn.pixabay.com/photo/2016/06/07/14/14/stadium-1442616_1280.jpg'
     },
-    { 
-      name: 'Stadio Flaminio', 
-      coords: [12.4712, 41.9234], 
-      type: 'stadium', 
-      color: '#D97706',
-      description: 'Stadio storico progettato da Pier Luigi Nervi per le Olimpiadi del 1960, oggi utilizzato per rugby.',
-      image: 'https://cdn.pixabay.com/photo/2016/06/16/16/32/stadium-1461329_1280.jpg'
-    },
-    { 
-      name: 'Stadio dei Marmi Pietro Mennea', 
-      coords: [12.4589, 41.9312], 
-      type: 'stadium', 
-      color: '#D97706',
-      description: 'Stadio di atletica leggera del Foro Italico, decorato con 60 statue di marmo di atleti.',
-      image: 'https://cdn.pixabay.com/photo/2014/05/18/11/25/track-and-field-346542_1280.jpg'
-    },
-    { 
-      name: 'Stadio Nando Martellini', 
-      coords: [12.4578, 41.9289], 
-      type: 'stadium', 
-      color: '#D97706',
-      description: 'Stadio di atletica leggera nel Foro Italico, sede di importanti eventi internazionali.',
-      image: 'https://cdn.pixabay.com/photo/2016/03/28/09/22/stadium-1285396_1280.jpg'
-    },
-    { 
-      name: 'Stadio della Rondinella', 
-      coords: [12.4423, 41.8956], 
-      type: 'stadium', 
-      color: '#D97706',
-      description: 'Stadio storico nel quartiere Flaminio, utilizzato per calcio giovanile e eventi sportivi locali.',
-      image: 'https://cdn.pixabay.com/photo/2013/11/25/10/58/grass-217637_1280.jpg'
-    },
-    { 
-      name: 'Stadio Tre Fontane', 
-      coords: [12.4623, 41.8234], 
-      type: 'stadium', 
-      color: '#D97706',
-      description: 'Stadio moderno nell\'EUR utilizzato per calcio e rugby, sede di diverse società sportive.',
-      image: 'https://cdn.pixabay.com/photo/2016/07/25/10/42/football-1540047_1280.jpg'
-    },
-    { 
-      name: 'Trastevere Stadium', 
-      coords: [12.4634, 41.8823], 
-      type: 'stadium', 
-      color: '#D97706',
-      description: 'Stadio nel quartiere Trastevere, sede dell\'ASD Trastevere Calcio e altri eventi sportivi.',
-      image: 'https://cdn.pixabay.com/photo/2018/03/01/14/57/architecture-3190254_1280.jpg'
-    },
-    { 
-      name: 'Campo Testaccio', 
-      coords: [12.4723, 41.8756], 
-      type: 'stadium', 
-      color: '#D97706',
-      description: 'Campo storico dove nacque l\'AS Roma nel 1927, oggi area residenziale con memoria storica.',
-      image: 'https://cdn.pixabay.com/photo/2018/01/21/17/04/soccer-3097455_1280.jpg'
-    },
-    { 
-      name: 'Stadio Centrale del Tennis', 
-      coords: [12.4567, 41.9298], 
-      type: 'stadium', 
-      color: '#D97706',
-      description: 'Campo centrale del Foro Italico, sede degli Internazionali d\'Italia di tennis.',
-      image: 'https://cdn.pixabay.com/photo/2015/07/19/10/01/tennis-852246_1280.jpg'
-    },
-    { 
-      name: 'Stadio Nicola Pietrangeli', 
-      coords: [12.4545, 41.9278], 
-      type: 'stadium', 
-      color: '#D97706',
-      description: 'Campo da tennis del Foro Italico, secondo campo più importante per gli Internazionali d\'Italia.',
-      image: 'https://cdn.pixabay.com/photo/2016/10/22/12/26/tennis-1761277_1280.jpg'
-    },
-
+    
     // Locali per vedere partite Roma maschile (marker rossi)
     { 
       name: 'Bar del Fico', 
@@ -316,7 +146,7 @@ const RomaMap = () => {
       type: 'roma-men', 
       color: '#DC2626',
       description: 'Bar storico nel centro di Roma, punto di ritrovo dei tifosi giallorossi per le partite.',
-      image: 'https://cdn.pixabay.com/photo/2017/03/27/14/33/bar-2179309_1280.jpg'
+      image: barRomanoImage
     },
     
     // Locali Roma femminile (marker viola/magenta)
@@ -327,25 +157,7 @@ const RomaMap = () => {
       color: '#9333EA',
       description: 'Centro di allenamento dell\'AS Roma Femminile, sede degli allenamenti e delle partite casalinghe.',
       image: 'https://cdn.pixabay.com/photo/2016/02/13/12/26/aurora-1197753_1280.jpg'
-    },
-    
-    // Altri punti d\'interesse (marker arancioni)
-    { 
-      name: 'Campo de\' Fiori', 
-      coords: [12.4724, 41.8955], 
-      type: 'other', 
-      color: '#F97316',
-      description: 'Piazza storica con mercato mattutino e vita notturna serale, centro della movida romana.',
-      image: 'https://cdn.pixabay.com/photo/2020/01/09/01/00/campo-de-fiori-4751848_1280.jpg'
-    },
-    { 
-      name: 'Villa Borghese', 
-      coords: [12.4923, 41.9142], 
-      type: 'other', 
-      color: '#F97316',
-      description: 'Parco pubblico più famoso di Roma con musei, giardini e la Galleria Borghese.',
-      image: 'https://cdn.pixabay.com/photo/2018/05/30/15/31/villa-borghese-3441799_1280.jpg'
-    },
+    }
   ];
 
   const getTypeLabel = (type: string) => {
@@ -362,8 +174,8 @@ const RomaMap = () => {
     }
   };
 
+  // Check if mobile
   useEffect(() => {
-    // Check if mobile
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 640);
     };
@@ -373,107 +185,70 @@ const RomaMap = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Initialize map
   useEffect(() => {
-    console.log('Map useEffect starting...');
+    if (!mapContainer.current) return;
     
-    if (!mapContainer.current) {
-      console.log('Map container ref not available');
-      return;
-    }
+    // Set token
+    mapboxgl.accessToken = MAPBOX_TOKEN;
     
-    if (map.current) {
-      console.log('Map already exists, skipping initialization');
-      return;
-    }
+    // Create map
+    const mapInstance = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: 'mapbox://styles/mapbox/light-v11',
+      center: [12.4964, 41.9028],
+      zoom: 12,
+      pitch: 45,
+    });
 
-    console.log('Initializing Mapbox with token:', MAPBOX_TOKEN ? 'Token available' : 'No token');
-    
-    try {
-      mapboxgl.accessToken = MAPBOX_TOKEN;
-      
-      console.log('Creating new map instance...');
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/light-v11',
-        center: [12.4964, 41.9028], // Centro di Roma
-        zoom: 12,
-        pitch: 45,
-      });
+    // Add navigation controls
+    mapInstance.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-      console.log('Map instance created, adding controls...');
-
-      // Add navigation controls
-      map.current.addControl(
-        new mapboxgl.NavigationControl({
-          visualizePitch: true,
-        }),
-        'top-right'
-      );
-
-      console.log('Adding markers...');
-      // Add markers for each place
-      romaPlaces.forEach((place, index) => {
-        console.log(`Adding marker ${index + 1}/${romaPlaces.length}: ${place.name}`);
-        
-        // Create marker element
+    // Wait for map to load before adding markers
+    mapInstance.on('load', () => {
+      // Add markers
+      romaPlaces.forEach((place) => {
         const markerEl = document.createElement('div');
         markerEl.className = 'custom-marker';
-        markerEl.style.backgroundColor = place.color;
-        markerEl.style.width = '20px';
-        markerEl.style.height = '20px';
-        markerEl.style.borderRadius = '50% 50% 50% 0';
-        markerEl.style.transform = 'rotate(-45deg)';
-        markerEl.style.border = '2px solid white';
-        markerEl.style.cursor = 'pointer';
-        markerEl.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
+        markerEl.style.cssText = `
+          background-color: ${place.color};
+          width: 20px;
+          height: 20px;
+          border-radius: 50% 50% 50% 0;
+          transform: rotate(-45deg);
+          border: 2px solid white;
+          cursor: pointer;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        `;
 
-        // Add click handler for both mobile and desktop
         markerEl.addEventListener('click', (e) => {
           e.stopPropagation();
-          console.log('Marker clicked:', place.name);
           setSelectedPlace(place);
         });
 
-        // Add marker to map
         new mapboxgl.Marker(markerEl)
           .setLngLat(place.coords as [number, number])
-          .addTo(map.current!);
+          .addTo(mapInstance);
       });
 
-      // Add atmosphere effect
-      map.current.on('style.load', () => {
-        console.log('Map style loaded, adding fog effect...');
-        map.current?.setFog({
-          color: 'rgb(255, 255, 255)',
-          'high-color': 'rgb(200, 200, 225)',
-          'horizon-blend': 0.1,
-        });
+      // Add fog effect
+      mapInstance.setFog({
+        color: 'rgb(255, 255, 255)',
+        'high-color': 'rgb(200, 200, 225)',
+        'horizon-blend': 0.1,
       });
+    });
 
-      map.current.on('load', () => {
-        console.log('Map fully loaded!');
-      });
-
-      map.current.on('error', (e) => {
-        console.error('Map error:', e);
-      });
-
-    } catch (error) {
-      console.error('Error initializing map:', error);
-    }
+    map.current = mapInstance;
 
     return () => {
-      console.log('Cleaning up map...');
-      if (map.current) {
-        map.current.remove();
-        map.current = null;
-      }
+      mapInstance.remove();
     };
   }, []);
 
   return (
     <div className="relative w-full">
-      {/* Main Map Container - responsive for both desktop and mobile */}
+      {/* Main Map Container */}
       <div className={`flex gap-4 transition-all duration-300 ${
         isMobile ? 'h-[calc(100vh-4rem)]' : 'h-[400px]'
       }`}>
@@ -483,12 +258,8 @@ const RomaMap = () => {
         }`}>
           <div 
             ref={mapContainer} 
-            className="w-full h-full" 
-            style={{ 
-              minHeight: '400px',
-              position: 'relative',
-              backgroundColor: '#f0f0f0' // Fallback color to see the container
-            }}
+            className="w-full h-full"
+            style={{ minHeight: '400px' }}
           />
           
           {/* Legend - Desktop only */}
@@ -523,10 +294,6 @@ const RomaMap = () => {
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-gray-500 border border-white flex-shrink-0"></div>
                   <span className="truncate">Luoghi Storici</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-orange-500 border border-white flex-shrink-0"></div>
-                  <span className="truncate">Punti d'Interesse</span>
                 </div>
               </div>
             </div>

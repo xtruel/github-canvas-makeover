@@ -418,22 +418,15 @@ const RomaMap = () => {
         </div>`
       );
 
-      // Add click handler for mobile
+      // Add click handler for both mobile and desktop
       markerEl.addEventListener('click', () => {
-        if (window.innerWidth < 640) {
-          setSelectedPlace(place);
-        }
+        setSelectedPlace(place);
       });
 
       // Add marker to map
       const marker = new mapboxgl.Marker(markerEl)
         .setLngLat(place.coords as [number, number])
         .addTo(map.current!);
-      
-      // Only add popup for desktop
-      if (window.innerWidth >= 640) {
-        marker.setPopup(popup);
-      }
     });
 
     // Add atmosphere effect
@@ -452,84 +445,140 @@ const RomaMap = () => {
 
   return (
     <div className="relative w-full">
-      {/* Map Container */}
-      <div className="relative h-[400px] md:h-[400px] sm:h-[60vh] rounded-lg overflow-hidden shadow-roma border border-border/50">
-        <div ref={mapContainer} className="absolute inset-0" />
-        
-        {/* Legend - responsive positioning */}
-        <div className="absolute top-4 left-4 sm:top-2 sm:left-2 bg-background/95 backdrop-blur-sm rounded-lg p-3 sm:p-2 shadow-lg border border-border/50 max-w-[200px] sm:max-w-[150px]">
-          <h4 className="text-sm font-bold mb-2 text-roma-gold">Legenda</h4>
-          <div className="space-y-1 text-xs">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-orange-700 border border-white flex-shrink-0"></div>
-              <span className="truncate">Stadi</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-600 border border-white flex-shrink-0"></div>
-              <span className="truncate">Partite Roma</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-purple-600 border border-white flex-shrink-0"></div>
-              <span className="truncate">Roma Femminile</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-blue-600 border border-white flex-shrink-0"></div>
-              <span className="truncate">Pub & Bar</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-pink-500 border border-white flex-shrink-0"></div>
-              <span className="truncate">Club</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-green-600 border border-white flex-shrink-0"></div>
-              <span className="truncate">Quartieri</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-gray-500 border border-white flex-shrink-0"></div>
-              <span className="truncate">Luoghi Storici</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-orange-500 border border-white flex-shrink-0"></div>
-              <span className="truncate">Punti d'Interesse</span>
+      {/* Desktop Layout */}
+      <div className={`hidden sm:flex gap-4 transition-all duration-300 ${
+        selectedPlace ? 'h-[400px]' : 'h-[400px]'
+      }`}>
+        {/* Map Container - Desktop */}
+        <div className={`relative rounded-lg overflow-hidden shadow-roma border border-border/50 transition-all duration-300 ${
+          selectedPlace ? 'w-2/3' : 'w-full'
+        }`}>
+          <div ref={mapContainer} className="absolute inset-0" />
+          
+          {/* Legend - Desktop */}
+          <div className="absolute top-4 left-4 bg-background/95 backdrop-blur-sm rounded-lg p-3 shadow-lg border border-border/50 max-w-[200px]">
+            <h4 className="text-sm font-bold mb-2 text-roma-gold">Legenda</h4>
+            <div className="space-y-1 text-xs">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-orange-700 border border-white flex-shrink-0"></div>
+                <span className="truncate">Stadi</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-red-600 border border-white flex-shrink-0"></div>
+                <span className="truncate">Partite Roma</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-purple-600 border border-white flex-shrink-0"></div>
+                <span className="truncate">Roma Femminile</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-blue-600 border border-white flex-shrink-0"></div>
+                <span className="truncate">Pub & Bar</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-pink-500 border border-white flex-shrink-0"></div>
+                <span className="truncate">Club</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-green-600 border border-white flex-shrink-0"></div>
+                <span className="truncate">Quartieri</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-gray-500 border border-white flex-shrink-0"></div>
+                <span className="truncate">Luoghi Storici</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-orange-500 border border-white flex-shrink-0"></div>
+                <span className="truncate">Punti d'Interesse</span>
+              </div>
             </div>
           </div>
         </div>
+
+        {/* Desktop Side Panel */}
+        {selectedPlace && (
+          <div className="w-1/3 bg-background/95 backdrop-blur-sm rounded-lg shadow-lg border border-border/50 flex flex-col">
+            <div className="flex justify-between items-start p-4 border-b border-border/50">
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-foreground">{selectedPlace.name}</h3>
+                <p className="text-sm text-blue-600 font-medium">{getTypeLabel(selectedPlace.type)}</p>
+              </div>
+              <button 
+                onClick={() => setSelectedPlace(null)}
+                className="p-1 rounded-full hover:bg-muted transition-colors flex-shrink-0 ml-2"
+              >
+                <X className="w-5 h-5 text-muted-foreground" />
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-4">
+              {selectedPlace.image && (
+                <img 
+                  src={selectedPlace.image} 
+                  alt={selectedPlace.name}
+                  className="w-full h-32 object-cover rounded-md mb-3"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              )}
+              
+              {selectedPlace.description && (
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {selectedPlace.description}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Mobile Place Details */}
-      {isMobile && selectedPlace && (
-        <div className="mt-4 bg-background/95 backdrop-blur-sm rounded-lg p-4 shadow-lg border border-border/50">
-          <div className="flex justify-between items-start mb-3">
-            <div>
-              <h3 className="text-lg font-bold text-foreground">{selectedPlace.name}</h3>
-              <p className="text-sm text-blue-600 font-medium">{getTypeLabel(selectedPlace.type)}</p>
-            </div>
-            <button 
-              onClick={() => setSelectedPlace(null)}
-              className="p-1 rounded-full hover:bg-muted transition-colors"
-            >
-              <X className="w-5 h-5 text-muted-foreground" />
-            </button>
+      {/* Mobile Layout */}
+      <div className="sm:hidden">
+        <div className="relative h-[calc(100vh-4rem)] rounded-lg overflow-hidden shadow-roma border border-border/50">
+          <div ref={mapContainer} className="absolute inset-0" />
+          
+          {/* Mobile Header */}
+          <div className="absolute top-2 left-2 right-2 z-20 bg-background/95 backdrop-blur-sm rounded-lg p-3 border border-border/50">
+            <h2 className="text-lg font-semibold text-roma-gold">Discover the Eternal City</h2>
           </div>
-          
-          {selectedPlace.image && (
-            <img 
-              src={selectedPlace.image} 
-              alt={selectedPlace.name}
-              className="w-full h-48 object-cover rounded-md mb-3"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-          )}
-          
-          {selectedPlace.description && (
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {selectedPlace.description}
-            </p>
-          )}
         </div>
-      )}
+
+        {/* Mobile Place Details */}
+        {selectedPlace && (
+          <div className="mt-4 bg-background/95 backdrop-blur-sm rounded-lg p-4 shadow-lg border border-border/50">
+            <div className="flex justify-between items-start mb-3">
+              <div>
+                <h3 className="text-lg font-bold text-foreground">{selectedPlace.name}</h3>
+                <p className="text-sm text-blue-600 font-medium">{getTypeLabel(selectedPlace.type)}</p>
+              </div>
+              <button 
+                onClick={() => setSelectedPlace(null)}
+                className="p-1 rounded-full hover:bg-muted transition-colors"
+              >
+                <X className="w-5 h-5 text-muted-foreground" />
+              </button>
+            </div>
+            
+            {selectedPlace.image && (
+              <img 
+                src={selectedPlace.image} 
+                alt={selectedPlace.name}
+                className="w-full h-48 object-cover rounded-md mb-3"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+            )}
+            
+            {selectedPlace.description && (
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {selectedPlace.description}
+              </p>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

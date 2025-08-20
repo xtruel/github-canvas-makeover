@@ -4,19 +4,16 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { X, ChevronUp, ChevronDown } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
-// Import real images from authentic locations
-import colosseocolosseoImage from '@/assets/colosseo-real.jpg';
-import pantheonImage from '@/assets/pantheon-real.jpg';
-import fontanaTreviImage from '@/assets/trevi-fountain-real.jpg';
-import piazzaSpagnaImage from '@/assets/piazza-spagna-real.jpg';
+// Import existing working images
+import colosseocolosseoImage from '@/assets/colosseo-roma.jpg';
+import pantheonImage from '@/assets/pantheon-interno.jpg';
+import fontanaTreviImage from '@/assets/fontana-trevi-roma.jpg';
+import piazzaSpagnaImage from '@/assets/piazza-spagna-roma.jpg';
 import vitorianoImage from '@/assets/vittoriano-altare.jpg';
-import trastevereImage from '@/assets/trastevere-real.jpg';
-import barRomanoImage from '@/assets/roma-pub-real.jpg';
-import clubNotturnoImage from '@/assets/roma-club-real.jpg';
-import quartiereStoricoImage from '@/assets/monti-quarter-real.jpg';
-import stadioOlimpicoImage from '@/assets/stadio-olimpico-real.jpg';
-import castelsantangeloImage from '@/assets/castel-santangelo-real.jpg';
-import villaBorgheseImage from '@/assets/villa-borghese-real.jpg';
+import trastevereImage from '@/assets/trastevere-roma.jpg';
+import barRomanoImage from '@/assets/bar-romano.jpg';
+import clubNotturnoImage from '@/assets/club-notturno.jpg';
+import quartiereStoricoImage from '@/assets/quartiere-storico.jpg';
 
 const RomaMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -71,7 +68,7 @@ const RomaMap = () => {
       type: 'historical', 
       color: '#6B7280',
       description: 'Nato come Mausoleo di Adriano (139 d.C.), questo cilindro di travertino e peperino è diventato nei secoli fortezza inespugnabile, prigione pontificia e residenza papale rinascimentale. Il Passetto di Borgo, corridoio sopraelevato di 800 metri, lo collegava segretamente al Vaticano per le fughe dei papi in pericolo. Oggi museo con 58 stanze riccamente affrescate, ospita la Sala Paolina, gli appartamenti papali e una terrazza panoramica mozzafiato. La statua bronzea dell\'Arcangelo Michele che corona la fortezza ricorda la visione di Papa Gregorio Magno che nel 590 vide l\'angelo rinfoderare la spada, annunciando la fine della peste.',
-      image: castelsantangeloImage
+      image: 'https://images.unsplash.com/photo-1569949381669-ecf31ae8e613?w=500'
     },
     { 
       name: 'Vittoriano', 
@@ -103,7 +100,7 @@ const RomaMap = () => {
       type: 'historical',
       color: '#6B7280',
       description: 'Magnifico parco di 80 ettari nel cuore di Roma, creato all\'inizio del XVII secolo dal Cardinale Scipione Borghese, nipote di Papa Paolo V. Progettato da Flaminio Ponzio e Giovanni Vasanzio, ospita la celebre Galleria Borghese con capolavori assoluti di Gian Lorenzo Bernini (Apollo e Dafne, Ratto di Proserpina), Caravaggio (Ragazzo con canestro di frutta, San Girolamo), Tiziano e Raffaello. Il parco include anche il Bioparco (zoo storico), il Museo Etrusco di Villa Giulia, il Globe Theatre shakespeariano, il laghetto delle tartarughe e il Pincio con terrazze panoramiche mozzafiato su Roma e San Pietro.',
-      image: villaBorgheseImage
+      image: 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=500'
     },
     {
       name: 'Terme di Caracalla',
@@ -303,7 +300,7 @@ const RomaMap = () => {
       type: 'stadium', 
       color: '#D97706',
       description: 'Tempio del calcio capitolino con capienza di 70.634 spettatori, inaugurato nel 1927 e ristrutturato per i Mondiali di Italia \'90. Situato nel Foro Italico, è la casa di AS Roma e SS Lazio, teatro dei derby più accesi d\'Italia che dividono la città in due. La Curva Sud giallorossa e la Curva Nord biancoceleste creano un\'atmosfera elettrizzante durante le partite. Ha ospitato le Olimpiadi del 1960, la finale dei Mondiali 1990 (Germania Ovest-Argentina), due finali di Champions League (1996, 2009) e concerti memorabili di artisti internazionali. Proprietà del CONI, è considerato uno degli stadi più belli e suggestivi d\'Europa.',
-      image: stadioOlimpicoImage
+      image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=500'
     },
     {
       name: 'Stadio Flaminio',

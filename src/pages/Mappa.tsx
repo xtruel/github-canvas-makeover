@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import RomaMap from "@/components/RomaMap";
 
 const Mappa = () => {
   return (
@@ -12,16 +13,8 @@ const Mappa = () => {
           <CardHeader>
             <CardTitle className="text-roma-gold">Discover the Eternal City</CardTitle>
           </CardHeader>
-          <CardContent className="p-0">
-            <div className="relative w-full h-[700px] rounded-lg overflow-hidden">
-              <iframe
-                src="https://mappa-roma.pages.dev/"
-                className="w-full h-full border-0"
-                title="Mappa Interattiva di Roma"
-                loading="lazy"
-                allowFullScreen
-              />
-            </div>
+          <CardContent className="p-4">
+            <RomaMap />
           </CardContent>
         </Card>
         

@@ -114,28 +114,28 @@ const RomaMap = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-[525px] rounded-lg overflow-hidden shadow-roma border border-border/50">
+    <div className="relative w-full h-[525px] md:h-[525px] sm:h-screen sm:aspect-square rounded-lg overflow-hidden shadow-roma border border-border/50">
       <div ref={mapContainer} className="absolute inset-0" />
       
-      {/* Legend */}
-      <div className="absolute top-4 left-4 bg-background/95 backdrop-blur-sm rounded-lg p-3 shadow-lg border border-border/50">
+      {/* Legend - responsive positioning */}
+      <div className="absolute top-4 left-4 sm:top-2 sm:left-2 bg-background/95 backdrop-blur-sm rounded-lg p-3 sm:p-2 shadow-lg border border-border/50 max-w-[200px] sm:max-w-[150px]">
         <h4 className="text-sm font-bold mb-2 text-roma-gold">Legenda</h4>
         <div className="space-y-1 text-xs">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-red-600 border border-white"></div>
-            <span>Partite Roma</span>
+            <div className="w-3 h-3 rounded-full bg-red-600 border border-white flex-shrink-0"></div>
+            <span className="truncate">Partite Roma</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-purple-600 border border-white"></div>
-            <span>Roma Femminile</span>
+            <div className="w-3 h-3 rounded-full bg-purple-600 border border-white flex-shrink-0"></div>
+            <span className="truncate">Roma Femminile</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-orange-500 border border-white"></div>
-            <span>Punti d'Interesse</span>
+            <div className="w-3 h-3 rounded-full bg-orange-500 border border-white flex-shrink-0"></div>
+            <span className="truncate">Punti d'Interesse</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-gray-500 border border-white"></div>
-            <span>Luoghi Storici</span>
+            <div className="w-3 h-3 rounded-full bg-gray-500 border border-white flex-shrink-0"></div>
+            <span className="truncate">Luoghi Storici</span>
           </div>
         </div>
       </div>

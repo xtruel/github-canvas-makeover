@@ -408,23 +408,14 @@ const RomaMap = () => {
       markerEl.style.cursor = 'pointer';
       markerEl.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
 
-      // Create popup for desktop, handle click for mobile
-      const popup = new mapboxgl.Popup({ offset: 25, maxWidth: '300px' }).setHTML(
-        `<div class="p-3 max-w-sm">
-          ${place.image ? `<img src="${place.image}" alt="${place.name}" class="w-full h-32 object-cover rounded-md mb-2" />` : ''}
-          <h3 class="font-bold text-base mb-1">${place.name}</h3>
-          <p class="text-xs text-blue-600 mb-2 font-medium">${getTypeLabel(place.type)}</p>
-          ${place.description ? `<p class="text-sm text-gray-700 leading-relaxed">${place.description}</p>` : ''}
-        </div>`
-      );
-
       // Add click handler for both mobile and desktop
-      markerEl.addEventListener('click', () => {
+      markerEl.addEventListener('click', (e) => {
+        e.stopPropagation();
         setSelectedPlace(place);
       });
 
       // Add marker to map
-      const marker = new mapboxgl.Marker(markerEl)
+      new mapboxgl.Marker(markerEl)
         .setLngLat(place.coords as [number, number])
         .addTo(map.current!);
     });
@@ -440,6 +431,7 @@ const RomaMap = () => {
 
     return () => {
       map.current?.remove();
+      map.current = null;
     };
   }, []);
 

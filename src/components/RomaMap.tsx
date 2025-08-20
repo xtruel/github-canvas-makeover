@@ -134,15 +134,89 @@ const RomaMap = () => {
       image: 'https://cdn.pixabay.com/photo/2018/07/26/07/45/trastevere-3562345_1280.jpg'
     },
     
-    // Locali per vedere partite Roma maschile (marker rossi)
+    // Stadi di Roma (marker arancioni scuri)
     { 
       name: 'Stadio Olimpico', 
       coords: [12.4547, 41.9342], 
-      type: 'roma-men', 
-      color: '#DC2626',
-      description: 'Casa dell\'AS Roma e della Lazio, stadio olimpico con capacità di 70.000 spettatori.',
+      type: 'stadium', 
+      color: '#D97706',
+      description: 'Stadio principale di Roma, casa di AS Roma e Lazio. Ospitò i Giochi Olimpici del 1960 e la finale dei Mondiali 1990.',
       image: 'https://cdn.pixabay.com/photo/2016/06/07/14/14/stadium-1442616_1280.jpg'
     },
+    { 
+      name: 'Stadio Flaminio', 
+      coords: [12.4712, 41.9234], 
+      type: 'stadium', 
+      color: '#D97706',
+      description: 'Stadio storico progettato da Pier Luigi Nervi per le Olimpiadi del 1960, oggi utilizzato per rugby.',
+      image: 'https://cdn.pixabay.com/photo/2016/06/16/16/32/stadium-1461329_1280.jpg'
+    },
+    { 
+      name: 'Stadio dei Marmi Pietro Mennea', 
+      coords: [12.4589, 41.9312], 
+      type: 'stadium', 
+      color: '#D97706',
+      description: 'Stadio di atletica leggera del Foro Italico, decorato con 60 statue di marmo di atleti.',
+      image: 'https://cdn.pixabay.com/photo/2014/05/18/11/25/track-and-field-346542_1280.jpg'
+    },
+    { 
+      name: 'Stadio Nando Martellini', 
+      coords: [12.4578, 41.9289], 
+      type: 'stadium', 
+      color: '#D97706',
+      description: 'Stadio di atletica leggera nel Foro Italico, sede di importanti eventi internazionali.',
+      image: 'https://cdn.pixabay.com/photo/2016/03/28/09/22/stadium-1285396_1280.jpg'
+    },
+    { 
+      name: 'Stadio della Rondinella', 
+      coords: [12.4423, 41.8956], 
+      type: 'stadium', 
+      color: '#D97706',
+      description: 'Stadio storico nel quartiere Flaminio, utilizzato per calcio giovanile e eventi sportivi locali.',
+      image: 'https://cdn.pixabay.com/photo/2013/11/25/10/58/grass-217637_1280.jpg'
+    },
+    { 
+      name: 'Stadio Tre Fontane', 
+      coords: [12.4623, 41.8234], 
+      type: 'stadium', 
+      color: '#D97706',
+      description: 'Stadio moderno nell\'EUR utilizzato per calcio e rugby, sede di diverse società sportive.',
+      image: 'https://cdn.pixabay.com/photo/2016/07/25/10/42/football-1540047_1280.jpg'
+    },
+    { 
+      name: 'Trastevere Stadium', 
+      coords: [12.4634, 41.8823], 
+      type: 'stadium', 
+      color: '#D97706',
+      description: 'Stadio nel quartiere Trastevere, sede dell\'ASD Trastevere Calcio e altri eventi sportivi.',
+      image: 'https://cdn.pixabay.com/photo/2018/03/01/14/57/architecture-3190254_1280.jpg'
+    },
+    { 
+      name: 'Campo Testaccio', 
+      coords: [12.4723, 41.8756], 
+      type: 'stadium', 
+      color: '#D97706',
+      description: 'Campo storico dove nacque l\'AS Roma nel 1927, oggi area residenziale con memoria storica.',
+      image: 'https://cdn.pixabay.com/photo/2018/01/21/17/04/soccer-3097455_1280.jpg'
+    },
+    { 
+      name: 'Stadio Centrale del Tennis', 
+      coords: [12.4567, 41.9298], 
+      type: 'stadium', 
+      color: '#D97706',
+      description: 'Campo centrale del Foro Italico, sede degli Internazionali d\'Italia di tennis.',
+      image: 'https://cdn.pixabay.com/photo/2015/07/19/10/01/tennis-852246_1280.jpg'
+    },
+    { 
+      name: 'Stadio Nicola Pietrangeli', 
+      coords: [12.4545, 41.9278], 
+      type: 'stadium', 
+      color: '#D97706',
+      description: 'Campo da tennis del Foro Italico, secondo campo più importante per gli Internazionali d\'Italia.',
+      image: 'https://cdn.pixabay.com/photo/2016/10/22/12/26/tennis-1761277_1280.jpg'
+    },
+
+    // Locali per vedere partite Roma maschile (marker rossi)
     { 
       name: 'Bar del Fico', 
       coords: [12.4735, 41.9008], 
@@ -187,6 +261,7 @@ const RomaMap = () => {
       case 'pub': return 'Pub & Bar';
       case 'club': return 'Club & Vita Notturna';
       case 'neighborhood': return 'Quartiere';
+      case 'stadium': return 'Stadio';
       case 'roma-men': return 'Partite Roma';
       case 'roma-women': return 'Roma Femminile';
       case 'other': return 'Punto di Interesse';
@@ -292,6 +367,10 @@ const RomaMap = () => {
         <div className="absolute top-4 left-4 sm:top-2 sm:left-2 bg-background/95 backdrop-blur-sm rounded-lg p-3 sm:p-2 shadow-lg border border-border/50 max-w-[200px] sm:max-w-[150px]">
           <h4 className="text-sm font-bold mb-2 text-roma-gold">Legenda</h4>
           <div className="space-y-1 text-xs">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-orange-700 border border-white flex-shrink-0"></div>
+              <span className="truncate">Stadi</span>
+            </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-red-600 border border-white flex-shrink-0"></div>
               <span className="truncate">Partite Roma</span>

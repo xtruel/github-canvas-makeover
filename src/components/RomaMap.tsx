@@ -4,16 +4,19 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { X, ChevronUp, ChevronDown } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
-// Import local images
-import colosseocolosseoImage from '@/assets/colosseo-roma.jpg';
-import pantheonImage from '@/assets/pantheon-interno.jpg';
-import fontanaTreviImage from '@/assets/fontana-trevi-roma.jpg';
-import piazzaSpagnaImage from '@/assets/piazza-spagna-roma.jpg';
+// Import real images from authentic locations
+import colosseocolosseoImage from '@/assets/colosseo-real.jpg';
+import pantheonImage from '@/assets/pantheon-real.jpg';
+import fontanaTreviImage from '@/assets/trevi-fountain-real.jpg';
+import piazzaSpagnaImage from '@/assets/piazza-spagna-real.jpg';
 import vitorianoImage from '@/assets/vittoriano-altare.jpg';
-import trastevereImage from '@/assets/trastevere-roma.jpg';
-import barRomanoImage from '@/assets/bar-romano.jpg';
-import clubNotturnoImage from '@/assets/club-notturno.jpg';
-import quartiereStoricoImage from '@/assets/quartiere-storico.jpg';
+import trastevereImage from '@/assets/trastevere-real.jpg';
+import barRomanoImage from '@/assets/roma-pub-real.jpg';
+import clubNotturnoImage from '@/assets/roma-club-real.jpg';
+import quartiereStoricoImage from '@/assets/monti-quarter-real.jpg';
+import stadioOlimpicoImage from '@/assets/stadio-olimpico-real.jpg';
+import castelsantangeloImage from '@/assets/castel-santangelo-real.jpg';
+import villaBorgheseImage from '@/assets/villa-borghese-real.jpg';
 
 const RomaMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -35,15 +38,15 @@ const RomaMap = () => {
       coords: [12.4924, 41.8902], 
       type: 'historical', 
       color: '#6B7280',
-      description: 'L\'Anfiteatro Flavio (I secolo d.C.), costruito dagli imperatori della dinastia flavia, è il simbolo eterno di Roma. Alto 50 metri e lungo 189, poteva ospitare fino a 75.000 spettatori per i leggendari combattimenti gladiatori e le cacce selvagge (venationes). Patrimonio UNESCO dal 1980.',
-      image: 'https://turismoroma.it/sites/default/files/colosseo_slide_0.jpg'
+      description: 'L\'Anfiteatro Flavio (I secolo d.C.) è il simbolo immortale di Roma. Questo colosso di pietra travertina, alto 50 metri con quattro piani di arcate, poteva ospitare fino a 75.000 spettatori che assistevano ai leggendari combattimenti gladiatori, alle venationes con bestie esotiche e ai spettacoli navali. I sotterranei conservano ancora i meccanismi che facevano emergere nell\'arena belve feroci e scenografie spettacolari. Patrimonio UNESCO dal 1980, rappresenta l\'ingegneria romana al suo apice.',
+      image: colosseocolosseoImage
     },
     { 
       name: 'Pantheon', 
       coords: [12.4768, 41.8986], 
       type: 'historical', 
       color: '#6B7280',
-      description: 'Miracolo dell\'architettura antica, il Pantheon (126 d.C.) vanta la cupola in calcestruzzo non armato più grande al mondo (43,3 metri di diametro). L\'oculo centrale illumina naturalmente questo tempio romano trasformato in basilica cristiana. Tomba di Raffaello e dei re d\'Italia.',
+      description: 'Miracolo architettonico dell\'antichità, il Pantheon (126 d.C.) sotto Adriano è il tempio meglio conservato di Roma. La sua cupola in calcestruzzo non armato, con un diametro di 43,3 metri, rimane la più grande mai costruita. L\'oculo centrale di 9 metri crea un fascio di luce che attraversa l\'interno come un orologio solare celeste. Trasformato in basilica cristiana nel 609, custodisce la tomba di Raffaello Sanzio e dei primi re d\'Italia. L\'iscrizione "M·AGRIPPA·L·F·COS·TERTIVM·FECIT" richiama la prima costruzione augustea.',
       image: pantheonImage
     },
     { 
@@ -51,7 +54,7 @@ const RomaMap = () => {
       coords: [12.4833, 41.9009], 
       type: 'historical', 
       color: '#6B7280',
-      description: 'Capolavoro del tardo barocco (1732-1762) progettato da Nicola Salvi, è la più grandiosa delle 2000+ fontane romane. Alta 26 metri e larga 49, rappresenta Nettuno con i tritoni. La leggenda vuole che lanciare una moneta con la mano destra sopra la spalla sinistra garantisca il ritorno a Roma.',
+      description: 'Capolavoro del tardo barocco romano (1732-1762), la Fontana di Trevi è la più spettacolare delle oltre 2000 fontane della Città Eterna. Progettata da Nicola Salvi, questa scenografia teatrale alta 26 metri e larga 49 metri rappresenta Nettuno (Oceano) con i suoi cavalli marini e tritoni tra rocce naturalistiche. L\'acqua Vergine scorre qui da oltre 2000 anni. La tradizione vuole che lanciare una moneta con la mano destra sopra la spalla sinistra garantisca il ritorno a Roma - vengono raccolte circa 3000 euro al giorno devoluti in beneficenza.',
       image: fontanaTreviImage
     },
     { 
@@ -59,7 +62,7 @@ const RomaMap = () => {
       coords: [12.4823, 41.9063], 
       type: 'historical', 
       color: '#6B7280',
-      description: 'Cuore elegante di Roma con la famosa scalinata di Trinità dei Monti (135 gradini, 1723-1726). Ai piedi, la Fontana della Barcaccia del Bernini padre. Via dei Condotti offre shopping di lusso dalle grandi maison internazionali. Dimora di Keats e Byron nell\'800.',
+      description: 'Cuore pulsante dell\'eleganza romana, Piazza di Spagna incanta con la sua scenografica scalinata di Trinità dei Monti - 135 gradini in travertino progettati da Francesco De Sanctis (1723-1726). Ai piedi, la Fontana della Barcaccia di Pietro Bernini (padre del più famoso Gian Lorenzo) ricorda l\'alluvione del Tevere del 1598. Via dei Condotti, che si apre sulla piazza, è il salotto dello shopping di lusso con le boutique delle più prestigiose maison internazionali. Qui hanno vissuto poeti romantici come Keats e Byron nella Casa-Museo alla base della scalinata.',
       image: piazzaSpagnaImage
     },
     { 
@@ -67,8 +70,8 @@ const RomaMap = () => {
       coords: [12.4663, 41.9031], 
       type: 'historical', 
       color: '#6B7280',
-      description: 'Nato come Mausoleo di Adriano (139 d.C.), divenne fortezza medievale e residenza papale rinascimentale. Il Passetto di Borgo lo collegava al Vaticano per le fughe papali. Oggi museo con 58 stanze affrescate, terrazza panoramica e la statua dell\'Arcangelo Michele che domina il Tevere.',
-      image: 'https://cdn.pixabay.com/photo/2020/07/04/07/02/castel-santangelo-5369688_1280.jpg'
+      description: 'Nato come Mausoleo di Adriano (139 d.C.), questo cilindro di travertino e peperino è diventato nei secoli fortezza inespugnabile, prigione pontificia e residenza papale rinascimentale. Il Passetto di Borgo, corridoio sopraelevato di 800 metri, lo collegava segretamente al Vaticano per le fughe dei papi in pericolo. Oggi museo con 58 stanze riccamente affrescate, ospita la Sala Paolina, gli appartamenti papali e una terrazza panoramica mozzafiato. La statua bronzea dell\'Arcangelo Michele che corona la fortezza ricorda la visione di Papa Gregorio Magno che nel 590 vide l\'angelo rinfoderare la spada, annunciando la fine della peste.',
+      image: castelsantangeloImage
     },
     { 
       name: 'Vittoriano', 
@@ -99,8 +102,8 @@ const RomaMap = () => {
       coords: [12.4922, 41.9142],
       type: 'historical',
       color: '#6B7280',
-      description: 'Il più grande parco pubblico di Roma con 80 ettari di verde. Ospita la Galleria Borghese, il Bioparco, il Globe Theatre e il Pincio con vista panoramica su Roma.',
-      image: 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=500'
+      description: 'Il più grande parco pubblico di Roma con 80 ettari di verde incantevole e ville liberty. Creato nel XVII secolo dal cardinale Scipione Borghese, ospita la celeberrima Galleria Borghese con capolavori di Bernini, Caravaggio e Tiziano. Qui si trovano anche il Bioparco (zoo storico), il Museo Etrusco di Villa Giulia, il Globe Theatre per Shakespeare, il laghetto con le tartarughe e il Pincio con le sue terrazze panoramiche che offrono una vista mozzafiato su Roma e San Pietro. Un\'oasi di pace dove romani e turisti passeggiano tra fontane, statue e giardini all\'italiana.',
+      image: villaBorgheseImage
     },
     {
       name: 'Terme di Caracalla',
@@ -241,7 +244,7 @@ const RomaMap = () => {
       coords: [12.4692, 41.8896], 
       type: 'neighborhood', 
       color: '#16A34A',
-      description: 'Quartiere medievale pittoresco con stradine acciottolate, trattorie tradizionali e vita notturna.',
+      description: 'Il quartiere più autentico e pittoresco di Roma, dove il tempo sembra essersi fermato al Medioevo. Le stradine acciottolate di sampietrini conducono a piazzette nascoste illuminate da lanterne, trattorie familiari dove nonna stende ancora la pasta a mano, e osteriacce che servono il vino dei Castelli in brocche di ceramica. Santa Maria in Trastevere con i suoi mosaici dorati veglia sulla piazza principale, mentre la sera il quartiere si trasforma nel cuore pulsante della movida romana, con locali che restano aperti fino all\'alba e una folla cosmopolita che si riversa nelle vie.',
       image: trastevereImage
     },
     { 
@@ -249,7 +252,7 @@ const RomaMap = () => {
       coords: [12.4856, 41.8956], 
       type: 'neighborhood', 
       color: '#16A34A',
-      description: 'Quartiere bohémien con boutique vintage, ristoranti caratteristici e atmosfera artistica.',
+      description: 'Il rione bohémien per eccellenza, che mantiene l\'anima popolare di una volta mescolata a un\'eleganza sottile e ricercata. Via del Boschetto e Via dei Cappuccini ospitano boutique vintage uniche, atelier di artisti emergenti, concept store e librerie indipendenti. I ristoranti di Monti spaziano dalla cucina tradizionale romana alle fusion più creative, mentre i cocktail bar nascosti nei vicoli offrono mixology d\'autore. La sera, Monti si anima di una folla giovane e internazionale che popola i locali fino a tarda notte, creando un\'atmosfera elettrizzante ma mai chiassosa.',
       image: quartiereStoricoImage
     },
     {
@@ -299,8 +302,8 @@ const RomaMap = () => {
       coords: [12.4547, 41.9342], 
       type: 'stadium', 
       color: '#D97706',
-      description: 'Stadio principale di Roma, casa di AS Roma e Lazio. Ospitò i Giochi Olimpici del 1960 e la finale dei Mondiali 1990.',
-      image: 'https://www.bellaromesports.com/media/80403/rugby1.jpg'
+      description: 'Tempio del calcio romano e teatro di emozioni infinite. Lo Stadio Olimpico (capienza 70.634 spettatori) è la casa di AS Roma e Lazio, scenario di derby infuocati che dividono la città. Costruito per le Olimpiadi del 1960 e ristrutturato per i Mondiali del 1990, ha ospitato la finale mondiale Italia-Germania Ovest. La Curva Sud giallorossa e la Curva Nord biancoceleste creano un\'atmosfera elettrizzante. Qui Totti ha scritto pagine di storia, qui risuonano i cori che fanno tremare le fondamenta. Oltre al calcio, ospita concerti memorabili e la finale di Coppa Italia.',
+      image: stadioOlimpicoImage
     },
     {
       name: 'Stadio Flaminio',

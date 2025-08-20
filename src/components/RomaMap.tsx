@@ -1,14 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 const RomaMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [mapboxToken, setMapboxToken] = useState('');
-  const [showTokenInput, setShowTokenInput] = useState(true);
+
+  // Token Mapbox fornito dall'utente
+  const MAPBOX_TOKEN = 'pk.eyJ1IjoiZnVyaWVyb21hbmUiLCJhIjoiY21lanVmMWVnMDFsdjJrczc2Mm12Y3QyNyJ9.J1I-1msTs5pOeccQAuQ4yg';
 
   // Luoghi di Roma con marker colorati (simulando la mappa originale)
   const romaPlaces = [
@@ -40,10 +39,20 @@ const RomaMap = () => {
     { name: 'Testaccio', coords: [12.4756, 41.8789], type: 'other', color: '#F97316' },
   ];
 
-  const initializeMap = (token: string) => {
-    if (!mapContainer.current || !token) return;
+  const getTypeLabel = (type: string) => {
+    switch (type) {
+      case 'historical': return 'Luogo Storico';
+      case 'roma-men': return 'Partite Roma';
+      case 'roma-women': return 'Roma Femminile';
+      case 'other': return 'Punto di Interesse';
+      default: return 'Luogo';
+    }
+  };
 
-    mapboxgl.accessToken = token;
+  useEffect(() => {
+    if (!mapContainer.current || map.current) return;
+
+    mapboxgl.accessToken = MAPBOX_TOKEN;
     
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -99,54 +108,10 @@ const RomaMap = () => {
       });
     });
 
-    setShowTokenInput(false);
-  };
-
-  const getTypeLabel = (type: string) => {
-    switch (type) {
-      case 'historical': return 'Luogo Storico';
-      case 'roma-men': return 'Partite Roma';
-      case 'roma-women': return 'Roma Femminile';
-      case 'other': return 'Punto di Interesse';
-      default: return 'Luogo';
-    }
-  };
-
-  const handleTokenSubmit = () => {
-    if (mapboxToken.trim()) {
-      initializeMap(mapboxToken.trim());
-    }
-  };
-
-  useEffect(() => {
     return () => {
       map.current?.remove();
     };
   }, []);
-
-  if (showTokenInput) {
-    return (
-      <div className="flex flex-col items-center justify-center space-y-4 p-8 bg-gradient-to-br from-roma-red/10 to-roma-gold/10 rounded-lg border border-border/50">
-        <h3 className="text-xl font-bold text-roma-gold">Configura Mappa di Roma</h3>
-        <p className="text-center text-muted-foreground max-w-md">
-          Per visualizzare la mappa interattiva di Roma, inserisci il tuo token pubblico Mapbox.
-          Puoi ottenerlo gratuitamente su <a href="https://mapbox.com/" target="_blank" rel="noopener noreferrer" className="text-roma-gold hover:underline">mapbox.com</a>
-        </p>
-        <div className="flex gap-2 w-full max-w-md">
-          <Input
-            type="text"
-            placeholder="pk.eyJ1Ijoi..."
-            value={mapboxToken}
-            onChange={(e) => setMapboxToken(e.target.value)}
-            className="flex-1"
-          />
-          <Button onClick={handleTokenSubmit} className="bg-roma-red hover:bg-roma-red/80">
-            Carica Mappa
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="relative w-full h-[525px] rounded-lg overflow-hidden shadow-roma border border-border/50">

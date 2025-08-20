@@ -32,7 +32,7 @@ const RomaMap = () => {
       type: 'historical', 
       color: '#6B7280',
       description: 'L\'Anfiteatro Flavio (I secolo d.C.), costruito dagli imperatori della dinastia flavia, è il simbolo eterno di Roma. Alto 50 metri e lungo 189, poteva ospitare fino a 75.000 spettatori per i leggendari combattimenti gladiatori e le cacce selvagge (venationes). Patrimonio UNESCO dal 1980.',
-      image: colosseocolosseoImage
+      image: 'https://turismoroma.it/sites/default/files/colosseo_slide_0.jpg'
     },
     { 
       name: 'Pantheon', 
@@ -74,6 +74,54 @@ const RomaMap = () => {
       description: 'Altare della Patria dedicato a Vittorio Emanuele II, primo re d\'Italia unita. Inaugurato nel 1935, è soprannominato "Macchina da scrivere" dai romani. Ospita il Milite Ignoto, il Museo del Risorgimento e terrazze panoramiche con ascensori panoramici che offrono vista a 360° su Roma.',
       image: vitorianoImage
     },
+    {
+      name: 'Basilica di San Pietro',
+      coords: [12.4534, 41.9022],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'La più grande basilica del mondo cristiano, capolavoro del Rinascimento e Barocco. Progettata da Bramante, Michelangelo e Bernini. La cupola di Michelangelo domina Roma con i suoi 136 metri di altezza.',
+      image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=500'
+    },
+    {
+      name: 'Fori Imperiali',
+      coords: [12.4843, 41.8947],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'Complesso di piazze monumentali costruite tra il 46 a.C. e il 113 d.C. dai vari imperatori romani. Include il Foro di Cesare, di Augusto, di Nerva e di Traiano con la famosa Colonna Traiana.',
+      image: 'https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=500'
+    },
+    {
+      name: 'Villa Borghese',
+      coords: [12.4922, 41.9142],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'Il più grande parco pubblico di Roma con 80 ettari di verde. Ospita la Galleria Borghese, il Bioparco, il Globe Theatre e il Pincio con vista panoramica su Roma.',
+      image: 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=500'
+    },
+    {
+      name: 'Terme di Caracalla',
+      coords: [12.4907, 41.8784],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'Uno dei più grandi e meglio conservati complessi termali dell\'antica Roma, costruito dall\'imperatore Caracalla tra il 212 e il 216 d.C. Poteva ospitare fino a 1600 bagnanti contemporaneamente.',
+      image: 'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=500'
+    },
+    {
+      name: 'Circo Massimo',
+      coords: [12.4854, 41.8857],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'Il più grande stadio dell\'antichità, lungo 621 metri e largo 118, poteva ospitare fino a 250.000 spettatori per le corse dei carri. Oggi è un parco pubblico che conserva la forma originale.',
+      image: 'https://images.unsplash.com/photo-1588773163068-ca4ae4a08742?w=500'
+    },
+    {
+      name: 'Campo de\' Fiori',
+      coords: [12.4728, 41.8957],
+      type: 'neighborhood',
+      color: '#16A34A',
+      description: 'Piazza storica con mercato mattutino dal 1869 e vivace vita notturna. Al centro la statua di Giordano Bruno, bruciato qui nel 1600. Circondata da osterie tradizionali e locali trendy.',
+      image: 'https://images.unsplash.com/photo-1582719471274-15abce5b07c3?w=500'
+    },
     
     // Pub e Bar (marker blu)
     { 
@@ -100,6 +148,46 @@ const RomaMap = () => {
       description: 'Antica torrefazione a legna nata nel 1938, uno dei caffè più amati di Roma in Piazza Sant\'Eustachio.',
       image: barRomanoImage
     },
+    {
+      name: 'Open Baladin',
+      coords: [12.4728, 41.8957],
+      type: 'pub',
+      color: '#2563EB',
+      description: 'Pub moderno vicino Campo de\' Fiori, leader nella scena craft-beer romana con 40 birre alla spina e 100 in bottiglia.',
+      image: 'https://lp-cms-production.imgix.net/2024-03/courtesy-rome-Open-Baladin-01.jpeg'
+    },
+    {
+      name: 'Ai Tre Scalini',
+      coords: [12.4856, 41.8956],
+      type: 'pub',
+      color: '#2563EB',
+      description: 'Antica vineria dal 1895 nel rione Monti. Storica bottiglieria con motto "morire sì, ma non di sete!"',
+      image: 'https://www.aitrescalini.org/wp-content/uploads/2024/03/Immagine-WhatsApp-2024-03-07-ore-10.29.26_317756ac.jpg'
+    },
+    {
+      name: 'Cul de Sac',
+      coords: [12.4734, 41.8994],
+      type: 'pub',
+      color: '#2563EB',
+      description: 'Wine bar popolare vicino Piazza Navona con terrazza e interno rivestito di bottiglie. Lista enciclopedica di vini regionali italiani.',
+      image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=500'
+    },
+    {
+      name: 'The Basement',
+      coords: [12.4815, 41.9021],
+      type: 'pub',
+      color: '#2563EB',
+      description: 'Pub e cocktail bar con punteggio perfetto su TripAdvisor. Ampia scelta di birre artigianali e cocktail creativi.',
+      image: 'https://images.unsplash.com/photo-1544148103-0773bf10d330?w=500'
+    },
+    {
+      name: 'Nag\'s Head',
+      coords: [12.4789, 41.9012],
+      type: 'pub',
+      color: '#2563EB',
+      description: 'Scottish pub nel cuore di Roma, autentico gusto scozzese con atmosfera tradizionale.',
+      image: 'https://nagshead.it/wp-content/uploads/2019/02/slide-scozia.jpg'
+    },
     
     // Club e Vita Notturna (marker rosa)
     { 
@@ -109,6 +197,38 @@ const RomaMap = () => {
       color: '#EC4899',
       description: 'Club iconico di Roma con musica elettronica, frequentato da DJ internazionali e giovani romani.',
       image: clubNotturnoImage
+    },
+    {
+      name: 'Room 26',
+      coords: [12.4712, 41.8934],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Discoteca esclusiva nel centro di Roma, locale trendy per la nightlife romana di alto livello.',
+      image: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=500'
+    },
+    {
+      name: 'Ex Dogana',
+      coords: [12.4923, 41.8789],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Spazio multifunzionale per eventi, concerti e serate danzanti nella zona San Lorenzo.',
+      image: 'https://images.unsplash.com/photo-1574391884720-bfdb9d9d7b84?w=500'
+    },
+    {
+      name: 'Akab Club',
+      coords: [12.4856, 41.8745],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Storico club romano con musica house e techno, punto di riferimento per la scena underground.',
+      image: 'https://images.unsplash.com/photo-1571166477815-3a379d3e6a24?w=500'
+    },
+    {
+      name: 'Magnolia Roma',
+      coords: [12.4547, 41.9342],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Locale al Foro Italico per eventi e serate esclusive, cocktail bar e privée.',
+      image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=500'
     },
     
     // Quartieri storici e moderni (marker verdi)
@@ -128,15 +248,111 @@ const RomaMap = () => {
       description: 'Quartiere bohémien con boutique vintage, ristoranti caratteristici e atmosfera artistica.',
       image: quartiereStoricoImage
     },
+    {
+      name: 'Testaccio',
+      coords: [12.4759, 41.8742],
+      type: 'neighborhood',
+      color: '#16A34A',
+      description: 'Quartiere operaio tradizionale, famoso per la vita notturna e la cucina tipica romana. Ex mattatoio ora centro culturale.',
+      image: 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=500'
+    },
+    {
+      name: 'San Lorenzo',
+      coords: [12.5145, 41.9012],
+      type: 'neighborhood',
+      color: '#16A34A',
+      description: 'Quartiere universitario e alternativo, ricco di locali notturni, street art e atmosfera bohémien.',
+      image: 'https://images.unsplash.com/photo-1613665813446-82a78c468a1d?w=500'
+    },
+    {
+      name: 'Pigneto',
+      coords: [12.5234, 41.8934],
+      type: 'neighborhood',
+      color: '#16A34A',
+      description: 'Quartiere emergente con gallerie d\'arte indipendenti, wine bar alternativi e forte identità culturale.',
+      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=500'
+    },
+    {
+      name: 'Garbatella',
+      coords: [12.4823, 41.8567],
+      type: 'neighborhood',
+      color: '#16A34A',
+      description: 'Quartiere degli anni \'20 con architettura razionalista e case popolari. Atmosfera autentica e cinema famosi.',
+      image: 'https://images.unsplash.com/photo-1595950823406-7caba1a27e3a?w=500'
+    },
+    {
+      name: 'Aventino',
+      coords: [12.4834, 41.8812],
+      type: 'neighborhood',
+      color: '#16A34A',
+      description: 'Colle aristocratico con ville eleganti, giardini panoramici e il famoso buco della serratura dei Cavalieri di Malta.',
+      image: 'https://images.unsplash.com/photo-1587149185119-0d36c3b4b23c?w=500'
+    },
     
-    // Stadi di Roma (marker arancioni scuri)
+    // Stadi e Impianti Sportivi (marker arancioni scuri)
     { 
       name: 'Stadio Olimpico', 
       coords: [12.4547, 41.9342], 
       type: 'stadium', 
       color: '#D97706',
       description: 'Stadio principale di Roma, casa di AS Roma e Lazio. Ospitò i Giochi Olimpici del 1960 e la finale dei Mondiali 1990.',
-      image: 'https://cdn.pixabay.com/photo/2016/06/07/14/14/stadium-1442616_1280.jpg'
+      image: 'https://www.bellaromesports.com/media/80403/rugby1.jpg'
+    },
+    {
+      name: 'Stadio Flaminio',
+      coords: [12.4678, 41.9234],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Stadio storico progettato da Pier Luigi Nervi per le Olimpiadi del 1960, ex casa della Roma e ora utilizzato per rugby.',
+      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500'
+    },
+    {
+      name: 'Centro Sportivo Fulvio Bernardini',
+      coords: [12.3456, 41.8234],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Centro di allenamento dell\'AS Roma a Trigoria, dotato di campi all\'avanguardia e strutture moderne.',
+      image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=500'
+    },
+    {
+      name: 'Ippodromo delle Capannelle',
+      coords: [12.5789, 41.8345],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Storico ippodromo romano inaugurato nel 1926, sede delle più importanti corse di cavalli in Italia.',
+      image: 'https://images.unsplash.com/photo-1553103464-e8e2d0c7e52a?w=500'
+    },
+    {
+      name: 'Palazetto dello Sport',
+      coords: [12.4612, 41.9289],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Palazzo dello sport progettato da Pierluigi Nervi per le Olimpiadi 1960, capolavoro architettonico moderno.',
+      image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=500'
+    },
+    {
+      name: 'Centro Federale di Pietralata',
+      coords: [12.5123, 41.9234],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Centro tecnico federale per il calcio italiano, sede di allenamenti e corsi per allenatori.',
+      image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=500'
+    },
+    {
+      name: 'Circolo del Golf Roma Acquasanta',
+      coords: [12.5234, 41.8567],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Prestigioso circolo di golf fondato nel 1903, uno dei più antichi d\'Italia con percorso a 18 buche.',
+      image: 'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=500'
+    },
+    {
+      name: 'Centro Olimpico Matteo Pellicone',
+      coords: [12.4789, 41.9456],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Centro di allenamento per lotta e arti marziali, intitolato al campione olimpico Matteo Pellicone.',
+      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500'
     },
     
     // Locali per vedere partite Roma maschile (marker rossi)
@@ -148,6 +364,38 @@ const RomaMap = () => {
       description: 'Bar storico nel centro di Roma, punto di ritrovo dei tifosi giallorossi per le partite.',
       image: barRomanoImage
     },
+    {
+      name: 'Scholars Lounge Irish Pub',
+      coords: [12.4823, 41.9034],
+      type: 'roma-men',
+      color: '#DC2626',
+      description: 'Irish pub nel centro storico con maxischermi per le partite della Roma e atmosfera da stadio.',
+      image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=500'
+    },
+    {
+      name: 'The Drunken Ship',
+      coords: [12.4728, 41.8957],
+      type: 'roma-men',
+      color: '#DC2626',
+      description: 'Pub americano a Campo de\' Fiori, popolare tra i tifosi per vedere le partite su grandi schermi.',
+      image: 'https://images.unsplash.com/photo-1541696490-8275fd5f6144?w=500'
+    },
+    {
+      name: 'Yellow Bar',
+      coords: [12.4756, 41.8945],
+      type: 'roma-men',
+      color: '#DC2626',
+      description: 'Sports bar con ambiente giallorosso, frequentato dai tifosi della Roma per seguire le partite.',
+      image: 'https://images.unsplash.com/photo-1544148103-0773bf10d330?w=500'
+    },
+    {
+      name: 'Libreria del Viaggiatore',
+      coords: [12.4692, 41.8896],
+      type: 'roma-men',
+      color: '#DC2626',
+      description: 'Bar libreria a Trastevere che trasmette le partite della Roma in ambiente culturale e rilassato.',
+      image: 'https://images.unsplash.com/photo-1481349518771-20055b2a7b24?w=500'
+    },
     
     // Locali Roma femminile (marker viola/magenta)
     { 
@@ -157,6 +405,72 @@ const RomaMap = () => {
       color: '#9333EA',
       description: 'Centro di allenamento dell\'AS Roma Femminile, sede degli allenamenti e delle partite casalinghe.',
       image: 'https://cdn.pixabay.com/photo/2016/02/13/12/26/aurora-1197753_1280.jpg'
+    },
+    {
+      name: 'Tre Fontane Sports Center',
+      coords: [12.4123, 41.8345],
+      type: 'roma-women',
+      color: '#9333EA',
+      description: 'Centro sportivo dove si allenano e giocano le squadre giovanili femminili della Roma.',
+      image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=500'
+    },
+    {
+      name: 'Bar dello Sport Femminile',
+      coords: [12.4567, 41.8765],
+      type: 'roma-women',
+      color: '#9333EA',
+      description: 'Bar dedicato al calcio femminile, trasmette le partite della Roma Women e promuove lo sport femminile.',
+      image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=500'
+    },
+    
+    // Altri luoghi iconici
+    {
+      name: 'Isola Tiberina',
+      coords: [12.4775, 41.8906],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'Isola sul Tevere a forma di nave, collegata alla città da due ponti antichi. Sede dell\'Ospedale Fatebenefratelli.',
+      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=500'
+    },
+    {
+      name: 'Ponte Sant\'Angelo',
+      coords: [12.4668, 41.9021],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'Ponte romano decorato da 10 statue di angeli del Bernini, collega il centro storico a Castel Sant\'Angelo.',
+      image: 'https://images.unsplash.com/photo-1580800503000-7b8c86c1a532?w=500'
+    },
+    {
+      name: 'Mercati di Traiano',
+      coords: [12.4856, 41.8956],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'Complesso commerciale antico considerato il primo centro commerciale della storia, oggi museo.',
+      image: 'https://images.unsplash.com/photo-1539650116574-75c0c6d73136?w=500'
+    },
+    {
+      name: 'Domus Aurea',
+      coords: [12.4967, 41.8923],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'Villa dorata di Nerone, palazzo imperiale con decorazioni e tecnologie avanzatissime per l\'epoca.',
+      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=500'
+    },
+    {
+      name: 'Palazzo Altemps',
+      coords: [12.4734, 41.9012],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'Palazzo rinascimentale che ospita una delle più importanti collezioni di sculture antiche al mondo.',
+      image: 'https://images.unsplash.com/photo-1587149185119-0d36c3b4b23c?w=500'
+    },
+    {
+      name: 'Palazzo Massimo',
+      coords: [12.4998, 41.9023],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'Sede del Museo Nazionale Romano con capolavori dell\'arte antica, affreschi e mosaici straordinari.',
+      image: 'https://images.unsplash.com/photo-1595950823406-7caba1a27e3a?w=500'
     }
   ];
 

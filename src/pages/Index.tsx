@@ -49,7 +49,7 @@ const Index = () => {
           <img 
             src="/lovable-uploads/af321201-3c36-40c5-862e-fed415398b56.png"
             alt="AS Roma Official Logo" 
-            className="w-24 h-24 mx-auto object-contain"
+            className="w-48 h-48 mx-auto object-contain"
           />
         </div>
       </div>

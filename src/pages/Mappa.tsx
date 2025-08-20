@@ -10,7 +10,7 @@ const Mappa = () => {
       
       <div className="grid gap-6 sm:gap-4">
         {/* Mappa - responsive container */}
-        <div className="sm:fixed sm:inset-0 sm:z-10 sm:bg-background">
+        <div className="sm:fixed sm:inset-0 sm:top-16 sm:z-10 sm:bg-background">
           <div className="sm:absolute sm:top-0 sm:left-0 sm:right-0 sm:bottom-0">
             <Card className="shadow-glow border-border/50 h-full sm:border-0 sm:shadow-none">
               <CardHeader className="sm:absolute sm:top-2 sm:left-2 sm:right-2 sm:z-20 sm:bg-background/95 sm:backdrop-blur-sm sm:rounded-lg sm:p-3">

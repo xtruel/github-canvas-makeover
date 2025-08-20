@@ -90,6 +90,88 @@ const RomaMap = () => {
       image: 'https://cdn.pixabay.com/photo/2016/11/29/05/36/bar-1867408_1280.jpg'
     },
     
+    // Caffè Storici di Roma (marker blu)
+    { 
+      name: 'Caffè Sant\'Eustachio', 
+      coords: [12.4751, 41.8986], 
+      type: 'pub', 
+      color: '#2563EB',
+      description: 'Antica torrefazione a legna nata nel 1938, uno dei caffè più amati di Roma in Piazza Sant\'Eustachio.',
+      image: 'https://cdn.pixabay.com/photo/2017/08/06/12/06/people-2592247_1280.jpg'
+    },
+    { 
+      name: 'Antico Caffè Greco', 
+      coords: [12.4823, 41.9058], 
+      type: 'pub', 
+      color: '#2563EB',
+      description: 'Il più antico caffè di Roma (1760), frequentato da D\'Annunzio, Casanova, Nietzsche e Pasolini. La più grande galleria d\'arte aperta al pubblico.',
+      image: 'https://cdn.pixabay.com/photo/2018/09/29/22/52/rome-3711108_1280.jpg'
+    },
+    { 
+      name: 'Caffè Museo Atelier Canova Tadolini', 
+      coords: [12.4804, 41.9078], 
+      type: 'pub', 
+      color: '#2563EB',
+      description: 'Caffè-museo in via del Babuino, nell\'antico studio di Canova. Si sorseggia il caffè tra arte e sculture.',
+      image: 'https://cdn.pixabay.com/photo/2018/07/14/17/46/rome-3537430_1280.jpg'
+    },
+    { 
+      name: 'Bar Rosati', 
+      coords: [12.4812, 41.9123], 
+      type: 'pub', 
+      color: '#2563EB',
+      description: 'Storico bar dal 1922, frequentato da artisti e intellettuali. Punto di ritrovo dei pittori di via Margutta negli anni \'30.',
+      image: 'https://cdn.pixabay.com/photo/2017/03/27/14/33/bar-2179309_1280.jpg'
+    },
+    { 
+      name: 'Caffè Palombini', 
+      coords: [12.4623, 41.8389], 
+      type: 'pub', 
+      color: '#2563EB',
+      description: 'Nato nel 1963 all\'EUR, simbolo del quartiere e punto di ritrovo vicino al Palazzo della Civiltà (Colosseo Quadrato).',
+      image: 'https://cdn.pixabay.com/photo/2016/02/13/12/26/aurora-1197753_1280.jpg'
+    },
+    { 
+      name: 'Sciascia Caffè', 
+      coords: [12.4634, 41.9089], 
+      type: 'pub', 
+      color: '#2563EB',
+      description: 'Dal 1919 nel quartiere Prati, torrefazione con ambientazione retrò e specialità come il caffè con cioccolato fondente.',
+      image: 'https://cdn.pixabay.com/photo/2015/07/02/20/57/club-829978_1280.jpg'
+    },
+    { 
+      name: 'Castroni', 
+      coords: [12.4645, 41.9078], 
+      type: 'pub', 
+      color: '#2563EB',
+      description: 'Nato nel 1932, storico locale in via Cola di Rienzo. Drogheria, caffetteria e torrefazione, sinonimo di "caffè buono".',
+      image: 'https://cdn.pixabay.com/photo/2015/05/15/14/27/nightclub-768434_1280.jpg'
+    },
+    { 
+      name: 'Harry\'s Bar', 
+      coords: [12.4889, 41.9089], 
+      type: 'pub', 
+      color: '#2563EB',
+      description: 'Il bar della Dolce Vita fondato nel 1959 in via Veneto, frequentato da Fellini e comparse nei suoi film.',
+      image: 'https://cdn.pixabay.com/photo/2018/04/18/13/18/rome-3331148_1280.jpg'
+    },
+    { 
+      name: 'Caffè Tazza D\'Oro', 
+      coords: [12.4756, 41.8992], 
+      type: 'pub', 
+      color: '#2563EB',
+      description: 'Storica torrefazione zona Pantheon, famosa per il caffè e la granita con doppia panna. C\'è sempre fila nel weekend.',
+      image: 'https://cdn.pixabay.com/photo/2020/02/06/15/52/trevi-fountain-4825089_1280.jpg'
+    },
+    { 
+      name: 'Babingtons Tea Room', 
+      coords: [12.4823, 41.9063], 
+      type: 'pub', 
+      color: '#2563EB',
+      description: 'In Piazza di Spagna, punto di riferimento per il rito del tè inglese. Frequentato da Keats, Byron, Goethe e De Chirico.',
+      image: 'https://cdn.pixabay.com/photo/2016/02/17/21/38/spanish-steps-1205648_1280.jpg'
+    },
+    
     // Club e Vita Notturna (marker rosa)
     { 
       name: 'Goa Club', 

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { RomaMatches } from "@/components/RomaMatches";
 import { MapPin, Calendar, Users, Trophy, MessageCircle, Settings, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -89,6 +90,11 @@ const Index = () => {
       </div>
 
       <div className="container mx-auto px-4 py-12">
+        {/* Prossime Partite - Sezione Principale */}
+        <div className="mb-16">
+          <RomaMatches />
+        </div>
+
         {/* Breaking News Section */}
         <div className="mb-16">
           <div className="flex items-center justify-between mb-8">

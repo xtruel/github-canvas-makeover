@@ -23,6 +23,8 @@ const RomaMap = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [drawerHeight, setDrawerHeight] = useState(0.3); // 30% of screen height
   const [isMapLoading, setIsMapLoading] = useState(true);
+  const [activeFilters, setActiveFilters] = useState<string[]>(['historical', 'pub', 'club', 'neighborhood', 'stadium']);
+  const markers = useRef<mapboxgl.Marker[]>([]);
 
   // Token Mapbox
   const MAPBOX_TOKEN = 'pk.eyJ1IjoiZnVyaWVyb21hbmUiLCJhIjoiY21lanVmMWVnMDFsdjJrczc2Mm12Y3QyNyJ9.J1I-1msTs5pOeccQAuQ4yg';
@@ -500,6 +502,22 @@ const RomaMap = () => {
     }
   };
 
+  const toggleFilter = (type: string) => {
+    setActiveFilters(prev => 
+      prev.includes(type) 
+        ? prev.filter(t => t !== type)
+        : [...prev, type]
+    );
+  };
+
+  const getFilteredPlaces = () => {
+    return romaPlaces.filter(place => activeFilters.includes(place.type));
+  };
+
+  const getPlaceCount = (type: string) => {
+    return romaPlaces.filter(place => place.type === type).length;
+  };
+
   // Check if mobile
   useEffect(() => {
     const checkMobile = () => {
@@ -550,58 +568,8 @@ const RomaMap = () => {
       console.log('✅ Map loaded successfully');
       setIsMapLoading(false);
       
-      // Add fewer markers on mobile for better performance
-      const placesToShow = isMobile ? romaPlaces.slice(0, 25) : romaPlaces;
-      console.log(`📍 Adding ${placesToShow.length} markers`);
-      
-      // Add markers
-      placesToShow.forEach((place, index) => {
-        try {
-          const markerEl = document.createElement('div');
-          markerEl.className = 'custom-marker';
-          markerEl.style.cssText = `
-            background-color: ${place.color};
-            width: ${isMobile ? '16px' : '20px'};
-            height: ${isMobile ? '16px' : '20px'};
-            border-radius: 50% 50% 50% 0;
-            transform: rotate(-45deg);
-            border: 2px solid white;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-          `;
-
-          markerEl.addEventListener('click', (e) => {
-            e.stopPropagation();
-            console.log('📍 Marker clicked:', place.name);
-            setSelectedPlace(place);
-            if (isMobile) {
-              setIsDrawerOpen(true);
-            }
-          });
-
-          new mapboxgl.Marker(markerEl)
-            .setLngLat(place.coords as [number, number])
-            .addTo(mapInstance);
-            
-          if (index === 0) console.log('✅ First marker added successfully');
-        } catch (error) {
-          console.error('❌ Error adding marker:', place.name, error);
-        }
-      });
-
-      // Add fog effect only on desktop
-      if (!isMobile) {
-        try {
-          mapInstance.setFog({
-            color: 'rgb(255, 255, 255)',
-            'high-color': 'rgb(200, 200, 225)',
-            'horizon-blend': 0.1,
-          });
-          console.log('🌫️ Fog effect added');
-        } catch (error) {
-          console.error('❌ Error adding fog:', error);
-        }
-      }
+      // Add markers for filtered places
+      updateMarkers(mapInstance);
     });
 
     mapInstance.on('error', (e) => {
@@ -624,6 +592,75 @@ const RomaMap = () => {
       }
     };
   }, [isMobile]); // Add isMobile as dependency
+
+  // Update markers when filters change
+  useEffect(() => {
+    if (map.current && !isMapLoading) {
+      updateMarkers(map.current);
+    }
+  }, [activeFilters, isMobile]);
+
+  const updateMarkers = (mapInstance: mapboxgl.Map) => {
+    // Clear existing markers
+    markers.current.forEach(marker => marker.remove());
+    markers.current = [];
+
+    // Get filtered places
+    const filteredPlaces = getFilteredPlaces();
+    const placesToShow = isMobile ? filteredPlaces.slice(0, 25) : filteredPlaces;
+    console.log(`📍 Adding ${placesToShow.length} filtered markers`);
+    
+    // Add markers for filtered places
+    placesToShow.forEach((place, index) => {
+      try {
+        const markerEl = document.createElement('div');
+        markerEl.className = 'custom-marker';
+        markerEl.style.cssText = `
+          background-color: ${place.color};
+          width: ${isMobile ? '16px' : '20px'};
+          height: ${isMobile ? '16px' : '20px'};
+          border-radius: 50% 50% 50% 0;
+          transform: rotate(-45deg);
+          border: 2px solid white;
+          cursor: pointer;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        `;
+
+        markerEl.addEventListener('click', (e) => {
+          e.stopPropagation();
+          console.log('📍 Marker clicked:', place.name);
+          setSelectedPlace(place);
+          if (isMobile) {
+            setIsDrawerOpen(true);
+          }
+        });
+
+        const marker = new mapboxgl.Marker(markerEl)
+          .setLngLat(place.coords as [number, number])
+          .addTo(mapInstance);
+          
+        markers.current.push(marker);
+          
+        if (index === 0) console.log('✅ First filtered marker added successfully');
+      } catch (error) {
+        console.error('❌ Error adding marker:', place.name, error);
+      }
+    });
+
+    // Add fog effect only on desktop
+    if (!isMobile) {
+      try {
+        mapInstance.setFog({
+          color: 'rgb(255, 255, 255)',
+          'high-color': 'rgb(200, 200, 225)',
+          'horizon-blend': 0.1,
+        });
+        console.log('🌫️ Fog effect added');
+      } catch (error) {
+        console.error('❌ Error adding fog:', error);
+      }
+    }
+  };
 
   return (
     <div className="relative w-full h-screen bg-background">
@@ -654,36 +691,36 @@ const RomaMap = () => {
             
             {/* Floating Legend */}
             <div className="absolute top-4 left-4 bg-background/95 backdrop-blur-sm rounded-lg p-2 shadow-lg border border-border/50 max-w-[180px] z-20">
-              <h4 className="text-xs font-bold mb-1 text-roma-gold">Legenda</h4>
+              <h4 className="text-xs font-bold mb-1 text-roma-gold">Legenda Interattiva</h4>
               <div className="space-y-1 text-xs">
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-orange-700 border border-white flex-shrink-0"></div>
-                  <span className="truncate text-xs">Stadi</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-red-600 border border-white flex-shrink-0"></div>
-                  <span className="truncate text-xs">Roma</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-purple-600 border border-white flex-shrink-0"></div>
-                  <span className="truncate text-xs">Femminile</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-blue-600 border border-white flex-shrink-0"></div>
-                  <span className="truncate text-xs">Bar</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-pink-500 border border-white flex-shrink-0"></div>
-                  <span className="truncate text-xs">Club</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-green-600 border border-white flex-shrink-0"></div>
-                  <span className="truncate text-xs">Quartieri</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-gray-500 border border-white flex-shrink-0"></div>
-                  <span className="truncate text-xs">Storici</span>
-                </div>
+                {[
+                  { type: 'stadium', color: '#D97706', label: 'Stadi' },
+                  { type: 'roma-men', color: '#DC2626', label: 'Roma' },
+                  { type: 'roma-women', color: '#9333EA', label: 'Femminile' },
+                  { type: 'pub', color: '#2563EB', label: 'Bar' },
+                  { type: 'club', color: '#EC4899', label: 'Club' },
+                  { type: 'neighborhood', color: '#16A34A', label: 'Quartieri' },
+                  { type: 'historical', color: '#6B7280', label: 'Storici' }
+                ].map((item) => (
+                  <button
+                    key={item.type}
+                    onClick={() => toggleFilter(item.type)}
+                    className={`flex items-center gap-1 w-full p-1 rounded transition-all hover:bg-muted/50 ${
+                      activeFilters.includes(item.type) 
+                        ? 'opacity-100' 
+                        : 'opacity-50 hover:opacity-70'
+                    }`}
+                  >
+                    <div 
+                      className="w-2 h-2 rounded-full border border-white flex-shrink-0"
+                      style={{ backgroundColor: item.color }}
+                    ></div>
+                    <span className="truncate text-xs">{item.label}</span>
+                    <span className="text-[10px] text-muted-foreground ml-auto">
+                      ({getPlaceCount(item.type)})
+                    </span>
+                  </button>
+                ))}
               </div>
             </div>
           </div>
@@ -748,34 +785,34 @@ const RomaMap = () => {
               ) : (
                 <div className="p-4">
                   <h3 className="text-lg font-bold text-roma-gold mb-3">Esplora Roma</h3>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="flex items-center gap-2 text-sm">
-                      <div className="w-3 h-3 rounded-full bg-gray-500 border border-white"></div>
-                      <span>Luoghi Storici</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <div className="w-3 h-3 rounded-full bg-blue-600 border border-white"></div>
-                      <span>Pub & Bar</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <div className="w-3 h-3 rounded-full bg-pink-500 border border-white"></div>
-                      <span>Club</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <div className="w-3 h-3 rounded-full bg-green-600 border border-white"></div>
-                      <span>Quartieri</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <div className="w-3 h-3 rounded-full bg-orange-700 border border-white"></div>
-                      <span>Stadi</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <div className="w-3 h-3 rounded-full bg-red-600 border border-white"></div>
-                      <span>Partite Roma</span>
-                    </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { type: 'historical', color: '#6B7280', label: 'Luoghi Storici' },
+                      { type: 'pub', color: '#2563EB', label: 'Pub & Bar' },
+                      { type: 'club', color: '#EC4899', label: 'Club' },
+                      { type: 'neighborhood', color: '#16A34A', label: 'Quartieri' },
+                      { type: 'stadium', color: '#D97706', label: 'Stadi' },
+                      { type: 'roma-men', color: '#DC2626', label: 'Partite Roma' }
+                    ].map((item) => (
+                      <button
+                        key={item.type}
+                        onClick={() => toggleFilter(item.type)}
+                        className={`flex items-center gap-2 p-2 rounded transition-all hover:bg-muted/50 text-left ${
+                          activeFilters.includes(item.type) 
+                            ? 'opacity-100' 
+                            : 'opacity-50 hover:opacity-70'
+                        }`}
+                      >
+                        <div 
+                          className="w-3 h-3 rounded-full border border-white flex-shrink-0"
+                          style={{ backgroundColor: item.color }}
+                        ></div>
+                        <span className="text-sm truncate">{item.label}</span>
+                      </button>
+                    ))}
                   </div>
                   <p className="text-xs text-muted-foreground mt-3">
-                    Tocca un marker sulla mappa per esplorare i luoghi di Roma
+                    Tocca un filtro per mostrare/nascondere i luoghi sulla mappa
                   </p>
                 </div>
               )}
@@ -801,36 +838,36 @@ const RomaMap = () => {
               
               {/* Legend - Desktop only */}
               <div className="absolute top-4 left-4 bg-background/95 backdrop-blur-sm rounded-lg p-3 shadow-lg border border-border/50 max-w-[200px] z-10">
-                <h4 className="text-sm font-bold mb-2 text-roma-gold">Legenda</h4>
+                <h4 className="text-sm font-bold mb-2 text-roma-gold">Legenda Interattiva</h4>
                 <div className="space-y-1 text-xs">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-orange-700 border border-white flex-shrink-0"></div>
-                    <span className="truncate">Stadi</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-600 border border-white flex-shrink-0"></div>
-                    <span className="truncate">Partite Roma</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-purple-600 border border-white flex-shrink-0"></div>
-                    <span className="truncate">Roma Femminile</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-blue-600 border border-white flex-shrink-0"></div>
-                    <span className="truncate">Pub & Bar</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-pink-500 border border-white flex-shrink-0"></div>
-                    <span className="truncate">Club</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-green-600 border border-white flex-shrink-0"></div>
-                    <span className="truncate">Quartieri</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-gray-500 border border-white flex-shrink-0"></div>
-                    <span className="truncate">Luoghi Storici</span>
-                  </div>
+                  {[
+                    { type: 'stadium', color: '#D97706', label: 'Stadi' },
+                    { type: 'roma-men', color: '#DC2626', label: 'Partite Roma' },
+                    { type: 'roma-women', color: '#9333EA', label: 'Roma Femminile' },
+                    { type: 'pub', color: '#2563EB', label: 'Pub & Bar' },
+                    { type: 'club', color: '#EC4899', label: 'Club' },
+                    { type: 'neighborhood', color: '#16A34A', label: 'Quartieri' },
+                    { type: 'historical', color: '#6B7280', label: 'Luoghi Storici' }
+                  ].map((item) => (
+                    <button
+                      key={item.type}
+                      onClick={() => toggleFilter(item.type)}
+                      className={`flex items-center gap-2 w-full p-1.5 rounded transition-all hover:bg-muted/50 text-left ${
+                        activeFilters.includes(item.type) 
+                          ? 'opacity-100' 
+                          : 'opacity-50 hover:opacity-70'
+                      }`}
+                    >
+                      <div 
+                        className="w-3 h-3 rounded-full border border-white flex-shrink-0"
+                        style={{ backgroundColor: item.color }}
+                      ></div>
+                      <span className="truncate text-xs flex-1">{item.label}</span>
+                      <span className="text-[10px] text-muted-foreground">
+                        ({getPlaceCount(item.type)})
+                      </span>
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>

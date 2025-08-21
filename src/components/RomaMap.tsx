@@ -1208,14 +1208,15 @@ const RomaMap = () => {
                 <div className="p-4">
                   <h3 className="text-lg font-bold text-roma-gold mb-3">Esplora Roma</h3>
                   <div className="grid grid-cols-2 gap-2">
-                    {[
-                      { type: 'historical', color: '#6B7280', label: 'Luoghi Storici' },
-                      { type: 'pub', color: '#2563EB', label: 'Pub & Bar' },
-                      { type: 'club', color: '#EC4899', label: 'Club' },
-                      { type: 'neighborhood', color: '#16A34A', label: 'Quartieri' },
-                      { type: 'stadium', color: '#D97706', label: 'Stadi' },
-                      { type: 'roma-men', color: '#DC2626', label: 'Partite Roma' }
-                    ].map((item) => (
+                     {[
+                       { type: 'historical', color: '#6B7280', label: 'Luoghi Storici' },
+                       { type: 'pub', color: '#2563EB', label: 'Pub & Bar' },
+                       { type: 'club', color: '#EC4899', label: 'Club' },
+                       { type: 'neighborhood', color: '#16A34A', label: 'Quartieri' },
+                       { type: 'stadium', color: '#D97706', label: 'Stadi' },
+                       { type: 'roma-men', color: '#DC2626', label: 'Partite Roma' },
+                       { type: 'roma-women', color: '#9333EA', label: 'Roma Femminile' }
+                     ].map((item) => (
                       <button
                         key={item.type}
                         onClick={() => toggleFilter(item.type)}
@@ -1248,7 +1249,7 @@ const RomaMap = () => {
             Mappa di Roma
           </h1>
           
-          <div className={`flex gap-4 transition-all duration-300 h-[500px]`}>
+          <div className={`flex gap-4 transition-all duration-300 h-[500px] ${!selectedPlace ? 'justify-center' : ''}`}>
             {/* Map Container */}
             <div className={`relative rounded-lg overflow-hidden shadow-roma border border-border/50 transition-all duration-300 ${
               selectedPlace ? 'w-2/3' : 'w-full'

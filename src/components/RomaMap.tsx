@@ -1077,7 +1077,7 @@ const RomaMap = () => {
 
   return (
     <div className="relative w-full h-screen bg-background">
-      {/* Mobile Layout - Square Map */}
+      {/* Mobile Layout - Optimized for better map visibility */}
       {isMobile ? (
         <div className="flex flex-col h-full">
           {/* Header */}
@@ -1085,8 +1085,48 @@ const RomaMap = () => {
             <h2 className="text-lg font-semibold text-roma-gold text-center">Discover the Eternal City</h2>
           </div>
           
-          {/* Square Map Container - Takes half of remaining screen */}
-          <div className="relative flex-1 max-h-[50vh]">
+          {/* Horizontal Legend */}
+          <div className="bg-background/95 backdrop-blur-sm border-b border-border/50 px-3 py-2">
+            <div className="flex gap-1.5 overflow-x-auto scrollbar-hide">
+              {[
+                { type: 'stadium', color: '#D97706', label: 'Stadi' },
+                { type: 'roma-men', color: '#DC2626', label: 'Roma' },
+                { type: 'roma-women', color: '#9333EA', label: 'Femminile' },
+                { type: 'pub', color: '#2563EB', label: 'Bar' },
+                { type: 'club', color: '#EC4899', label: 'Club' },
+                { type: 'neighborhood', color: '#16A34A', label: 'Quartieri' },
+                { type: 'historical', color: '#6B7280', label: 'Storici' }
+              ].map((item) => (
+                <button
+                  key={item.type}
+                  onClick={() => toggleFilter(item.type)}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full whitespace-nowrap transition-all duration-200 hover:bg-muted/50 flex-shrink-0 text-xs ${
+                    activeFilters.includes(item.type) 
+                      ? 'opacity-100 bg-muted/30 ring-1 ring-roma-gold/50' 
+                      : 'opacity-60 hover:opacity-80'
+                  }`}
+                >
+                  <div 
+                    className="w-2 h-2 rounded-full border border-white flex-shrink-0"
+                    style={{ backgroundColor: item.color }}
+                  ></div>
+                  <span className="font-medium">{item.label}</span>
+                  <span className="text-[10px] text-muted-foreground">
+                    ({getPlaceCount(item.type)})
+                  </span>
+                </button>
+              ))}
+              <button
+                onClick={showAllFilters}
+                className="px-2.5 py-1.5 rounded-full text-xs text-roma-gold hover:text-roma-yellow border border-roma-gold/30 hover:bg-roma-gold/10 transition-all flex-shrink-0"
+              >
+                Tutti
+              </button>
+            </div>
+          </div>
+          
+          {/* Map Container - Increased height for better visibility */}
+          <div className="relative flex-1 max-h-[65vh]">
             <div 
               ref={mapContainer} 
               className="w-full h-full"
@@ -1101,57 +1141,14 @@ const RomaMap = () => {
                 </div>
               </div>
             )}
-            
-            {/* Floating Legend */}
-            <div className="absolute top-4 left-4 bg-background/95 backdrop-blur-sm rounded-lg p-2 shadow-lg border border-border/50 max-w-[180px] z-20">
-              <div className="flex items-center justify-between mb-1">
-                <h4 className="text-xs font-bold text-roma-gold">Legenda</h4>
-                <button
-                  onClick={showAllFilters}
-                  className="text-[10px] text-roma-gold hover:text-roma-yellow underline"
-                >
-                  Tutti
-                </button>
-              </div>
-              <div className="space-y-1 text-xs">
-                {[
-                  { type: 'stadium', color: '#D97706', label: 'Stadi' },
-                  { type: 'roma-men', color: '#DC2626', label: 'Roma' },
-                  { type: 'roma-women', color: '#9333EA', label: 'Femminile' },
-                  { type: 'pub', color: '#2563EB', label: 'Bar' },
-                  { type: 'club', color: '#EC4899', label: 'Club' },
-                  { type: 'neighborhood', color: '#16A34A', label: 'Quartieri' },
-                  { type: 'historical', color: '#6B7280', label: 'Storici' }
-                ].map((item) => (
-                  <button
-                    key={item.type}
-                    onClick={() => toggleFilter(item.type)}
-                    className={`flex items-center gap-1 w-full p-1 rounded transition-all duration-200 hover:bg-muted/50 ${
-                      activeFilters.includes(item.type) 
-                        ? 'opacity-100 bg-muted/30 ring-1 ring-roma-gold/50' 
-                        : 'opacity-60 hover:opacity-80'
-                    }`}
-                  >
-                    <div 
-                      className="w-2 h-2 rounded-full border border-white flex-shrink-0"
-                      style={{ backgroundColor: item.color }}
-                    ></div>
-                    <span className="truncate text-xs">{item.label}</span>
-                    <span className="text-[10px] text-muted-foreground ml-auto">
-                      ({getPlaceCount(item.type)})
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
           
-          {/* Auto-opening Drawer - Opens automatically when place is selected */}
+          {/* Auto-opening Drawer - Reduced height to keep map partially visible */}
           <div 
             className="bg-background border-t border-border/50 overflow-y-auto transition-all duration-300 ease-in-out"
             style={{ 
-              height: selectedPlace ? '65vh' : '0vh',
-              maxHeight: '65vh'
+              height: selectedPlace ? '40vh' : '0vh',
+              maxHeight: '40vh'
             }}
           >
             <div className="min-h-full">

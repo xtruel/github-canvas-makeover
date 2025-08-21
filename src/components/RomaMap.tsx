@@ -1076,17 +1076,17 @@ const RomaMap = () => {
   };
 
   return (
-    <div className="relative w-full h-[calc(100dvh-4rem)] bg-background">
+    <div className="relative w-full h-[calc(100dvh-4rem)] bg-background overflow-hidden">
       {/* Mobile Layout - Optimized for better map visibility */}
       {isMobile ? (
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="bg-background/95 backdrop-blur-sm p-3 border-b border-border/50 z-30">
+          <div className="bg-background/95 backdrop-blur-sm p-3 border-b border-border/50 z-30 flex-shrink-0">
             <h2 className="text-lg font-semibold text-roma-gold text-center">Discover the Eternal City</h2>
           </div>
           
           {/* Horizontal Legend */}
-          <div className="bg-background/95 backdrop-blur-sm border-b border-border/50 px-3 py-2">
+          <div className="bg-background/95 backdrop-blur-sm border-b border-border/50 px-3 py-2 flex-shrink-0">
             <div className="flex gap-1.5 overflow-x-auto scrollbar-hide">
               {[
                 { type: 'stadium', color: '#D97706', label: 'Stadi' },
@@ -1126,7 +1126,7 @@ const RomaMap = () => {
           </div>
           
           {/* Map Container - Increased height for better visibility */}
-          <div className="relative flex-1">
+          <div className="relative flex-1 min-h-0">
             <div 
               ref={mapContainer} 
               className="w-full h-full"
@@ -1145,10 +1145,10 @@ const RomaMap = () => {
           
           {/* Auto-opening Drawer - Reduced height to keep map partially visible */}
           <div 
-            className="bg-background border-t border-border/50 overflow-y-auto transition-all duration-300 ease-in-out"
+            className="bg-background border-t border-border/50 overflow-y-auto transition-all duration-300 ease-in-out flex-shrink-0"
             style={{ 
-              height: selectedPlace ? '35vh' : '0vh',
-              maxHeight: '35vh'
+              height: selectedPlace ? 'min(30vh, 240px)' : '0vh',
+              maxHeight: 'min(30vh, 240px)'
             }}
           >
             <div className="min-h-full">

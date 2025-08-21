@@ -15,7 +15,11 @@ import barRomanoImage from '@/assets/bar-romano.jpg';
 import clubNotturnoImage from '@/assets/club-notturno.jpg';
 import quartiereStoricoImage from '@/assets/quartiere-storico.jpg';
 
-const RomaMap = () => {
+interface RomaMapProps {
+  mode?: "embedded" | "full";
+}
+
+const RomaMap = ({ mode = "embedded" }: RomaMapProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<{
@@ -1093,133 +1097,158 @@ const RomaMap = () => {
   };
 
   return (
-    <div className="relative w-full h-full bg-background overflow-hidden">
-      {/* Mobile Layout - Square map with bottom drawer */}
+    <div className={`relative w-full bg-background overflow-hidden ${
+      mode === "full" ? "h-[calc(100dvh-4rem)]" : "h-auto"
+    }`}>
+      {/* Mobile Layout */}
       {isMobile ? (
-        <div className="flex flex-col h-full min-h-[500px]">
-          {/* Header */}
-          <div className="bg-background/95 backdrop-blur-sm p-3 border-b border-border/50 z-30 flex-shrink-0">
-            <h2 className="text-lg font-semibold text-roma-gold text-center">Discover the Eternal City</h2>
+        mode === "embedded" ? (
+          /* Embedded Mode: Simple square map only */
+          <div className="aspect-square w-full relative rounded-lg overflow-hidden shadow-roma border border-border/50">
+            <div 
+              ref={mapContainer} 
+              className="absolute inset-0 w-full h-full"
+            />
+            
+            {/* Loading indicator */}
+            {isMapLoading && (
+              <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-30">
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-roma-gold mx-auto mb-2"></div>
+                  <p className="text-sm text-muted-foreground">Caricamento mappa...</p>
+                </div>
+              </div>
+            )}
           </div>
-          
-          {/* Horizontal Legend */}
-          <div className="bg-background/95 backdrop-blur-sm border-b border-border/50 px-3 py-2 flex-shrink-0">
-            <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
-              {[
-                { type: 'stadium', color: '#D97706', label: 'Stadi' },
-                { type: 'roma-men', color: '#DC2626', label: 'Roma' },
-                { type: 'roma-women', color: '#9333EA', label: 'Femminile' },
-                { type: 'pub', color: '#2563EB', label: 'Bar' },
-                { type: 'club', color: '#EC4899', label: 'Club' },
-                { type: 'neighborhood', color: '#16A34A', label: 'Quartieri' },
-                { type: 'historical', color: '#6B7280', label: 'Storici' }
-              ].map((item) => (
+        ) : (
+          /* Full Mode: Complete mobile experience with header, legend, and drawer */
+          <div className="flex flex-col h-full min-h-[500px]">
+            {/* Header */}
+            <div className="bg-background/95 backdrop-blur-sm p-3 border-b border-border/50 z-30 flex-shrink-0">
+              <h2 className="text-lg font-semibold text-roma-gold text-center">Discover the Eternal City</h2>
+            </div>
+            
+            {/* Horizontal Legend */}
+            <div className="bg-background/95 backdrop-blur-sm border-b border-border/50 px-3 py-2 flex-shrink-0">
+              <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
+                {[
+                  { type: 'stadium', color: '#D97706', label: 'Stadi' },
+                  { type: 'roma-men', color: '#DC2626', label: 'Roma' },
+                  { type: 'roma-women', color: '#9333EA', label: 'Femminile' },
+                  { type: 'pub', color: '#2563EB', label: 'Bar' },
+                  { type: 'club', color: '#EC4899', label: 'Club' },
+                  { type: 'neighborhood', color: '#16A34A', label: 'Quartieri' },
+                  { type: 'historical', color: '#6B7280', label: 'Storici' }
+                ].map((item) => (
+                  <button
+                    key={item.type}
+                    onClick={() => toggleFilter(item.type)}
+                    className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full whitespace-nowrap transition-all duration-200 hover:bg-muted/50 flex-shrink-0 text-xs ${
+                      activeFilters.includes(item.type) 
+                        ? 'opacity-100 bg-muted/30 ring-1 ring-roma-gold/50' 
+                        : 'opacity-60 hover:opacity-80'
+                    }`}
+                  >
+                    <div 
+                      className="w-2 h-2 rounded-full border border-white flex-shrink-0"
+                      style={{ backgroundColor: item.color }}
+                    ></div>
+                    <span className="font-medium">{item.label}</span>
+                    <span className="text-[10px] text-muted-foreground">
+                      ({getPlaceCount(item.type)})
+                    </span>
+                  </button>
+                ))}
                 <button
-                  key={item.type}
-                  onClick={() => toggleFilter(item.type)}
-                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full whitespace-nowrap transition-all duration-200 hover:bg-muted/50 flex-shrink-0 text-xs ${
-                    activeFilters.includes(item.type) 
-                      ? 'opacity-100 bg-muted/30 ring-1 ring-roma-gold/50' 
-                      : 'opacity-60 hover:opacity-80'
-                  }`}
+                  onClick={showAllFilters}
+                  className="px-2.5 py-1.5 rounded-full text-xs text-roma-gold hover:text-roma-yellow border border-roma-gold/30 hover:bg-roma-gold/10 transition-all flex-shrink-0"
                 >
-                  <div 
-                    className="w-2 h-2 rounded-full border border-white flex-shrink-0"
-                    style={{ backgroundColor: item.color }}
-                  ></div>
-                  <span className="font-medium">{item.label}</span>
-                  <span className="text-[10px] text-muted-foreground">
-                    ({getPlaceCount(item.type)})
-                  </span>
+                  Tutti
                 </button>
-              ))}
-              <button
-                onClick={showAllFilters}
-                className="px-2.5 py-1.5 rounded-full text-xs text-roma-gold hover:text-roma-yellow border border-roma-gold/30 hover:bg-roma-gold/10 transition-all flex-shrink-0"
-              >
-                Tutti
-              </button>
+              </div>
             </div>
-          </div>
-          
-          {/* Square Map Container - Constrained by screen width */}
-          <div className="px-3 py-3 flex-shrink-0">
-            <div className="aspect-square w-full relative rounded-lg overflow-hidden shadow-roma border border-border/50">
-              <div 
-                ref={mapContainer} 
-                className="absolute inset-0 w-full h-full"
-              />
-              
-              {/* Loading indicator */}
-              {isMapLoading && (
-                <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-30">
-                  <div className="text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-roma-gold mx-auto mb-2"></div>
-                    <p className="text-sm text-muted-foreground">Caricamento mappa...</p>
+            
+            {/* Square Map Container - Constrained by screen width */}
+            <div className="px-3 py-3 flex-shrink-0">
+              <div className="aspect-square w-full relative rounded-lg overflow-hidden shadow-roma border border-border/50">
+                <div 
+                  ref={mapContainer} 
+                  className="absolute inset-0 w-full h-full"
+                />
+                
+                {/* Loading indicator */}
+                {isMapLoading && (
+                  <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-30">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-roma-gold mx-auto mb-2"></div>
+                      <p className="text-sm text-muted-foreground">Caricamento mappa...</p>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          </div>
-          
-          {/* Bottom Drawer for selected place */}
-          <div 
-            className="bg-background border-t border-border/50 overflow-y-auto transition-all duration-300 ease-in-out flex-shrink-0"
-            style={{ 
-              height: selectedPlace ? 'min(40vh, 300px)' : '0vh',
-              maxHeight: 'min(40vh, 300px)'
-            }}
-          >
-            <div className="min-h-full">
-              {selectedPlace && (
-                <div className="p-4 pb-8">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="flex-1">
-                      <h3 className="text-xl font-bold text-foreground mb-1">{selectedPlace.name}</h3>
-                      <p className="text-sm font-medium" style={{ color: selectedPlace.color }}>
-                        {getTypeLabel(selectedPlace.type)}
-                      </p>
+            
+            {/* Bottom Drawer for selected place */}
+            <div 
+              className="bg-background border-t border-border/50 overflow-y-auto transition-all duration-300 ease-in-out flex-shrink-0"
+              style={{ 
+                height: selectedPlace ? 'min(40vh, 300px)' : '0vh',
+                maxHeight: 'min(40vh, 300px)'
+              }}
+            >
+              <div className="min-h-full">
+                {selectedPlace && (
+                  <div className="p-4 pb-8">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-foreground mb-1">{selectedPlace.name}</h3>
+                        <p className="text-sm font-medium" style={{ color: selectedPlace.color }}>
+                          {getTypeLabel(selectedPlace.type)}
+                        </p>
+                      </div>
+                      <button 
+                        onClick={() => setSelectedPlace(null)}
+                        className="p-2 rounded-full hover:bg-muted transition-colors active:bg-muted ml-2 flex-shrink-0"
+                      >
+                        <X className="w-5 h-5 text-muted-foreground" />
+                      </button>
                     </div>
-                    <button 
-                      onClick={() => setSelectedPlace(null)}
-                      className="p-2 rounded-full hover:bg-muted transition-colors active:bg-muted ml-2 flex-shrink-0"
-                    >
-                      <X className="w-5 h-5 text-muted-foreground" />
-                    </button>
+                    
+                    {selectedPlace.image && (
+                      <div className="mb-4">
+                        <img 
+                          src={selectedPlace.image} 
+                          alt={selectedPlace.name}
+                          className="w-full h-48 object-cover rounded-lg shadow-md"
+                          onError={(e) => {
+                            console.log('Image failed to load:', selectedPlace.image);
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                      </div>
+                    )}
+                    
+                    {selectedPlace.description && (
+                      <div className="text-sm text-foreground/90 leading-relaxed">
+                        <p>{selectedPlace.description}</p>
+                      </div>
+                    )}
                   </div>
-                  
-                  {selectedPlace.image && (
-                    <div className="mb-4">
-                      <img 
-                        src={selectedPlace.image} 
-                        alt={selectedPlace.name}
-                        className="w-full h-48 object-cover rounded-lg shadow-md"
-                        onError={(e) => {
-                          console.log('Image failed to load:', selectedPlace.image);
-                          e.currentTarget.style.display = 'none';
-                        }}
-                      />
-                    </div>
-                  )}
-                  
-                  {selectedPlace.description && (
-                    <div className="text-sm text-foreground/90 leading-relaxed">
-                      <p>{selectedPlace.description}</p>
-                    </div>
-                  )}
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        )
       ) : (
         /* Desktop Layout */
-        <div className="container mx-auto px-4 py-8 h-full">
-          <h1 className="text-4xl font-bold mb-8 text-roma-gold">
-            Mappa di Roma
-          </h1>
+        <div className={`container mx-auto px-4 py-8 ${mode === "full" ? "h-full" : "h-full"}`}>
+          {mode === "full" && (
+            <h1 className="text-4xl font-bold mb-8 text-roma-gold">
+              Mappa di Roma
+            </h1>
+          )}
           
-          <div className={`flex gap-4 transition-all duration-300 h-[500px]`}>
+          <div className={`flex gap-4 transition-all duration-300 ${mode === "full" ? "h-[500px]" : "h-full"}`}>
             {/* Map Container */}
             <div className={`relative rounded-lg overflow-hidden shadow-roma border border-border/50 transition-all duration-300 ${
               selectedPlace ? 'w-2/3' : 'w-full'
@@ -1229,48 +1258,50 @@ const RomaMap = () => {
                 className="w-full h-full"
               />
               
-              {/* Legend - Desktop only */}
-              <div className="absolute top-4 left-4 bg-background/95 backdrop-blur-sm rounded-lg p-3 shadow-lg border border-border/50 max-w-[200px] z-10">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="text-sm font-bold text-roma-gold">Legenda</h4>
-                  <button
-                    onClick={showAllFilters}
-                    className="text-xs text-roma-gold hover:text-roma-yellow underline"
-                  >
-                    Tutti
-                  </button>
-                </div>
-                <div className="space-y-1 text-xs">
-                  {[
-                    { type: 'stadium', color: '#D97706', label: 'Stadi' },
-                    { type: 'roma-men', color: '#DC2626', label: 'Partite Roma' },
-                    { type: 'roma-women', color: '#9333EA', label: 'Roma Femminile' },
-                    { type: 'pub', color: '#2563EB', label: 'Pub & Bar' },
-                    { type: 'club', color: '#EC4899', label: 'Club' },
-                    { type: 'neighborhood', color: '#16A34A', label: 'Quartieri' },
-                    { type: 'historical', color: '#6B7280', label: 'Luoghi Storici' }
-                  ].map((item) => (
+              {/* Legend - Desktop only in full mode */}
+              {mode === "full" && (
+                <div className="absolute top-4 left-4 bg-background/95 backdrop-blur-sm rounded-lg p-3 shadow-lg border border-border/50 max-w-[200px] z-10">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="text-sm font-bold text-roma-gold">Legenda</h4>
                     <button
-                      key={item.type}
-                      onClick={() => toggleFilter(item.type)}
-                      className={`flex items-center gap-2 w-full p-1.5 rounded transition-all hover:bg-muted/50 text-left ${
-                        activeFilters.includes(item.type) 
-                          ? 'opacity-100' 
-                          : 'opacity-50 hover:opacity-70'
-                      }`}
+                      onClick={showAllFilters}
+                      className="text-xs text-roma-gold hover:text-roma-yellow underline"
                     >
-                      <div 
-                        className="w-3 h-3 rounded-full border border-white flex-shrink-0"
-                        style={{ backgroundColor: item.color }}
-                      ></div>
-                      <span className="truncate text-xs flex-1">{item.label}</span>
-                      <span className="text-[10px] text-muted-foreground">
-                        ({getPlaceCount(item.type)})
-                      </span>
+                      Tutti
                     </button>
-                  ))}
+                  </div>
+                  <div className="space-y-1 text-xs">
+                    {[
+                      { type: 'stadium', color: '#D97706', label: 'Stadi' },
+                      { type: 'roma-men', color: '#DC2626', label: 'Partite Roma' },
+                      { type: 'roma-women', color: '#9333EA', label: 'Roma Femminile' },
+                      { type: 'pub', color: '#2563EB', label: 'Pub & Bar' },
+                      { type: 'club', color: '#EC4899', label: 'Club' },
+                      { type: 'neighborhood', color: '#16A34A', label: 'Quartieri' },
+                      { type: 'historical', color: '#6B7280', label: 'Luoghi Storici' }
+                    ].map((item) => (
+                      <button
+                        key={item.type}
+                        onClick={() => toggleFilter(item.type)}
+                        className={`flex items-center gap-2 w-full p-1.5 rounded transition-all hover:bg-muted/50 text-left ${
+                          activeFilters.includes(item.type) 
+                            ? 'opacity-100' 
+                            : 'opacity-50 hover:opacity-70'
+                        }`}
+                      >
+                        <div 
+                          className="w-3 h-3 rounded-full border border-white flex-shrink-0"
+                          style={{ backgroundColor: item.color }}
+                        ></div>
+                        <span className="truncate text-xs flex-1">{item.label}</span>
+                        <span className="text-[10px] text-muted-foreground">
+                          ({getPlaceCount(item.type)})
+                        </span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Desktop Side Panel */}

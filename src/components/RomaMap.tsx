@@ -23,7 +23,7 @@ const RomaMap = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [drawerHeight, setDrawerHeight] = useState(0.3); // 30% of screen height
   const [isMapLoading, setIsMapLoading] = useState(true);
-  const [activeFilters, setActiveFilters] = useState<string[]>(['historical', 'pub', 'club', 'neighborhood', 'stadium']);
+  const [activeFilters, setActiveFilters] = useState<string[]>(['historical', 'pub', 'club', 'neighborhood', 'stadium', 'roma-men', 'roma-women']);
   const markers = useRef<mapboxgl.Marker[]>([]);
 
   // Token Mapbox

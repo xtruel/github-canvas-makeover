@@ -21,7 +21,6 @@ const RomaMap = () => {
   const [selectedPlace, setSelectedPlace] = useState<any>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [drawerHeight, setDrawerHeight] = useState(0.3); // 30% of screen height
   const [isMapLoading, setIsMapLoading] = useState(true);
   const [activeFilters, setActiveFilters] = useState<string[]>(['historical', 'pub', 'club', 'neighborhood', 'stadium', 'roma-men', 'roma-women']);
   const markers = useRef<mapboxgl.Marker[]>([]);
@@ -1147,30 +1146,16 @@ const RomaMap = () => {
             </div>
           </div>
           
-          {/* Bottom Drawer Trigger */}
-          <div className="relative">
-            <button
-              onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-              className="w-full bg-background/95 backdrop-blur-sm border-t border-border/50 p-4 flex items-center justify-center gap-2 hover:bg-muted/50 transition-colors active:bg-muted"
-            >
-              {isDrawerOpen ? <ChevronDown className="w-5 h-5" /> : <ChevronUp className="w-5 h-5" />}
-              <span className="font-medium">
-                {selectedPlace ? selectedPlace.name : 'Luoghi di Roma'}
-              </span>
-              {isDrawerOpen ? <ChevronDown className="w-5 h-5" /> : <ChevronUp className="w-5 h-5" />}
-            </button>
-          </div>
-          
-          {/* Bottom Drawer - Always render content when place is selected */}
+          {/* Auto-opening Drawer - Opens automatically when place is selected */}
           <div 
             className="bg-background border-t border-border/50 overflow-y-auto transition-all duration-300 ease-in-out"
             style={{ 
-              height: isDrawerOpen ? (selectedPlace ? '50vh' : '35vh') : '0vh',
-              maxHeight: '50vh'
+              height: selectedPlace ? '65vh' : '0vh',
+              maxHeight: '65vh'
             }}
           >
             <div className="min-h-full">
-              {selectedPlace ? (
+              {selectedPlace && (
                 <div className="p-4 pb-8">
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex-1">
@@ -1192,7 +1177,7 @@ const RomaMap = () => {
                       <img 
                         src={selectedPlace.image} 
                         alt={selectedPlace.name}
-                        className="w-full h-44 object-cover rounded-lg shadow-md"
+                        className="w-full h-48 object-cover rounded-lg shadow-md"
                         onError={(e) => {
                           console.log('Image failed to load:', selectedPlace.image);
                           e.currentTarget.style.display = 'none';
@@ -1206,40 +1191,6 @@ const RomaMap = () => {
                       <p>{selectedPlace.description}</p>
                     </div>
                   )}
-                </div>
-              ) : (
-                <div className="p-4">
-                  <h3 className="text-lg font-bold text-roma-gold mb-3">Esplora Roma</h3>
-                  <div className="grid grid-cols-2 gap-2">
-                     {[
-                       { type: 'historical', color: '#6B7280', label: 'Luoghi Storici' },
-                       { type: 'pub', color: '#2563EB', label: 'Pub & Bar' },
-                       { type: 'club', color: '#EC4899', label: 'Club' },
-                       { type: 'neighborhood', color: '#16A34A', label: 'Quartieri' },
-                       { type: 'stadium', color: '#D97706', label: 'Stadi' },
-                       { type: 'roma-men', color: '#DC2626', label: 'Partite Roma' },
-                       { type: 'roma-women', color: '#9333EA', label: 'Roma Femminile' }
-                     ].map((item) => (
-                      <button
-                        key={item.type}
-                        onClick={() => toggleFilter(item.type)}
-                        className={`flex items-center gap-2 p-2 rounded transition-all hover:bg-muted/50 text-left active:bg-muted ${
-                          activeFilters.includes(item.type) 
-                            ? 'opacity-100' 
-                            : 'opacity-50 hover:opacity-70'
-                        }`}
-                      >
-                        <div 
-                          className="w-3 h-3 rounded-full border border-white flex-shrink-0"
-                          style={{ backgroundColor: item.color }}
-                        ></div>
-                        <span className="text-sm truncate">{item.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-3">
-                    Tocca un filtro per mostrare/nascondere i luoghi sulla mappa
-                  </p>
                 </div>
               )}
             </div>

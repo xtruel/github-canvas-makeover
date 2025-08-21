@@ -1,11 +1,7 @@
 import RomaMap from "@/components/RomaMap";
 
 const Mappa = () => {
-  return (
-    <div className="w-full h-screen">
-      <RomaMap />
-    </div>
-  );
+  return <RomaMap />;
 };
 
 export default Mappa;

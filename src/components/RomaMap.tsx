@@ -893,8 +893,17 @@ const RomaMap = () => {
   };
 
   const toggleFilter = (type: string) => {
-    // Exclusive selection: show only selected type
-    setActiveFilters([type]);
+    setActiveFilters(prev => {
+      if (prev.includes(type)) {
+        // Remove if already active
+        const newFilters = prev.filter(f => f !== type);
+        // Ensure at least one filter remains active
+        return newFilters.length > 0 ? newFilters : [type];
+      } else {
+        // Add if not active
+        return [...prev, type];
+      }
+    });
   };
 
   const showAllFilters = () => {
@@ -993,13 +1002,36 @@ const RomaMap = () => {
 
   const updateMarkers = (mapInstance: mapboxgl.Map) => {
     // Clear existing markers
-    markers.current.forEach(marker => marker.remove());
+    markers.current.forEach(marker => {
+      try {
+        marker.remove();
+      } catch (error) {
+        console.warn('⚠️ Error removing marker:', error);
+      }
+    });
     markers.current = [];
 
     // Get filtered places
     const filteredPlaces = getFilteredPlaces();
-    const placesToShow = isMobile ? filteredPlaces.slice(0, 25) : filteredPlaces;
-    console.log(`📍 Adding ${placesToShow.length} filtered markers`);
+    
+    // Validate coordinates and filter out invalid ones
+    const validPlaces = filteredPlaces.filter(place => {
+      const [lng, lat] = place.coords;
+      const isValid = Array.isArray(place.coords) && 
+                     place.coords.length === 2 && 
+                     !isNaN(lng) && !isNaN(lat) &&
+                     lng >= -180 && lng <= 180 && 
+                     lat >= -90 && lat <= 90;
+      
+      if (!isValid) {
+        console.warn('⚠️ Invalid coordinates for place:', place.name, place.coords);
+      }
+      return isValid;
+    });
+    
+    // Limit markers on mobile for performance
+    const placesToShow = isMobile ? validPlaces.slice(0, 30) : validPlaces;
+    console.log(`📍 Adding ${placesToShow.length} filtered markers (${validPlaces.length} valid out of ${filteredPlaces.length} filtered)`);
     
     // Add markers for filtered places
     placesToShow.forEach((place, index) => {
@@ -1008,14 +1040,26 @@ const RomaMap = () => {
         markerEl.className = 'custom-marker';
         markerEl.style.cssText = `
           background-color: ${place.color};
-          width: ${isMobile ? '16px' : '20px'};
-          height: ${isMobile ? '16px' : '20px'};
+          width: ${isMobile ? '18px' : '22px'};
+          height: ${isMobile ? '18px' : '22px'};
           border-radius: 50% 50% 50% 0;
           transform: rotate(-45deg);
           border: 2px solid white;
           cursor: pointer;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+          box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+          transition: all 0.2s ease;
         `;
+
+        // Add hover effect
+        markerEl.addEventListener('mouseenter', () => {
+          markerEl.style.transform = 'rotate(-45deg) scale(1.1)';
+          markerEl.style.zIndex = '1000';
+        });
+        
+        markerEl.addEventListener('mouseleave', () => {
+          markerEl.style.transform = 'rotate(-45deg) scale(1)';
+          markerEl.style.zIndex = 'auto';
+        });
 
         markerEl.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -1034,11 +1078,11 @@ const RomaMap = () => {
           
         if (index === 0) console.log('✅ First filtered marker added successfully');
       } catch (error) {
-        console.error('❌ Error adding marker:', place.name, error);
+        console.error('❌ Error adding marker for place:', place.name, error);
       }
     });
 
-    // Add fog effect only on desktop
+    // Add fog effect only on desktop when not mobile
     if (!isMobile) {
       try {
         mapInstance.setFog({
@@ -1048,7 +1092,7 @@ const RomaMap = () => {
         });
         console.log('🌫️ Fog effect added');
       } catch (error) {
-        console.error('❌ Error adding fog:', error);
+        console.warn('⚠️ Error adding fog (this is normal on some devices):', error);
       }
     }
   };
@@ -1104,10 +1148,10 @@ const RomaMap = () => {
                   <button
                     key={item.type}
                     onClick={() => toggleFilter(item.type)}
-                    className={`flex items-center gap-1 w-full p-1 rounded transition-all hover:bg-muted/50 ${
+                    className={`flex items-center gap-1 w-full p-1 rounded transition-all duration-200 hover:bg-muted/50 ${
                       activeFilters.includes(item.type) 
-                        ? 'opacity-100' 
-                        : 'opacity-50 hover:opacity-70'
+                        ? 'opacity-100 bg-muted/30 ring-1 ring-roma-gold/50' 
+                        : 'opacity-60 hover:opacity-80'
                     }`}
                   >
                     <div 

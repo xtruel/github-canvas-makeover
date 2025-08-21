@@ -1150,8 +1150,18 @@ const RomaMap = () => {
           {/* Bottom Drawer Trigger */}
           <div className="relative">
             <button
-              onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-              className="w-full bg-background/95 backdrop-blur-sm border-t border-border/50 p-4 flex items-center justify-center gap-2 hover:bg-muted/50 transition-colors"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsDrawerOpen(!isDrawerOpen);
+              }}
+              onTouchEnd={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsDrawerOpen(!isDrawerOpen);
+              }}
+              className="w-full bg-background/95 backdrop-blur-sm border-t border-border/50 p-4 flex items-center justify-center gap-2 hover:bg-muted/50 transition-colors active:bg-muted touch-manipulation"
+              style={{ touchAction: 'manipulation' }}
             >
               {isDrawerOpen ? <ChevronDown className="w-5 h-5" /> : <ChevronUp className="w-5 h-5" />}
               <span className="font-medium">
@@ -1162,85 +1172,105 @@ const RomaMap = () => {
           </div>
           
           {/* Bottom Drawer */}
-          {isDrawerOpen && (
-            <div 
-              className="bg-background border-t border-border/50 overflow-y-auto transition-all duration-300 ease-in-out"
-              style={{ 
-                height: selectedPlace ? '40vh' : '25vh',
-                maxHeight: '50vh'
-              }}
-            >
-              {selectedPlace ? (
-                <div className="p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div className="flex-1">
-                      <h3 className="text-xl font-bold text-foreground">{selectedPlace.name}</h3>
-                      <p className="text-sm font-medium" style={{ color: selectedPlace.color }}>
-                        {getTypeLabel(selectedPlace.type)}
-                      </p>
-                    </div>
-                    <button 
-                      onClick={() => setSelectedPlace(null)}
-                      className="p-2 rounded-full hover:bg-muted transition-colors"
-                    >
-                      <X className="w-5 h-5 text-muted-foreground" />
-                    </button>
-                  </div>
-                  
-                  {selectedPlace.image && (
-                    <img 
-                      src={selectedPlace.image} 
-                      alt={selectedPlace.name}
-                      className="w-full h-40 object-cover rounded-lg mb-4"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                      }}
-                    />
-                  )}
-                  
-                  {selectedPlace.description && (
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {selectedPlace.description}
+          <div 
+            className={`bg-background border-t border-border/50 overflow-y-auto transition-all duration-300 ease-in-out ${
+              isDrawerOpen ? 'block' : 'hidden'
+            }`}
+            style={{ 
+              height: isDrawerOpen ? (selectedPlace ? '40vh' : '25vh') : '0vh',
+              maxHeight: '50vh'
+            }}
+          >
+            {selectedPlace ? (
+              <div className="p-4">
+                <div className="flex justify-between items-start mb-3">
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-foreground">{selectedPlace.name}</h3>
+                    <p className="text-sm font-medium" style={{ color: selectedPlace.color }}>
+                      {getTypeLabel(selectedPlace.type)}
                     </p>
-                  )}
-                </div>
-              ) : (
-                <div className="p-4">
-                  <h3 className="text-lg font-bold text-roma-gold mb-3">Esplora Roma</h3>
-                  <div className="grid grid-cols-2 gap-2">
-                     {[
-                       { type: 'historical', color: '#6B7280', label: 'Luoghi Storici' },
-                       { type: 'pub', color: '#2563EB', label: 'Pub & Bar' },
-                       { type: 'club', color: '#EC4899', label: 'Club' },
-                       { type: 'neighborhood', color: '#16A34A', label: 'Quartieri' },
-                       { type: 'stadium', color: '#D97706', label: 'Stadi' },
-                       { type: 'roma-men', color: '#DC2626', label: 'Partite Roma' },
-                       { type: 'roma-women', color: '#9333EA', label: 'Roma Femminile' }
-                     ].map((item) => (
-                      <button
-                        key={item.type}
-                        onClick={() => toggleFilter(item.type)}
-                        className={`flex items-center gap-2 p-2 rounded transition-all hover:bg-muted/50 text-left ${
-                          activeFilters.includes(item.type) 
-                            ? 'opacity-100' 
-                            : 'opacity-50 hover:opacity-70'
-                        }`}
-                      >
-                        <div 
-                          className="w-3 h-3 rounded-full border border-white flex-shrink-0"
-                          style={{ backgroundColor: item.color }}
-                        ></div>
-                        <span className="text-sm truncate">{item.label}</span>
-                      </button>
-                    ))}
                   </div>
-                  <p className="text-xs text-muted-foreground mt-3">
-                    Tocca un filtro per mostrare/nascondere i luoghi sulla mappa
-                  </p>
+                  <button 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setSelectedPlace(null);
+                    }}
+                    onTouchEnd={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setSelectedPlace(null);
+                    }}
+                    className="p-2 rounded-full hover:bg-muted transition-colors active:bg-muted touch-manipulation"
+                    style={{ touchAction: 'manipulation' }}
+                  >
+                    <X className="w-5 h-5 text-muted-foreground" />
+                  </button>
                 </div>
-              )}
-            </div>
-          )}
+                
+                {selectedPlace.image && (
+                  <img 
+                    src={selectedPlace.image} 
+                    alt={selectedPlace.name}
+                    className="w-full h-40 object-cover rounded-lg mb-4"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                )}
+                
+                {selectedPlace.description && (
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {selectedPlace.description}
+                  </p>
+                )}
+              </div>
+            ) : (
+              <div className="p-4">
+                <h3 className="text-lg font-bold text-roma-gold mb-3">Esplora Roma</h3>
+                <div className="grid grid-cols-2 gap-2">
+                   {[
+                     { type: 'historical', color: '#6B7280', label: 'Luoghi Storici' },
+                     { type: 'pub', color: '#2563EB', label: 'Pub & Bar' },
+                     { type: 'club', color: '#EC4899', label: 'Club' },
+                     { type: 'neighborhood', color: '#16A34A', label: 'Quartieri' },
+                     { type: 'stadium', color: '#D97706', label: 'Stadi' },
+                     { type: 'roma-men', color: '#DC2626', label: 'Partite Roma' },
+                     { type: 'roma-women', color: '#9333EA', label: 'Roma Femminile' }
+                   ].map((item) => (
+                    <button
+                      key={item.type}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleFilter(item.type);
+                      }}
+                      onTouchEnd={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleFilter(item.type);
+                      }}
+                      className={`flex items-center gap-2 p-2 rounded transition-all hover:bg-muted/50 text-left active:bg-muted touch-manipulation ${
+                        activeFilters.includes(item.type) 
+                          ? 'opacity-100' 
+                          : 'opacity-50 hover:opacity-70'
+                      }`}
+                      style={{ touchAction: 'manipulation' }}
+                    >
+                      <div 
+                        className="w-3 h-3 rounded-full border border-white flex-shrink-0"
+                        style={{ backgroundColor: item.color }}
+                      ></div>
+                      <span className="text-sm truncate">{item.label}</span>
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground mt-3">
+                  Tocca un filtro per mostrare/nascondere i luoghi sulla mappa
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       ) : (
         /* Desktop Layout */

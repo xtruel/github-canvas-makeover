@@ -4,13 +4,13 @@ import { Users, MessageCircle, Heart } from "lucide-react";
 
 const Community = () => {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8 text-roma-gold">
+    <div className="container mx-auto px-2 sm:px-4 py-6 sm:py-8">
+      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8 text-roma-gold">
         Community Romanisti
       </h1>
       
-      <div className="grid gap-6">
-        <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <Card className="shadow-glow border-border/50">
             <CardHeader>
               <CardTitle className="text-roma-gold flex items-center gap-2">

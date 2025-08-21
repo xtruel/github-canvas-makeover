@@ -893,17 +893,8 @@ const RomaMap = () => {
   };
 
   const toggleFilter = (type: string) => {
-    setActiveFilters(prev => {
-      if (prev.includes(type)) {
-        // Remove if already active
-        const newFilters = prev.filter(f => f !== type);
-        // Ensure at least one filter remains active
-        return newFilters.length > 0 ? newFilters : [type];
-      } else {
-        // Add if not active
-        return [...prev, type];
-      }
-    });
+    // Exclusive selection: show only selected type
+    setActiveFilters([type]);
   };
 
   const showAllFilters = () => {
@@ -1040,26 +1031,14 @@ const RomaMap = () => {
         markerEl.className = 'custom-marker';
         markerEl.style.cssText = `
           background-color: ${place.color};
-          width: ${isMobile ? '18px' : '22px'};
-          height: ${isMobile ? '18px' : '22px'};
+          width: ${isMobile ? '16px' : '20px'};
+          height: ${isMobile ? '16px' : '20px'};
           border-radius: 50% 50% 50% 0;
           transform: rotate(-45deg);
           border: 2px solid white;
           cursor: pointer;
-          box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         `;
-
-        // Add hover effect
-        markerEl.addEventListener('mouseenter', () => {
-          markerEl.style.transform = 'rotate(-45deg) scale(1.1)';
-          markerEl.style.zIndex = '1000';
-        });
-        
-        markerEl.addEventListener('mouseleave', () => {
-          markerEl.style.transform = 'rotate(-45deg) scale(1)';
-          markerEl.style.zIndex = 'auto';
-        });
 
         markerEl.addEventListener('click', (e) => {
           e.stopPropagation();

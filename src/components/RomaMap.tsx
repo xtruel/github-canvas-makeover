@@ -1076,7 +1076,7 @@ const RomaMap = () => {
   };
 
   return (
-    <div className="relative w-full h-[100dvh] bg-background">
+    <div className="relative w-full h-[calc(100dvh-4rem)] bg-background">
       {/* Mobile Layout - Optimized for better map visibility */}
       {isMobile ? (
         <div className="flex flex-col h-full">

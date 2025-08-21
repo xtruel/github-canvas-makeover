@@ -99,7 +99,7 @@ const Index = () => {
               Scopri i luoghi storici, gli stadi e i ritrovi dei romanisti nella Città Eterna
             </p>
           </div>
-          <div className="h-[500px] rounded-lg overflow-hidden shadow-roma border border-border/50">
+          <div className="md:h-[500px] rounded-lg overflow-hidden shadow-roma border border-border/50">
             <RomaMap />
           </div>
         </div>

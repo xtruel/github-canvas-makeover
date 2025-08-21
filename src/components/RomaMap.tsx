@@ -18,7 +18,14 @@ import quartiereStoricoImage from '@/assets/quartiere-storico.jpg';
 const RomaMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [selectedPlace, setSelectedPlace] = useState<any>(null);
+  const [selectedPlace, setSelectedPlace] = useState<{
+    name: string;
+    coords: [number, number];
+    type: string;
+    color: string;
+    description?: string;
+    image?: string;
+  } | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMapLoading, setIsMapLoading] = useState(true);
@@ -908,15 +915,25 @@ const RomaMap = () => {
     return romaPlaces.filter(place => place.type === type).length;
   };
 
-  // Check if mobile
+  // Check if mobile using pointer: coarse OR width < 768 for better Android detection
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 640);
+      const hasCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
+      const isNarrowScreen = window.innerWidth < 768;
+      setIsMobile(hasCoarsePointer || isNarrowScreen);
     };
+    
     checkMobile();
+    
+    // Listen for both resize and pointer changes
+    const mediaQuery = window.matchMedia('(pointer: coarse)');
+    mediaQuery.addEventListener('change', checkMobile);
     window.addEventListener('resize', checkMobile);
     
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => {
+      mediaQuery.removeEventListener('change', checkMobile);
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   // Initialize map
@@ -1076,10 +1093,10 @@ const RomaMap = () => {
   };
 
   return (
-    <div className="relative w-full h-[calc(100dvh-4rem)] bg-background overflow-hidden">
-      {/* Mobile Layout - Optimized for better map visibility */}
+    <div className="relative w-full h-full bg-background overflow-hidden">
+      {/* Mobile Layout - Square map with bottom drawer */}
       {isMobile ? (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full min-h-[500px]">
           {/* Header */}
           <div className="bg-background/95 backdrop-blur-sm p-3 border-b border-border/50 z-30 flex-shrink-0">
             <h2 className="text-lg font-semibold text-roma-gold text-center">Discover the Eternal City</h2>
@@ -1087,7 +1104,7 @@ const RomaMap = () => {
           
           {/* Horizontal Legend */}
           <div className="bg-background/95 backdrop-blur-sm border-b border-border/50 px-3 py-2 flex-shrink-0">
-            <div className="flex gap-1.5 overflow-x-auto scrollbar-hide">
+            <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
               {[
                 { type: 'stadium', color: '#D97706', label: 'Stadi' },
                 { type: 'roma-men', color: '#DC2626', label: 'Roma' },
@@ -1125,30 +1142,32 @@ const RomaMap = () => {
             </div>
           </div>
           
-          {/* Map Container - Increased height for better visibility */}
-          <div className="relative flex-1 min-h-0">
-            <div 
-              ref={mapContainer} 
-              className="w-full h-full"
-            />
-            
-            {/* Loading indicator */}
-            {isMapLoading && (
-              <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-30">
-                <div className="text-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-roma-gold mx-auto mb-2"></div>
-                  <p className="text-sm text-muted-foreground">Caricamento mappa...</p>
+          {/* Square Map Container - Constrained by screen width */}
+          <div className="px-3 py-3 flex-shrink-0">
+            <div className="aspect-square w-full relative rounded-lg overflow-hidden shadow-roma border border-border/50">
+              <div 
+                ref={mapContainer} 
+                className="absolute inset-0 w-full h-full"
+              />
+              
+              {/* Loading indicator */}
+              {isMapLoading && (
+                <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-30">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-roma-gold mx-auto mb-2"></div>
+                    <p className="text-sm text-muted-foreground">Caricamento mappa...</p>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
           
-          {/* Auto-opening Drawer - Reduced height to keep map partially visible */}
+          {/* Bottom Drawer for selected place */}
           <div 
             className="bg-background border-t border-border/50 overflow-y-auto transition-all duration-300 ease-in-out flex-shrink-0"
             style={{ 
-              height: selectedPlace ? 'min(30vh, 240px)' : '0vh',
-              maxHeight: 'min(30vh, 240px)'
+              height: selectedPlace ? 'min(40vh, 300px)' : '0vh',
+              maxHeight: 'min(40vh, 300px)'
             }}
           >
             <div className="min-h-full">

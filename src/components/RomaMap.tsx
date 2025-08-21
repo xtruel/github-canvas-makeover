@@ -18,7 +18,14 @@ import quartiereStoricoImage from '@/assets/quartiere-storico.jpg';
 const RomaMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [selectedPlace, setSelectedPlace] = useState<any>(null);
+  const [selectedPlace, setSelectedPlace] = useState<{
+    name: string;
+    coords: [number, number];
+    type: string;
+    color: string;
+    description?: string;
+    image?: string;
+  } | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMapLoading, setIsMapLoading] = useState(true);

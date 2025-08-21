@@ -85,26 +85,26 @@ const Eventi = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8 text-roma-gold">
+    <div className="container mx-auto px-2 sm:px-4 py-6 sm:py-8">
+      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8 text-roma-gold">
         Eventi e Partite
       </h1>
       
       {/* Sezione Partite */}
-      <section className="mb-12">
+      <section className="mb-8 sm:mb-12">
         <RomaMatches />
       </section>
 
       {/* Sezione Eventi Sportivi da Turismo Roma */}
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold mb-6 text-roma-gold">
+      <section className="mb-8 sm:mb-12">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-roma-gold">
           Eventi Sportivi Ufficiali
         </h2>
         {loading ? (
-          <div className="grid gap-6">
+          <div className="grid gap-4 sm:gap-6">
             {[1, 2, 3].map((i) => (
               <Card key={i} className="shadow-glow border-border/50 animate-pulse">
-                <CardContent className="p-6">
+                <CardContent className="p-4 sm:p-6">
                   <div className="h-4 bg-muted rounded mb-4"></div>
                   <div className="h-3 bg-muted rounded mb-2"></div>
                   <div className="h-3 bg-muted rounded w-2/3"></div>
@@ -113,7 +113,7 @@ const Eventi = () => {
             ))}
           </div>
         ) : (
-          <div className="grid gap-6">
+          <div className="grid gap-4 sm:gap-6">
             {scrapedEvents.map((evento) => (
               <Card key={evento.id} className="shadow-glow border-border/50 hover:shadow-roma transition-all duration-300">
                 <CardHeader>
@@ -153,10 +153,10 @@ const Eventi = () => {
 
       {/* Sezione Eventi Community */}
       <section>
-        <h2 className="text-2xl font-bold mb-6 text-roma-gold">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-roma-gold">
           Eventi della Community
         </h2>
-        <div className="grid gap-6">
+        <div className="grid gap-4 sm:gap-6">
           {eventiCommunity.map((evento) => (
             <Card key={evento.id} className="shadow-glow border-border/50 hover:shadow-roma transition-all duration-300">
               <CardHeader>

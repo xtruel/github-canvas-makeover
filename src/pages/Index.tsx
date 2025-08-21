@@ -61,25 +61,25 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section with Gradient */}
-      <div className="relative bg-gradient-to-br from-roma-red via-red-500 to-yellow-400 text-white py-20 px-4">
+      <div className="relative bg-gradient-to-br from-roma-red via-red-500 to-yellow-400 text-white py-12 sm:py-20 px-2 sm:px-4">
         <div className="container mx-auto text-center">
-          <div className="mb-8">
+          <div className="mb-6 sm:mb-8">
             <img 
               src="/lovable-uploads/af321201-3c36-40c5-862e-fed415398b56.png"
               alt="AS Roma Official Logo" 
-              className="w-32 h-32 mx-auto object-contain mb-6"
+              className="w-24 h-24 sm:w-32 sm:h-32 mx-auto object-contain mb-4 sm:mb-6"
             />
           </div>
           
-          <h1 className="text-6xl font-bold mb-6">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">
             FORZA ROMA
           </h1>
           
-          <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
+          <p className="text-lg sm:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto opacity-90 px-2">
             La tua destinazione definitiva per notizie, eventi e contenuti esclusivi dell'AS Roma
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
             <Button asChild size="lg" className="bg-white text-roma-red hover:bg-gray-100">
               <Link to="/eventi">Ultimi Eventi</Link>
             </Button>
@@ -90,35 +90,35 @@ const Index = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-2 sm:px-4 py-8 sm:py-12">
         {/* Mappa Interattiva Roma */}
-        <div className="mb-16">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Esplora Roma Giallorossa</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+        <div className="mb-12 sm:mb-16">
+          <div className="text-center mb-6 sm:mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">Esplora Roma Giallorossa</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto px-2">
               Scopri i luoghi storici, gli stadi e i ritrovi dei romanisti nella Città Eterna
             </p>
           </div>
-          <div className="h-[500px] rounded-lg overflow-hidden shadow-roma border border-border/50">
+          <div className="h-[300px] sm:h-[500px] rounded-lg overflow-hidden shadow-roma border border-border/50">
             <RomaMap />
           </div>
         </div>
 
         {/* Prossime Partite - Sezione Principale */}
-        <div className="mb-16">
+        <div className="mb-12 sm:mb-16">
           <RomaMatches />
         </div>
 
         {/* Breaking News Section */}
-        <div className="mb-16">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-3xl font-bold text-foreground">Ultime Notizie</h2>
-            <Button variant="ghost" className="text-roma-gold hover:text-roma-red">
+        <div className="mb-12 sm:mb-16">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-4">
+            <h2 className="text-2xl sm:text-3xl font-bold text-foreground">Ultime Notizie</h2>
+            <Button variant="ghost" className="text-roma-gold hover:text-roma-red self-start sm:self-auto">
               Vedi Tutto <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {breakingNews.map((news, index) => (
               <Card key={index} className="shadow-glow border-border/50 hover:shadow-roma transition-all duration-300 hover:scale-105">
                 <CardHeader>
@@ -140,13 +140,13 @@ const Index = () => {
         </div>
 
         {/* Features Section */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold mb-8 text-center text-foreground">Esplora la Community</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="mb-12 sm:mb-16">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center text-foreground">Esplora la Community</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {features.map((feature, index) => (
               <Card key={index} className="shadow-glow border-border/50 hover:shadow-roma transition-all duration-300 hover:scale-105">
                 <CardHeader className="text-center">
-                  <feature.icon className={`h-12 w-12 mx-auto mb-4 ${feature.color}`} />
+                  <feature.icon className={`h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4 ${feature.color}`} />
                   <CardTitle className="text-roma-gold">{feature.title}</CardTitle>
                   <CardDescription>{feature.description}</CardDescription>
                 </CardHeader>
@@ -163,21 +163,21 @@ const Index = () => {
         {/* Stats Section */}
         <Card className="shadow-roma border-border/50 bg-gradient-to-r from-roma-red/10 to-roma-gold/10">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl text-roma-gold mb-4">Forza Roma Sempre</CardTitle>
+            <CardTitle className="text-xl sm:text-2xl text-roma-gold mb-4">Forza Roma Sempre</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-3 gap-8 text-center">
+            <div className="grid grid-cols-3 gap-4 sm:gap-8 text-center">
               <div>
-                <div className="text-3xl font-bold text-roma-gold">1927</div>
-                <div className="text-muted-foreground">Fondata</div>
+                <div className="text-2xl sm:text-3xl font-bold text-roma-gold">1927</div>
+                <div className="text-sm sm:text-base text-muted-foreground">Fondata</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-roma-yellow">3</div>
-                <div className="text-muted-foreground">Scudetti</div>
+                <div className="text-2xl sm:text-3xl font-bold text-roma-yellow">3</div>
+                <div className="text-sm sm:text-base text-muted-foreground">Scudetti</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-roma-gold">∞</div>
-                <div className="text-muted-foreground">Passione</div>
+                <div className="text-2xl sm:text-3xl font-bold text-roma-gold">∞</div>
+                <div className="text-sm sm:text-base text-muted-foreground">Passione</div>
               </div>
             </div>
           </CardContent>

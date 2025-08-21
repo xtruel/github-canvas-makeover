@@ -5,6 +5,14 @@
   text-align: center;
 }
 
+/* Mobile responsiveness for #root */
+@media (max-width: 768px) {
+  #root {
+    max-width: 100%;
+    padding: 0.5rem;
+  }
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -39,4 +47,18 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 640px) {
+  #root {
+    max-width: 100%;
+    padding: 0.75rem;
+  }
+}
+
+/* Ensure media does not overflow horizontally */
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
 }

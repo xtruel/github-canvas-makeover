@@ -1076,7 +1076,7 @@ const RomaMap = () => {
   };
 
   return (
-    <div className="relative w-full h-screen bg-background">
+    <div className="relative w-full h-[100dvh] bg-background">
       {/* Mobile Layout - Optimized for better map visibility */}
       {isMobile ? (
         <div className="flex flex-col h-full">
@@ -1126,7 +1126,7 @@ const RomaMap = () => {
           </div>
           
           {/* Map Container - Increased height for better visibility */}
-          <div className="relative flex-1 max-h-[65vh]">
+          <div className="relative flex-1">
             <div 
               ref={mapContainer} 
               className="w-full h-full"
@@ -1147,8 +1147,8 @@ const RomaMap = () => {
           <div 
             className="bg-background border-t border-border/50 overflow-y-auto transition-all duration-300 ease-in-out"
             style={{ 
-              height: selectedPlace ? '40vh' : '0vh',
-              maxHeight: '40vh'
+              height: selectedPlace ? '35vh' : '0vh',
+              maxHeight: '35vh'
             }}
           >
             <div className="min-h-full">

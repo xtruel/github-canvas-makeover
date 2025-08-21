@@ -503,11 +503,12 @@ const RomaMap = () => {
   };
 
   const toggleFilter = (type: string) => {
-    setActiveFilters(prev => 
-      prev.includes(type) 
-        ? prev.filter(t => t !== type)
-        : [...prev, type]
-    );
+    // Exclusive selection: show only selected type
+    setActiveFilters([type]);
+  };
+
+  const showAllFilters = () => {
+    setActiveFilters(['historical', 'pub', 'club', 'neighborhood', 'stadium', 'roma-men', 'roma-women']);
   };
 
   const getFilteredPlaces = () => {
@@ -691,7 +692,15 @@ const RomaMap = () => {
             
             {/* Floating Legend */}
             <div className="absolute top-4 left-4 bg-background/95 backdrop-blur-sm rounded-lg p-2 shadow-lg border border-border/50 max-w-[180px] z-20">
-              <h4 className="text-xs font-bold mb-1 text-roma-gold">Legenda Interattiva</h4>
+              <div className="flex items-center justify-between mb-1">
+                <h4 className="text-xs font-bold text-roma-gold">Legenda</h4>
+                <button
+                  onClick={showAllFilters}
+                  className="text-[10px] text-roma-gold hover:text-roma-yellow underline"
+                >
+                  Tutti
+                </button>
+              </div>
               <div className="space-y-1 text-xs">
                 {[
                   { type: 'stadium', color: '#D97706', label: 'Stadi' },
@@ -838,7 +847,15 @@ const RomaMap = () => {
               
               {/* Legend - Desktop only */}
               <div className="absolute top-4 left-4 bg-background/95 backdrop-blur-sm rounded-lg p-3 shadow-lg border border-border/50 max-w-[200px] z-10">
-                <h4 className="text-sm font-bold mb-2 text-roma-gold">Legenda Interattiva</h4>
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-sm font-bold text-roma-gold">Legenda</h4>
+                  <button
+                    onClick={showAllFilters}
+                    className="text-xs text-roma-gold hover:text-roma-yellow underline"
+                  >
+                    Tutti
+                  </button>
+                </div>
                 <div className="space-y-1 text-xs">
                   {[
                     { type: 'stadium', color: '#D97706', label: 'Stadi' },

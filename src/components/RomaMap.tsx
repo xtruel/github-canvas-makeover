@@ -485,6 +485,396 @@ const RomaMap = () => {
       color: '#6B7280',
       description: 'Sede del Museo Nazionale Romano con capolavori dell\'arte antica, affreschi e mosaici straordinari.',
       image: 'https://images.unsplash.com/photo-1595950823406-7caba1a27e3a?w=500'
+    },
+
+    // Nuovi impianti sportivi da Wikipedia
+    {
+      name: 'Centro sportivo La Borghesiana',
+      coords: [12.6234, 41.8345],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Centro sportivo moderno nella zona est di Roma, utilizzato per allenamenti e competizioni locali.',
+      image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=500'
+    },
+    {
+      name: 'Centro Federale Polo Acquatico di Ostia',
+      coords: [12.2890, 41.7456],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Centro federale specializzato nel polo acquatico, situato nel litorale di Ostia.',
+      image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=500'
+    },
+    {
+      name: 'Circolo Antico tiro a volo',
+      coords: [12.4789, 41.9456],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Storico circolo per il tiro a volo, uno dei più antichi impianti sportivi di Roma.',
+      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500'
+    },
+    {
+      name: 'Circolo del Tennis del Foro Italico',
+      coords: [12.4578, 41.9345],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Prestigioso circolo tennistico del Foro Italico, sede degli Internazionali d\'Italia.',
+      image: 'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=500'
+    },
+    {
+      name: 'Città dello sport',
+      coords: [12.4234, 41.8567],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Moderno complesso sportivo multifunzionale nella zona sud di Roma.',
+      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500'
+    },
+    {
+      name: 'Accademia di scherma al Foro Italico',
+      coords: [12.4567, 41.9323],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Accademia nazionale di scherma, punto di riferimento per questo sport in Italia.',
+      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500'
+    },
+    {
+      name: 'Complesso natatorio del Foro Italico',
+      coords: [12.4556, 41.9334],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Complesso di piscine olimpiche del Foro Italico, sede di gare internazionali di nuoto.',
+      image: 'https://images.unsplash.com/photo-1530549387789-4c1017266635?w=500'
+    },
+    {
+      name: 'Stadio dei Marmi Pietro Mennea',
+      coords: [12.4545, 41.9312],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Stadio di atletica decorato con statue di marmo, intitolato al velocista Pietro Mennea.',
+      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500'
+    },
+    {
+      name: 'Motovelodromo Appio',
+      coords: [12.5123, 41.8789],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Storico impianto per corse motociclistiche e ciclismo su pista nella zona Appio.',
+      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500'
+    },
+    {
+      name: 'Centro di preparazione olimpica Giulio Onesti',
+      coords: [12.5234, 41.9234],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Centro di preparazione per atleti olimpici, intitolato al dirigente sportivo Giulio Onesti.',
+      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500'
+    },
+    {
+      name: 'Palazzo dello Sport (Roma)',
+      coords: [12.5167, 41.9456],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Grande palazzo dello sport per eventi indoor, concerti e manifestazioni sportive.',
+      image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=500'
+    },
+    {
+      name: 'Piscina delle Rose',
+      coords: [12.5089, 41.9123],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Piscina storica di Roma, punto di riferimento per il nuoto cittadino.',
+      image: 'https://images.unsplash.com/photo-1530549387789-4c1017266635?w=500'
+    },
+    {
+      name: 'Poligono Olimpico (Roma)',
+      coords: [12.4678, 41.9456],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Poligono di tiro olimpico, sede di competizioni nazionali e internazionali.',
+      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500'
+    },
+    {
+      name: 'Stadio della Rondinella',
+      coords: [12.4345, 41.8678],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Stadio di calcio della zona sud di Roma, casa di squadre minori locali.',
+      image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=500'
+    },
+    {
+      name: 'Grand Stand Arena',
+      coords: [12.4589, 41.9345],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Arena moderna nel complesso del Foro Italico per eventi sportivi e spettacoli.',
+      image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=500'
+    },
+    {
+      name: 'Stadio Centrale del Tennis',
+      coords: [12.4567, 41.9334],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Campo centrale del tennis del Foro Italico, sede della finale degli Internazionali.',
+      image: 'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=500'
+    },
+    {
+      name: 'Stadio Nicola Pietrangeli',
+      coords: [12.4578, 41.9323],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Secondo campo più importante del tennis romano, intitolato al tennista Nicola Pietrangeli.',
+      image: 'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=500'
+    },
+    {
+      name: 'SuperTennis Arena',
+      coords: [12.4556, 41.9312],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Arena moderna per il tennis con tecnologie all\'avanguardia nel Foro Italico.',
+      image: 'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=500'
+    },
+    {
+      name: 'Campo Testaccio',
+      coords: [12.4756, 41.8742],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Storico campo di calcio nel quartiere Testaccio, primo stadio dell\'AS Roma.',
+      image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=500'
+    },
+    {
+      name: 'Ippodromo Tor di Valle',
+      coords: [12.4123, 41.8234],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Storico ippodromo nella zona sud di Roma, sede di corse di galoppo e trotto.',
+      image: 'https://images.unsplash.com/photo-1553103464-e8e2d0c7e52a?w=500'
+    },
+    {
+      name: 'Trastevere Stadium',
+      coords: [12.4634, 41.8823],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Stadio nel quartiere Trastevere per calcio e eventi sportivi locali.',
+      image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=500'
+    },
+    {
+      name: 'Stadio Tre Fontane',
+      coords: [12.4089, 41.8345],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Stadio nella zona delle Tre Fontane, utilizzato per calcio e atletica leggera.',
+      image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=500'
+    },
+    {
+      name: 'Velodromo Olimpico',
+      coords: [12.4645, 41.9389],
+      type: 'stadium',
+      color: '#D97706',
+      description: 'Velodromo storico per ciclismo su pista, parte del complesso olimpico romano.',
+      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500'
+    },
+
+    // Nuovi monumenti e attrazioni da ScopriRoma
+    {
+      name: 'Palatino',
+      coords: [12.4883, 41.8887],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'Il Monte Palatino è il più centrale dei sette colli di Roma ed è una delle zone più antiche della città.',
+      image: 'https://images.unsplash.com/photo-1539650116574-75c0c6d73136?w=500'
+    },
+    {
+      name: 'Colonna Traiana',
+      coords: [12.4843, 41.8958],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'Costruita su ordine dell\'imperatore Traiano nell\'anno 114, è uno dei monumenti più importanti nel cuore di Roma.',
+      image: 'https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=500'
+    },
+    {
+      name: 'Catacombe di San Callisto',
+      coords: [12.5123, 41.8567],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'Le catacombe sono gallerie sotterranee che furono utilizzate per vari secoli come luoghi di sepoltura.',
+      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=500'
+    },
+    {
+      name: 'Arco di Costantino',
+      coords: [12.4906, 41.8896],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'L\'Arco di Costantino si trova fra il Colosseo e il Monte Palatino e fu costruito nel 315 per commemorare la vittoria di Ponte Milvio.',
+      image: 'https://images.unsplash.com/photo-1539650116574-75c0c6d73136?w=500'
+    },
+    {
+      name: 'Ara Pacis',
+      coords: [12.4756, 41.9067],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'L\'Ara Pacis è un monumento commemorativo eretto fra il 13 e il 9 a.C. per celebrare la pace nel Mediterraneo.',
+      image: 'https://images.unsplash.com/photo-1587149185119-0d36c3b4b23c?w=500'
+    },
+    {
+      name: 'Bocca della Verità',
+      coords: [12.4817, 41.8878],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'La Bocca della Verità è una grande maschera di marmo, la cui leggenda narra che potrebbe mordere la mano di chiunque la inserisca nella sua bocca.',
+      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=500'
+    },
+    {
+      name: 'Gianicolo',
+      coords: [12.4623, 41.8934],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'Il Gianicolo è un luogo gradevole dove passeggiare, per poi visitare nella zona dei punti d\'interesse interessanti come la Chiesa di San Pietro in Montorio.',
+      image: 'https://images.unsplash.com/photo-1580800503000-7b8c86c1a532?w=500'
+    },
+    {
+      name: 'Area Sacra di Largo Argentina',
+      coords: [12.4756, 41.8956],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'L\'Area Sacra è la zona dove si trovano le rovine dei templi più antichi di Roma. Attualmente l\'area è occupata da rovine e da centinaia di gatti.',
+      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=500'
+    },
+    {
+      name: 'Forum Boarium',
+      coords: [12.4823, 41.8887],
+      type: 'historical',
+      color: '#6B7280',
+      description: 'Il Forum Boarium è una zona che costeggia il Tevere, dove si conservano in buone condizioni i templi repubblicani costruiti nel II secolo a.C.',
+      image: 'https://images.unsplash.com/photo-1539650116574-75c0c6d73136?w=500'
+    },
+
+    // Nuovi club da Xceed
+    {
+      name: 'Spazio Novecento',
+      coords: [12.4789, 41.8956],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Uno dei club più esclusivi e innovativi di Roma, famoso per le serate techno e house di qualità.',
+      image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=500'
+    },
+    {
+      name: 'MONK Roma',
+      coords: [12.4823, 41.9012],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Club moderno nel centro di Roma, noto per la sua programmazione musicale raffinata e l\'atmosfera elegante.',
+      image: 'https://images.unsplash.com/photo-1571166477815-3a379d3e6a24?w=500'
+    },
+    {
+      name: 'The Sanctuary Eco Retreat',
+      coords: [12.3456, 41.8234],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Locale unico che combina sostenibilità ambientale e vita notturna, situato in zona periferica.',
+      image: 'https://images.unsplash.com/photo-1574391884720-bfdb9d9d7b84?w=500'
+    },
+    {
+      name: 'Cave di Tufo di Tor Cervara',
+      coords: [12.5567, 41.9123],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Location suggestiva nelle antiche cave di tufo, per eventi underground e serate alternative.',
+      image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=500'
+    },
+    {
+      name: 'Cieloterra',
+      coords: [12.4567, 41.8789],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Club all\'aperto con giardino, perfetto per serate estive e eventi musicali sotto le stelle.',
+      image: 'https://images.unsplash.com/photo-1574391884720-bfdb9d9d7b84?w=500'
+    },
+    {
+      name: 'NICE Disco',
+      coords: [12.4712, 41.8945],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Discoteca moderna con pista da ballo spaziosa e sistema audio di alta qualità.',
+      image: 'https://images.unsplash.com/photo-1571166477815-3a379d3e6a24?w=500'
+    },
+    {
+      name: 'Opus Club',
+      coords: [12.4834, 41.9023],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Club esclusivo nel centro di Roma, frequentato da personaggi del mondo dello spettacolo.',
+      image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=500'
+    },
+    {
+      name: 'Atlantico Live',
+      coords: [12.4689, 41.8956],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Locale per concerti live e DJ set, con palco per artisti emergenti e internazionali.',
+      image: 'https://images.unsplash.com/photo-1574391884720-bfdb9d9d7b84?w=500'
+    },
+    {
+      name: 'Alcazar',
+      coords: [12.4756, 41.8923],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Discoteca storica di Roma con sale multiple e diversi generi musicali.',
+      image: 'https://images.unsplash.com/photo-1571166477815-3a379d3e6a24?w=500'
+    },
+    {
+      name: 'Secret Location Roma',
+      coords: [12.4645, 41.8834],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Club misterioso che cambia location, noto per eventi esclusivi e feste private.',
+      image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=500'
+    },
+    {
+      name: 'Materia Club',
+      coords: [12.5123, 41.8967],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Club underground specializzato in musica techno e elettronica sperimentale.',
+      image: 'https://images.unsplash.com/photo-1571166477815-3a379d3e6a24?w=500'
+    },
+    {
+      name: 'Ground Zero',
+      coords: [12.4889, 41.8745],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Locale alternativo per eventi underground, concerti punk e metal.',
+      image: 'https://images.unsplash.com/photo-1574391884720-bfdb9d9d7b84?w=500'
+    },
+    {
+      name: 'Andrea Doria Club',
+      coords: [12.4567, 41.9067],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Club nautico che organizza anche eventi serali e feste a tema marinaresco.',
+      image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=500'
+    },
+    {
+      name: 'THE RANDOM',
+      coords: [12.4723, 41.8867],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Club con programmazione musicale varia e imprevedibile, da qui il nome "Random".',
+      image: 'https://images.unsplash.com/photo-1571166477815-3a379d3e6a24?w=500'
+    },
+    {
+      name: '692 Secret Garden',
+      coords: [12.4634, 41.8923],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Club con giardino segreto, atmosfera intima e selezione musicale ricercata.',
+      image: 'https://images.unsplash.com/photo-1574391884720-bfdb9d9d7b84?w=500'
+    },
+    {
+      name: 'Aforisma & Toy Room',
+      coords: [12.4789, 41.9034],
+      type: 'club',
+      color: '#EC4899',
+      description: 'Doppio locale con due ambienti diversi: uno più rilassato e uno per il clubbing.',
+      image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=500'
     }
   ];
 

@@ -1249,7 +1249,7 @@ const RomaMap = () => {
             Mappa di Roma
           </h1>
           
-          <div className={`flex gap-4 transition-all duration-300 h-[500px] ${!selectedPlace ? 'justify-center' : ''}`}>
+          <div className={`flex gap-4 transition-all duration-300 h-[500px]`}>
             {/* Map Container */}
             <div className={`relative rounded-lg overflow-hidden shadow-roma border border-border/50 transition-all duration-300 ${
               selectedPlace ? 'w-2/3' : 'w-full'

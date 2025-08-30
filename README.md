@@ -1,5 +1,36 @@
 # Welcome to your Lovable project
 
+## Roma Matches Data Pipeline
+
+This project includes a zero-keys Roma matches data pipeline using OpenFootball community data:
+
+### Features
+- **No API Keys Required**: Uses open-source [OpenFootball](https://github.com/openfootball/italy) data
+- **Automated Updates**: GitHub Actions workflow updates matches every 6 hours
+- **Fallback System**: Falls back to Supabase data if OpenFootball is unavailable
+- **Non-Live Data**: Accepts slower updates in exchange for no API dependencies
+
+### Data Source
+- **Source**: OpenFootball community-maintained Serie A data
+- **Update Frequency**: Every 6 hours (configurable via GitHub Actions)
+- **Limitations**: 
+  - Not live/real-time (depends on community updates)
+  - May lag behind actual match results
+  - No minute-by-minute match status
+  - Serie A men's matches only (no women's matches in OpenFootball)
+
+### Files
+- `scripts/updateRomaOpenfootball.ts` - Main update script
+- `scripts/openfootball/parseSerieA.ts` - Parser for OpenFootball data format
+- `.github/workflows/roma-openfootball.yml` - Automated update workflow
+- `data/roma-matches.json` - Generated matches data
+- `public/data/roma-matches.json` - Data accessible to frontend
+
+### Manual Update
+```bash
+npx tsx scripts/updateRomaOpenfootball.ts
+```
+
 ## Project info
 
 **URL**: https://lovable.dev/projects/ad45f660-19d6-41e8-8460-2ddc6c86b1cc

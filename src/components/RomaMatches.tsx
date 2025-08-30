@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, Clock, Trophy } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { loadRomaMatches, convertToComponentFormat } from "@/lib/loadRomaMatches";
 
 interface Match {
   id: string;
@@ -27,6 +28,19 @@ export const RomaMatches = () => {
   useEffect(() => {
     const fetchMatches = async () => {
       try {
+        // First try to load from OpenFootball data (no API keys required)
+        const openFootballData = await loadRomaMatches();
+        
+        if (openFootballData) {
+          console.log('✅ Loaded Roma matches from OpenFootball');
+          const convertedData = convertToComponentFormat(openFootballData);
+          setMatches(convertedData);
+          setLoading(false);
+          return;
+        }
+        
+        // Fall back to Supabase function
+        console.log('ℹ️ OpenFootball data not available, falling back to Supabase');
         const { data, error: functionError } = await supabase.functions.invoke('fetch-roma-matches');
         
         if (functionError) {

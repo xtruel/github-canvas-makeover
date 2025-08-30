@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, Users, Trophy, Swords } from "lucide-react";
 import { RomaMatches } from "@/components/RomaMatches";
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 
 interface ScrapedEvent {
   id: string;
@@ -46,12 +45,18 @@ const Eventi = () => {
   useEffect(() => {
     const fetchScrapedEvents = async () => {
       try {
-        const { data, error } = await supabase.functions.invoke('scrape-roma-events');
-        
-        if (error) {
-          console.error('Error fetching scraped events:', error);
-        } else if (data?.success) {
-          setScrapedEvents(data.events || []);
+        // Try to load Supabase dynamically (optional functionality)
+        try {
+          const { supabase } = await import("../../legacy/integrations/supabase/client");
+          const { data, error } = await supabase.functions.invoke('scrape-roma-events');
+          
+          if (error) {
+            console.error('Error fetching scraped events:', error);
+          } else if (data?.success) {
+            setScrapedEvents(data.events || []);
+          }
+        } catch (supabaseError) {
+          console.log('Supabase not available for scraped events - using static data only');
         }
       } catch (error) {
         console.error('Error calling scrape function:', error);

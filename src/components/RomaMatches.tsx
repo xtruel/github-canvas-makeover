@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, Clock, Trophy } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { loadRomaMatches, getUpcomingMatches, isRomaHome, type RomaFixture } from "@/lib/loadRomaMatches";
 
-interface Match {
+interface LegacyMatch {
   id: string;
   homeTeam: string;
   awayTeam: string;
@@ -12,30 +12,77 @@ interface Match {
   eventDate: string;
   venue: string;
   status: string;
+  homeScore?: number | null;
+  awayScore?: number | null;
 }
 
-interface MatchesData {
-  menMatches: Match[];
-  womenMatches: Match[];
+interface LegacyMatchesData {
+  menMatches: LegacyMatch[];
+  womenMatches: LegacyMatch[];
 }
 
 export const RomaMatches = () => {
-  const [matches, setMatches] = useState<MatchesData>({ menMatches: [], womenMatches: [] });
+  const [matches, setMatches] = useState<RomaFixture[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [dataSource, setDataSource] = useState<'json' | 'supabase'>('json');
 
   useEffect(() => {
     const fetchMatches = async () => {
       try {
-        const { data, error: functionError } = await supabase.functions.invoke('fetch-roma-matches');
-        
-        if (functionError) {
-          console.error('Error calling function:', functionError);
-          setError('Errore nel caricamento delle partite');
+        // Try loading from JSON first
+        try {
+          const data = await loadRomaMatches();
+          const upcomingMatches = getUpcomingMatches(data);
+          setMatches(upcomingMatches);
+          setDataSource('json');
+          console.log(`Loaded ${upcomingMatches.length} matches from JSON data (last updated: ${data.lastUpdated})`);
           return;
+        } catch (jsonError) {
+          console.warn('Failed to load from JSON, trying Supabase fallback:', jsonError);
         }
 
-        setMatches(data || { menMatches: [], womenMatches: [] });
+        // Fallback to Supabase if available
+        try {
+          const { supabase } = await import("../../legacy/integrations/supabase/client");
+          const { data, error: functionError } = await supabase.functions.invoke('fetch-roma-matches');
+          
+          if (functionError) {
+            throw new Error(`Supabase error: ${functionError.message}`);
+          }
+
+          const legacyData = data as LegacyMatchesData;
+          // Convert legacy format to new format
+          const convertedMatches: RomaFixture[] = legacyData.menMatches.map((match, index) => ({
+            id: parseInt(match.id) || index,
+            date: match.eventDate,
+            status: match.status === 'scheduled' ? 'NS' : match.status.toUpperCase(),
+            league: {
+              id: 135, // Serie A default
+              name: match.competition,
+            },
+            home: {
+              id: match.homeTeam.toLowerCase().includes('roma') ? 497 : 0,
+              name: match.homeTeam,
+              goals: match.homeScore,
+            },
+            away: {
+              id: match.awayTeam.toLowerCase().includes('roma') ? 497 : 0,
+              name: match.awayTeam,
+              goals: match.awayScore,
+            },
+            venue: match.venue || '',
+            round: 'Regular Season',
+          }));
+
+          setMatches(convertedMatches);
+          setDataSource('supabase');
+          console.log(`Loaded ${convertedMatches.length} matches from Supabase fallback`);
+        } catch (supabaseError) {
+          console.warn('Supabase fallback also failed:', supabaseError);
+          throw new Error('No data sources available');
+        }
+
       } catch (err) {
         console.error('Error fetching matches:', err);
         setError('Errore nel caricamento delle partite');
@@ -61,19 +108,14 @@ export const RomaMatches = () => {
     };
   };
 
-  const isRomaHome = (match: Match) => {
-    return match.homeTeam.toLowerCase().includes('roma');
-  };
-
   if (loading) {
     return (
       <div className="space-y-6">
         <div className="grid gap-4">
           {[1, 2, 3].map((i) => (
             <Card key={i} className="animate-pulse">
-              <CardContent className="p-6">
-                <div className="h-4 bg-muted rounded w-3/4 mb-2"></div>
-                <div className="h-4 bg-muted rounded w-1/2"></div>
+              <CardContent className="p-3">
+                <div className="h-16 bg-muted rounded"></div>
               </CardContent>
             </Card>
           ))}
@@ -84,24 +126,35 @@ export const RomaMatches = () => {
 
   if (error) {
     return (
-      <Card className="border-destructive">
-        <CardContent className="p-6 text-center">
-          <p className="text-destructive">{error}</p>
+      <Card>
+        <CardContent className="p-3 text-center">
+          <p className="text-sm text-destructive">{error}</p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <div className="space-y-4">
-      {/* Partite Maschili - Sezione Principale */}
-      <section>
-        <div className="flex items-center gap-2 mb-3">
-          <Trophy className="w-4 h-4 text-roma-red" />
-          <h2 className="text-lg font-bold text-foreground">Prossime Partite AS Roma</h2>
-        </div>
-        
-        {matches.menMatches.length === 0 ? (
+    <div className="space-y-6">
+      <CardHeader className="px-0 pt-0">
+        <CardTitle className="flex items-center gap-2 text-roma-red">
+          <Trophy className="h-5 w-5" />
+          Prossime Partite AS Roma
+        </CardTitle>
+        {dataSource === 'json' && (
+          <p className="text-xs text-muted-foreground">
+            Aggiornato automaticamente da API-Football
+          </p>
+        )}
+        {dataSource === 'supabase' && (
+          <p className="text-xs text-muted-foreground">
+            Dati da fonte alternativa
+          </p>
+        )}
+      </CardHeader>
+
+      <div className="space-y-4">
+        {matches.length === 0 ? (
           <Card>
             <CardContent className="p-3 text-center">
               <p className="text-sm text-muted-foreground">Nessuna partita programmata al momento</p>
@@ -109,8 +162,8 @@ export const RomaMatches = () => {
           </Card>
         ) : (
           <div className="grid gap-2">
-            {matches.menMatches.map((match) => {
-              const { date, time } = formatDate(match.eventDate);
+            {matches.slice(0, 6).map((match) => {
+              const { date, time } = formatDate(match.date);
               const romaHome = isRomaHome(match);
               
               return (
@@ -120,7 +173,7 @@ export const RomaMatches = () => {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <Badge variant="secondary" className="text-xs">
-                            {match.competition}
+                            {match.league.name}
                           </Badge>
                           {romaHome && (
                             <Badge variant="outline" className="text-xs border-roma-red text-roma-red">
@@ -128,80 +181,31 @@ export const RomaMatches = () => {
                             </Badge>
                           )}
                         </div>
-                        
-                        <div className="text-sm font-semibold mb-1">
-                          <span className={romaHome ? "text-roma-red font-bold" : ""}>
-                            {match.homeTeam}
+                        <div className="text-sm font-medium">
+                          <span className={romaHome ? "text-roma-red font-semibold" : ""}>
+                            {match.home.name}
                           </span>
-                          <span className="mx-2 text-muted-foreground">vs</span>
-                          <span className={!romaHome ? "text-roma-red font-bold" : ""}>
-                            {match.awayTeam}
+                          {" vs "}
+                          <span className={!romaHome ? "text-roma-red font-semibold" : ""}>
+                            {match.away.name}
                           </span>
                         </div>
-                        
-                        <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                          <span>{date} • {time}</span>
-                          <span>• {match.venue}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        )}
-      </section>
-
-      {/* Partite Femminili - Sezione Secondaria */}
-      <section className="border-t pt-3">
-        <div className="flex items-center gap-2 mb-2">
-          <Trophy className="w-4 h-4 text-roma-yellow" />
-          <h3 className="text-sm font-semibold text-foreground">AS Roma Femminile</h3>
-        </div>
-        
-        {matches.womenMatches.length === 0 ? (
-          <Card className="bg-muted/30">
-            <CardContent className="p-2 text-center">
-              <p className="text-xs text-muted-foreground">Nessuna partita programmata</p>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid gap-2">
-            {matches.womenMatches.map((match) => {
-              const { date, time } = formatDate(match.eventDate);
-              const romaHome = isRomaHome(match);
-              
-              return (
-                <Card key={match.id} className="bg-muted/30 hover:bg-muted/50 transition-colors">
-                  <CardContent className="p-2">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-1 mb-1">
-                          <Badge variant="outline" className="text-xs">
-                            {match.competition}
-                          </Badge>
-                          {romaHome && (
-                            <Badge variant="outline" className="text-xs border-roma-yellow text-roma-yellow">
-                              CASA
-                            </Badge>
+                        <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                          <div className="flex items-center gap-1">
+                            <Calendar className="h-3 w-3" />
+                            {date}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Clock className="h-3 w-3" />
+                            {time}
+                          </div>
+                          {match.venue && (
+                            <div className="flex items-center gap-1">
+                              <MapPin className="h-3 w-3" />
+                              {match.venue}
+                            </div>
                           )}
                         </div>
-                        
-                        <div className="text-xs font-medium mb-1">
-                          <span className={romaHome ? "text-roma-yellow font-semibold" : ""}>
-                            {match.homeTeam}
-                          </span>
-                          <span className="mx-2 text-muted-foreground">vs</span>
-                          <span className={!romaHome ? "text-roma-yellow font-semibold" : ""}>
-                            {match.awayTeam}
-                          </span>
-                        </div>
-                        
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <span>{date} • {time}</span>
-                          <span>• {match.venue}</span>
-                        </div>
                       </div>
                     </div>
                   </CardContent>
@@ -210,7 +214,7 @@ export const RomaMatches = () => {
             })}
           </div>
         )}
-      </section>
+      </div>
     </div>
   );
 };

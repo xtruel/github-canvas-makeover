@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CMS</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/admin-styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+</head>
+<body class="admin-body">
+    <!-- Navigation Sidebar -->
+    <nav class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-header">
+            <h1 class="sidebar-title">
+                <span class="sidebar-icon">⚙️</span>
+                <span class="sidebar-text">CMS Admin</span>
+            </h1>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <span class="toggle-icon">❮</span>
+            </button>
+        </div>
+        
+        <div class="sidebar-user">
+            <div class="user-avatar">👤</div>
+            <div class="user-info">
+                <div class="user-name" id="userName">Loading...</div>
+                <div class="user-role" id="userRole">...</div>
+            </div>
+        </div>
+        
+        <ul class="sidebar-nav">
+            <li class="nav-item">
+                <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#media" class="nav-link" data-section="media">
+                    <span class="nav-icon">🖼️</span>
+                    <span class="nav-text">Media</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#articles" class="nav-link" data-section="articles">
+                    <span class="nav-icon">📝</span>
+                    <span class="nav-text">Articles</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#tags" class="nav-link" data-section="tags">
+                    <span class="nav-icon">🏷️</span>
+                    <span class="nav-text">Tags & Categories</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#api-keys" class="nav-link" data-section="api-keys">
+                    <span class="nav-icon">🔑</span>
+                    <span class="nav-text">API Keys</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#recycle" class="nav-link" data-section="recycle">
+                    <span class="nav-icon">🗑️</span>
+                    <span class="nav-text">Recycle Bin</span>
+                </a>
+            </li>
+            <li class="nav-item admin-only">
+                <a href="#users" class="nav-link" data-section="users">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-text">Users</span>
+                </a>
+            </li>
+            <li class="nav-item admin-only">
+                <a href="#audit" class="nav-link" data-section="audit">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">Audit Log</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <div class="footer-actions">
+                <button id="themeToggle" class="footer-btn" title="Toggle theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <a href="/" class="footer-btn" title="View site" target="_blank">
+                    <span>🌐</span>
+                </a>
+                <button id="logoutBtn" class="footer-btn logout-btn" title="Logout">
+                    <span>🚪</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="admin-main" id="adminMain">
+        <header class="admin-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <span class="hamburger-icon">☰</span>
+                </button>
+                <h1 class="page-title" id="pageTitle">Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="connection-status">
+                    <span class="status-indicator" id="statusIndicator">🔴</span>
+                    <span class="status-text" id="statusText">Connecting...</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="admin-content" id="adminContent">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section active">
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🖼️</div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="mediaCount">0</div>
+                            <div class="stat-label">Media Items</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📝</div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="articlesCount">0</div>
+                            <div class="stat-label">Articles</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🗑️</div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="deletedCount">0</div>
+                            <div class="stat-label">In Recycle Bin</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔑</div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="apiKeysCount">0</div>
+                            <div class="stat-label">API Keys</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-actions">
+                    <button class="action-btn primary" onclick="adminApp.showSection('media')">
+                        <span class="btn-icon">🖼️</span>
+                        <span class="btn-text">Manage Media</span>
+                    </button>
+                    <button class="action-btn secondary" onclick="adminApp.showSection('articles')">
+                        <span class="btn-icon">📝</span>
+                        <span class="btn-text">Manage Articles</span>
+                    </button>
+                    <button class="action-btn tertiary" onclick="adminApp.showMediaUpload()">
+                        <span class="btn-icon">⬆️</span>
+                        <span class="btn-text">Upload Media</span>
+                    </button>
+                </div>
+                
+                <div class="recent-activity">
+                    <h2 class="section-title">Recent Activity</h2>
+                    <div class="activity-list" id="recentActivity">
+                        <!-- Activity items will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Media Section -->
+            <section id="media-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Media Management</h2>
+                    <div class="section-actions">
+                        <button class="action-btn primary" onclick="adminApp.showMediaUpload()">
+                            <span class="btn-icon">⬆️</span>
+                            <span class="btn-text">Upload Media</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="content-filters">
+                    <div class="filter-group">
+                        <label for="mediaTypeFilter" class="filter-label">Type:</label>
+                        <select id="mediaTypeFilter" class="filter-select">
+                            <option value="">All Types</option>
+                            <option value="image">Images</option>
+                            <option value="video">Videos</option>
+                            <option value="youtube">YouTube</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <input type="checkbox" id="includeDeletedMedia" class="filter-checkbox">
+                        <label for="includeDeletedMedia" class="filter-label">Include deleted</label>
+                    </div>
+                </div>
+                
+                <div class="media-grid" id="mediaGrid">
+                    <!-- Media items will be loaded here -->
+                </div>
+                
+                <div class="load-more-container">
+                    <button id="loadMoreMedia" class="load-more-btn">Load More Media</button>
+                </div>
+            </section>
+
+            <!-- Articles Section -->
+            <section id="articles-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Articles Management</h2>
+                    <div class="section-actions">
+                        <button class="action-btn primary" onclick="adminApp.showArticleEditor()">
+                            <span class="btn-icon">➕</span>
+                            <span class="btn-text">New Article</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="content-filters">
+                    <div class="filter-group">
+                        <input type="checkbox" id="includeDeletedArticles" class="filter-checkbox">
+                        <label for="includeDeletedArticles" class="filter-label">Include deleted</label>
+                    </div>
+                </div>
+                
+                <div class="articles-list" id="articlesList">
+                    <!-- Articles will be loaded here -->
+                </div>
+                
+                <div class="load-more-container">
+                    <button id="loadMoreArticles" class="load-more-btn">Load More Articles</button>
+                </div>
+            </section>
+
+            <!-- Tags & Categories Section -->
+            <section id="tags-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Tags & Categories Management</h2>
+                </div>
+                
+                <div class="tags-grid">
+                    <div class="tags-panel">
+                        <h3 class="panel-title">Media Tags</h3>
+                        <div class="tags-list" id="mediaTagsList">
+                            <!-- Media tags will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div class="tags-panel">
+                        <h3 class="panel-title">Article Tags</h3>
+                        <div class="tags-list" id="articleTagsList">
+                            <!-- Article tags will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div class="tags-panel">
+                        <h3 class="panel-title">Categories</h3>
+                        <div class="tags-list" id="categoriesList">
+                            <!-- Categories will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tags-actions">
+                    <h3 class="panel-title">Tag Operations</h3>
+                    <div class="action-forms">
+                        <div class="form-group">
+                            <label class="form-label">Rename Tag</label>
+                            <div class="input-group">
+                                <input type="text" id="oldTagName" placeholder="Old tag name" class="form-input">
+                                <input type="text" id="newTagName" placeholder="New tag name" class="form-input">
+                                <select id="renameTagType" class="form-select">
+                                    <option value="both">Both</option>
+                                    <option value="media">Media Only</option>
+                                    <option value="articles">Articles Only</option>
+                                </select>
+                                <button class="action-btn secondary" onclick="adminApp.renameTag()">Rename</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- API Keys Section -->
+            <section id="api-keys-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">API Keys Management</h2>
+                    <div class="section-actions">
+                        <button class="action-btn primary" onclick="adminApp.showCreateApiKey()">
+                            <span class="btn-icon">➕</span>
+                            <span class="btn-text">Create API Key</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="api-keys-list" id="apiKeysList">
+                    <!-- API keys will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Recycle Bin Section -->
+            <section id="recycle-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Recycle Bin</h2>
+                    <div class="section-actions">
+                        <button class="action-btn danger" onclick="adminApp.purgeAll()">
+                            <span class="btn-icon">💀</span>
+                            <span class="btn-text">Purge All</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="recycle-filters">
+                    <div class="filter-group">
+                        <label for="recycleTypeFilter" class="filter-label">Type:</label>
+                        <select id="recycleTypeFilter" class="filter-select">
+                            <option value="">All Types</option>
+                            <option value="media">Media</option>
+                            <option value="article">Articles</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="recycle-list" id="recycleList">
+                    <!-- Deleted items will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Users Section (Admin Only) -->
+            <section id="users-section" class="content-section admin-only">
+                <div class="section-header">
+                    <h2 class="section-title">User Management</h2>
+                    <div class="section-actions">
+                        <button class="action-btn primary" onclick="adminApp.showCreateUser()">
+                            <span class="btn-icon">➕</span>
+                            <span class="btn-text">Create User</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="users-list" id="usersList">
+                    <!-- Users will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Audit Log Section (Admin Only) -->
+            <section id="audit-section" class="content-section admin-only">
+                <div class="section-header">
+                    <h2 class="section-title">Audit Log</h2>
+                    <div class="section-actions">
+                        <button class="action-btn danger" onclick="adminApp.purgeAuditLog()">
+                            <span class="btn-icon">🧹</span>
+                            <span class="btn-text">Purge Old Logs</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="audit-list" id="auditList">
+                    <!-- Audit logs will be loaded here -->
+                </div>
+                
+                <div class="load-more-container">
+                    <button id="loadMoreAudit" class="load-more-btn">Load More Logs</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modals will be inserted here dynamically -->
+    <div id="modalContainer"></div>
+
+    <!-- Status Messages -->
+    <div id="statusContainer" class="status-container">
+        <!-- Status messages will appear here -->
+    </div>
+
+    <script src="/admin.js"></script>
+</body>
+</html>

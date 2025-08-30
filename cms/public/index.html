@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Canvas Makeover CMS</title>
+    <meta name="description" content="Self-hosted content management system">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📸</text></svg>">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">
+                    <span class="logo-icon">📸</span>
+                    <span class="logo-text">CMS Gallery</span>
+                </h1>
+                
+                <nav class="nav">
+                    <div class="search-container">
+                        <input type="text" id="searchInput" placeholder="Search articles..." class="search-input">
+                        <button id="searchBtn" class="search-btn">🔍</button>
+                    </div>
+                    
+                    <div class="nav-actions">
+                        <button id="themeToggle" class="theme-toggle" title="Toggle theme">
+                            <span class="theme-icon">🌙</span>
+                        </button>
+                        <a href="/admin.html" class="admin-link">Admin</a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Filters -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="categoryFilter" class="filter-label">Category:</label>
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="tagFilter" class="filter-label">Tag:</label>
+                    <select id="tagFilter" class="filter-select">
+                        <option value="">All Tags</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="typeFilter" class="filter-label">Type:</label>
+                    <select id="typeFilter" class="filter-select">
+                        <option value="">All Content</option>
+                        <option value="media">Media Only</option>
+                        <option value="articles">Articles Only</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Content Sections -->
+            <div class="content-tabs">
+                <button class="tab-btn active" data-tab="gallery">📸 Gallery</button>
+                <button class="tab-btn" data-tab="articles">📝 Articles</button>
+                <button class="tab-btn" data-tab="search" id="searchTab" style="display: none;">🔍 Search Results</button>
+            </div>
+
+            <!-- Gallery Tab -->
+            <section id="gallery" class="tab-content active">
+                <div class="gallery-grid" id="mediaGrid">
+                    <!-- Media items will be loaded here -->
+                </div>
+                <div class="load-more-container">
+                    <button id="loadMoreMedia" class="load-more-btn">Load More Media</button>
+                </div>
+            </section>
+
+            <!-- Articles Tab -->
+            <section id="articles" class="tab-content">
+                <div class="articles-list" id="articlesList">
+                    <!-- Articles will be loaded here -->
+                </div>
+                <div class="load-more-container">
+                    <button id="loadMoreArticles" class="load-more-btn">Load More Articles</button>
+                </div>
+            </section>
+
+            <!-- Search Results Tab -->
+            <section id="search" class="tab-content">
+                <div class="search-results" id="searchResults">
+                    <!-- Search results will be loaded here -->
+                </div>
+                <div class="load-more-container">
+                    <button id="loadMoreSearch" class="load-more-btn">Load More Results</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Media Modal -->
+    <div id="mediaModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <div class="modal-body" id="modalBody">
+                <!-- Modal content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Modal -->
+    <div id="articleModal" class="modal">
+        <div class="modal-content modal-content-large">
+            <button class="modal-close">&times;</button>
+            <div class="modal-body" id="articleModalBody">
+                <!-- Article content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Messages -->
+    <div id="statusContainer" class="status-container">
+        <!-- Status messages will appear here -->
+    </div>
+
+    <!-- Connection Status -->
+    <div id="connectionStatus" class="connection-status">
+        <span class="status-indicator" id="statusIndicator">🔴</span>
+        <span class="status-text" id="statusText">Connecting...</span>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2024 GitHub Canvas Makeover CMS. Powered by Express & SQLite.</p>
+                <div class="footer-links">
+                    <a href="/feed.xml" target="_blank">RSS Feed</a>
+                    <a href="/sitemap.xml" target="_blank">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/app.js"></script>
+</body>
+</html>

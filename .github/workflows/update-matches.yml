@@ -1,0 +1,94 @@
+name: Update Roma Matches
+
+on:
+  schedule:
+    # Daily update at 05:00 UTC
+    - cron: '0 5 * * *'
+    # Live updates every 15 minutes from 12:00 to 22:00 UTC (match hours)
+    - cron: '*/15 12-22 * * *'
+  
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Update mode'
+        required: false
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - daily
+          - live
+
+jobs:
+  update-matches:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install ts-node globally
+        run: npm install -g ts-node
+
+      - name: Determine update mode
+        id: mode
+        run: |
+          if [[ "${{ github.event.inputs.mode }}" == "daily" ]]; then
+            echo "mode=daily" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event.inputs.mode }}" == "live" ]]; then
+            echo "mode=live" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event.inputs.mode }}" == "auto" ]] || [[ -z "${{ github.event.inputs.mode }}" ]]; then
+            # Auto mode: determine based on current UTC time
+            current_hour=$(date -u +%H)
+            if (( current_hour >= 12 && current_hour <= 22 )); then
+              echo "mode=live" >> $GITHUB_OUTPUT
+            else
+              echo "mode=daily" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "mode=daily" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run matches update script
+        env:
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
+          ROMA_TEAM_ID: ${{ vars.ROMA_TEAM_ID || '497' }}
+          SEASON: ${{ vars.SEASON || '2024' }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          MAX_RETRIES: ${{ vars.MAX_RETRIES || '3' }}
+          REQUEST_TIMEOUT_MS: ${{ vars.REQUEST_TIMEOUT_MS || '30000' }}
+          MATCH_UPDATE_ENABLED: ${{ vars.MATCH_UPDATE_ENABLED || 'true' }}
+        run: |
+          if [[ "${{ env.MATCH_UPDATE_ENABLED }}" != "true" ]]; then
+            echo "⏭️ Match updates are disabled via MATCH_UPDATE_ENABLED variable"
+            exit 0
+          fi
+          
+          echo "🚀 Running matches update in ${{ steps.mode.outputs.mode }} mode"
+          
+          if [[ "${{ steps.mode.outputs.mode }}" == "daily" ]]; then
+            npx ts-node scripts/update-matches.ts --daily
+          else
+            npx ts-node scripts/update-matches.ts --live
+          fi
+
+      - name: Report success
+        if: success()
+        run: |
+          echo "✅ Match update completed successfully in ${{ steps.mode.outputs.mode }} mode"
+
+      - name: Report failure
+        if: failure()
+        run: |
+          echo "❌ Match update failed in ${{ steps.mode.outputs.mode }} mode"
+          exit 1

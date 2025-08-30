@@ -64,10 +64,14 @@ async function updateRomaMatches(): Promise<void> {
     if (hasChanged) {
       // Ensure data directory exists
       await fs.mkdir(join(process.cwd(), 'data'), { recursive: true });
+      await fs.mkdir(join(process.cwd(), 'public', 'data'), { recursive: true });
       
-      // Write the file
+      // Write the file to both locations
       await fs.writeFile(outputPath, jsonContent, 'utf-8');
+      await fs.writeFile(join(process.cwd(), 'public', 'data', 'roma-matches.json'), jsonContent, 'utf-8');
+      
       console.log(`✅ Updated ${outputPath} with ${matches.length} Roma matches`);
+      console.log(`✅ Updated public/data/roma-matches.json for frontend access`);
       console.log(`📅 Last updated: ${romaData.lastUpdated}`);
       
       if (matches.length > 0) {

@@ -32,14 +32,14 @@ jobs:
       - name: Check for changes
         id: git-check
         run: |
-          git diff --exit-code data/roma-matches.json || echo "changes=true" >> $GITHUB_OUTPUT
+          git diff --exit-code data/roma-matches.json public/data/roma-matches.json || echo "changes=true" >> $GITHUB_OUTPUT
 
       - name: Commit and push changes
         if: steps.git-check.outputs.changes == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add data/roma-matches.json
+          git add data/roma-matches.json public/data/roma-matches.json
           git commit -m "chore: update Roma matches from OpenFootball [automated]"
           git push
 

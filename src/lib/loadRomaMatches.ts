@@ -1,4 +1,25 @@
-import { RomaMatchesData } from '../scripts/openfootball/parseSerieA';
+// Types for Roma matches data (from OpenFootball)
+interface OpenFootballMatch {
+  id: number;
+  date: string;
+  status: 'SCHEDULED' | 'FINISHED';
+  league: string;
+  round: string | null;
+  venue: string | null;
+  homeTeam: string;
+  awayTeam: string;
+  homeScore: number | null;
+  awayScore: number | null;
+}
+
+interface RomaMatchesData {
+  lastUpdated: string;
+  source: string;
+  live: boolean;
+  teamName: string;
+  season: string;
+  fixtures: OpenFootballMatch[];
+}
 
 /**
  * Load Roma matches from local JSON file

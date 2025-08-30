@@ -36,8 +36,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install ts-node globally
-        run: npm install -g ts-node
+      - name: Install tsx globally
+        run: npm install -g tsx
 
       - name: Determine update mode
         id: mode
@@ -77,9 +77,9 @@ jobs:
           echo "🚀 Running matches update in ${{ steps.mode.outputs.mode }} mode"
           
           if [[ "${{ steps.mode.outputs.mode }}" == "daily" ]]; then
-            npx ts-node scripts/update-matches.ts --daily
+            tsx scripts/update-matches.ts --daily
           else
-            npx ts-node scripts/update-matches.ts --live
+            tsx scripts/update-matches.ts --live
           fi
 
       - name: Report success

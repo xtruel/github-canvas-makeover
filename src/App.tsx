@@ -10,6 +10,7 @@ import Eventi from "./pages/Eventi";
 import Community from "./pages/Community";
 import Trofei from "./pages/Trofei";
 import Impostazioni from "./pages/Impostazioni";
+import TestComponents from "./pages/TestComponents";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/community" element={<Community />} />
             <Route path="/trofei" element={<Trofei />} />
             <Route path="/impostazioni" element={<Impostazioni />} />
+            <Route path="/test" element={<TestComponents />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

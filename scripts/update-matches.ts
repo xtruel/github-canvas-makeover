@@ -1,4 +1,4 @@
-#!/usr/bin/env npx ts-node
+#!/usr/bin/env tsx
 /**
  * Match update script for fetching and updating Roma matches
  * Supports both daily and live update modes
@@ -224,6 +224,6 @@ process.on('uncaughtException', (error) => {
 });
 
 // Run the script
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   main();
 }

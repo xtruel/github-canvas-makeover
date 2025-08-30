@@ -47,8 +47,8 @@ interface ApiFootballFixture {
 
 interface ApiFootballResponse {
   get: string;
-  parameters: Record<string, any>;
-  errors: any[];
+  parameters: Record<string, unknown>;
+  errors: unknown[];
   results: number;
   paging: {
     current: number;

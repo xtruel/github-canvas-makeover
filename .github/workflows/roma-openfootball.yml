@@ -1,0 +1,52 @@
+name: Update Roma Matches from OpenFootball
+
+on:
+  schedule:
+    # Run at minute 12 every 6th hour (0,6,12,18 UTC)
+    - cron: '12 */6 * * *'
+  workflow_dispatch:
+    # Allow manual triggering
+
+jobs:
+  update-roma-matches:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Update Roma matches from OpenFootball
+        run: npx tsx scripts/updateRomaOpenfootball.ts
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code data/roma-matches.json || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/roma-matches.json
+          git commit -m "chore: update Roma matches from OpenFootball [automated]"
+          git push
+
+      - name: Summary
+        run: |
+          if [ "${{ steps.git-check.outputs.changes }}" == "true" ]; then
+            echo "✅ Roma matches updated successfully"
+          else
+            echo "ℹ️ No changes in Roma matches data"
+          fi

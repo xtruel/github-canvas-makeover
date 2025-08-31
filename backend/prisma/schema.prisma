@@ -3,59 +3,40 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id        String   @id @default(cuid())
-  username  String   @unique
-  password  String
-  role      UserRole @default(ADMIN)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  articles  Article[]
-  media     Media[]
-}
-
-enum UserRole {
-  ADMIN
-}
-
-model Article {
-  id          String    @id @default(cuid())
-  title       String
-  body        String
-  published   Boolean   @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  mediaItems  ArticleMedia[]
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  role         String   @default("admin")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  articles     Article[]
 }
 
 model Media {
-  id         String    @id @default(cuid())
-  userId     String
-  user       User      @relation(fields: [userId], references: [id])
-  kind       MediaKind
-  mimeType   String
-  path       String    @unique
-  sizeBytes  Int
-  createdAt  DateTime  @default(now())
-  articleRefs ArticleMedia[]
+  id          String   @id @default(cuid())
+  originalName String
+  mimeType     String
+  size         Int
+  path         String   @unique
+  url          String
+  createdAt    DateTime @default(now())
+  articleCover Article[]
 }
 
-enum MediaKind {
-  IMAGE
-  VIDEO
-}
-
-model ArticleMedia {
-  id        String  @id @default(cuid())
-  articleId String
-  mediaId   String
-  article   Article @relation(fields: [articleId], references: [id])
-  media     Media   @relation(fields: [mediaId], references: [id])
+model Article {
+  id        String   @id @default(cuid())
+  title     String
+  body      String
+  published Boolean  @default(false)
+  coverId   String?  
+  cover     Media?   @relation(fields: [coverId], references: [id])
   createdAt DateTime @default(now())
-
-  @@unique([articleId, mediaId])
+  updatedAt DateTime @updatedAt
+  authorId  String?  // reserved for future multi-user
+  author    User?    @relation(fields: [authorId], references: [id])
 }

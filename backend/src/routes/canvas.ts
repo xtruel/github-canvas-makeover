@@ -119,6 +119,10 @@ canvasRouter.post('/api/canvas/:id/post', upload.single('file'), async (req, res
 
       // Generate public URL
       const fileUrl = `/uploads/${req.file.filename}`;
+      
+      // TODO: For S3/cloud storage migration, replace the above line with:
+      // const fileUrl = await uploadToS3(req.file.path, req.file.filename);
+      // fs.unlinkSync(req.file.path); // Clean up local temp file
 
       const post = await prisma.post.create({
         data: {

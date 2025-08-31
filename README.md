@@ -174,6 +174,36 @@ curl -X POST http://localhost:4000/api/canvas/{canvas-id}/post \
 curl http://localhost:4000/api/canvas/{canvas-id}/posts
 ```
 
+### Production Setup Notes
+
+For production deployment, consider these steps:
+
+1. **Database Migration**: Run `npm run prisma:migrate` to create Canvas and Post tables
+2. **Environment Variables**: Set `DATABASE_URL` for your production database
+3. **File Storage Migration**: Replace local file storage with S3/CloudFlare R2:
+   ```typescript
+   // In canvas.ts, replace local storage with cloud storage
+   const fileUrl = await uploadToS3(req.file); // Instead of `/uploads/${filename}`
+   ```
+4. **Security**: Add authentication middleware to Canvas routes if needed
+5. **File Cleanup**: Add cleanup job for orphaned files
+6. **Monitoring**: Add logging for file upload failures and storage usage
+
+### Development Testing
+
+A test server is provided for development without database dependencies:
+
+```bash
+# Start test server (uses in-memory storage)
+node test-server.js
+
+# Run comprehensive API tests
+bash test-api.sh
+
+# Run validation tests only
+node test-canvas-api.js
+```
+
 ---
 ## 4. Development Environment & Devcontainer
 A `.devcontainer/devcontainer.json` is provided so you can open a GitHub Codespace or local VS Code Dev Container:

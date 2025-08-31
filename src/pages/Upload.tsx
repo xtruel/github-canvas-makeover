@@ -111,9 +111,10 @@ const Upload = () => {
         navigate("/forum");
       }, 1500);
       
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Errore durante la pubblicazione:", error);
-      toast.error(error.message || "Errore durante la pubblicazione del post", {
+      const errorMessage = error instanceof Error ? error.message : "Errore durante la pubblicazione del post";
+      toast.error(errorMessage, {
         id: "upload-progress"
       });
       toast.dismiss("create-post");

@@ -1,23 +1,36 @@
 import { apiFetch, API_BASE } from './client';
 
-export async function uploadMedia(file: File){
+interface MediaAsset {
+  id: string;
+  type: 'IMAGE' | 'VIDEO';
+  mimeType: string;
+  originalUrl: string;
+}
+
+interface PresignResponse {
+  assetId: string;
+  uploadUrl: string;
+  publicUrl: string;
+}
+
+export async function uploadMedia(file: File): Promise<MediaAsset> {
   const presignPaths = ['/media/presign','/admin/media/presign'];
-  let presign:any;
-  let lastErr:any;
+  let presign: PresignResponse | undefined;
+  let lastErr: Error | undefined;
 
   for(const p of presignPaths){
     try {
-      presign = await apiFetch(p,{ method:'POST', json:{ filename:file.name, mimeType:file.type, type: file.type.startsWith('video')? 'VIDEO':'IMAGE' } });
+      presign = await apiFetch(p,{ method:'POST', json:{ filename:file.name, mimeType:file.type, type: file.type.startsWith('video')? 'VIDEO':'IMAGE' } }) as PresignResponse;
       break;
-    } catch(e:any){
-      lastErr=e;
+    } catch(e: unknown){
+      lastErr = e as Error;
     }
   }
 
   if(!presign) throw lastErr;
   await fetch(API_BASE + presign.uploadUrl,{ method:'PUT', body:file });
   const dims = file.type.startsWith('image')? await readImageDimensions(file).catch(()=>null): null;
-  const asset = await apiFetch((presign.uploadUrl.startsWith('/uploads')? (presign.uploadUrl.includes('/admin/')? '/admin':'') : '') + `/media/${presign.assetId}/finalize`, { method:'POST', json:{ width:dims?.width, height:dims?.height } });
+  const asset = await apiFetch((presign.uploadUrl.startsWith('/uploads')? (presign.uploadUrl.includes('/admin/')? '/admin':'') : '') + `/media/${presign.assetId}/finalize`, { method:'POST', json:{ width:dims?.width, height:dims?.height } }) as MediaAsset;
   return asset;
 }
 

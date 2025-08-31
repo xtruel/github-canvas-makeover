@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, MessageCircle, Heart } from "lucide-react";
+import { Users, MessageCircle, Heart, FileText, Info, Upload } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Community = () => {
   return (
@@ -22,8 +23,61 @@ const Community = () => {
               <p className="text-muted-foreground mb-4">
                 Discuti con altri tifosi romanisti da tutto il mondo
               </p>
-              <Button variant="secondary" className="w-full">
-                Entra nel Forum
+              <Button asChild variant="secondary" className="w-full">
+                <Link to="/forum">Entra nel Forum</Link>
+              </Button>
+            </CardContent>
+          </Card>
+          
+          <Card className="shadow-glow border-border/50">
+            <CardHeader>
+              <CardTitle className="text-roma-gold flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Articoli
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground mb-4">
+                Leggi articoli e interviste esclusive sulla Roma
+              </p>
+              <Button asChild variant="secondary" className="w-full">
+                <Link to="/articles">Leggi Articoli</Link>
+              </Button>
+            </CardContent>
+          </Card>
+          
+          <Card className="shadow-glow border-border/50">
+            <CardHeader>
+              <CardTitle className="text-roma-gold flex items-center gap-2">
+                <Upload className="h-5 w-5" />
+                Carica Contenuti
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground mb-4">
+                Condividi i tuoi momenti romanisti con la community
+              </p>
+              <Button asChild variant="secondary" className="w-full">
+                <Link to="/upload">Carica Contenuti</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+        
+        <div className="grid md:grid-cols-3 gap-6">
+          <Card className="shadow-glow border-border/50">
+            <CardHeader>
+              <CardTitle className="text-roma-gold flex items-center gap-2">
+                <Info className="h-5 w-5" />
+                Info Forum
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground mb-4">
+                Scopri come funziona il forum e le regole della community
+              </p>
+              <Button asChild variant="secondary" className="w-full">
+                <Link to="/about-forum">Info Forum</Link>
               </Button>
             </CardContent>
           </Card>
@@ -56,8 +110,8 @@ const Community = () => {
               <p className="text-muted-foreground mb-4">
                 Condividi i tuoi momenti romanisti
               </p>
-              <Button variant="secondary" className="w-full">
-                Carica Contenuti
+              <Button asChild variant="secondary" className="w-full">
+                <Link to="/upload">Carica Contenuti</Link>
               </Button>
             </CardContent>
           </Card>

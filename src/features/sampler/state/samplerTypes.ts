@@ -44,7 +44,7 @@ export type SamplerAction =
   | { type: 'INIT_AUDIO_CONTEXT'; audioContext: AudioContext }
   | { type: 'SET_BUFFER'; padId: number; buffer: AudioBuffer; fileName?: string }
   | { type: 'SET_SLICE'; padId: number; start: number; end: number }
-  | { type: 'SET_EFFECT'; padId: number; effectType: keyof EffectSettings; value: any }
+  | { type: 'SET_EFFECT'; padId: number; effectType: keyof EffectSettings; value: unknown }
   | { type: 'SET_MASTER_GAIN'; gain: number }
   | { type: 'SELECT_PAD'; padId: number | null }
   | { type: 'SET_PLAYING'; padId: number; isPlaying: boolean };

@@ -114,7 +114,7 @@ export function SamplerProvider({ children }: { children: React.ReactNode }) {
       playingSourcesRef.current.delete(padId);
       dispatch({ type: 'SET_PLAYING', padId, isPlaying: false });
     };
-  }, [state.audioContext, state.pads]);
+  }, [state.audioContext, state.pads, stopPad]);
 
   const stopPad = useCallback((padId: number) => {
     const source = playingSourcesRef.current.get(padId);

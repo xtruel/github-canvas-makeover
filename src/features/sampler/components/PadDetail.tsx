@@ -54,9 +54,9 @@ export function PadDetail({ padId }: PadDetailProps) {
       effectValue = value;
     } else {
       // Navigate nested path
-      let current = effectValue as any;
+      let current = effectValue as Record<string, unknown>;
       for (let i = 0; i < path.length - 1; i++) {
-        current = current[path[i]];
+        current = current[path[i]] as Record<string, unknown>;
       }
       current[path[path.length - 1]] = value;
     }

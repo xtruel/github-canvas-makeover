@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { prisma } from '../prisma/client.js';
-import { UserRole } from '@prisma/client';
+
+// Define UserRole enum locally since Prisma client generation has issues
+export enum UserRole {
+  USER = 'USER',
+  ADMIN = 'ADMIN'
+}
 
 export interface AuthRequest extends Request {
   user?: { id: string; role: UserRole };

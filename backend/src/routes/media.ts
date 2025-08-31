@@ -24,10 +24,10 @@ function buildPresignRoute(pathBase: string, admin: boolean) {
 }
 
 buildPresignRoute('/admin', true);
-buildPresignRoute('', false);
+buildPresignRoute('', true); // Require admin for regular route too
 
 mediaRouter.post('/admin/media/:id/finalize', requireAdmin(), finalizeHandler);
-mediaRouter.post('/media/:id/finalize', authRequired(), finalizeHandler);
+mediaRouter.post('/media/:id/finalize', requireAdmin(), finalizeHandler); // Require admin for regular route too
 
 async function finalizeHandler(req: AuthRequest, res: any) {
   const { id } = req.params;

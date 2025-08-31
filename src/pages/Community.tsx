@@ -2,8 +2,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, MessageCircle, Heart, FileText, Info, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const Community = () => {
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'ADMIN';
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-8 text-roma-gold">
@@ -46,22 +50,24 @@ const Community = () => {
             </CardContent>
           </Card>
           
-          <Card className="shadow-glow border-border/50">
-            <CardHeader>
-              <CardTitle className="text-roma-gold flex items-center gap-2">
-                <Upload className="h-5 w-5" />
-                Carica Contenuti
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground mb-4">
-                Condividi i tuoi momenti romanisti con la community
-              </p>
-              <Button asChild variant="secondary" className="w-full">
-                <Link to="/upload">Carica Contenuti</Link>
-              </Button>
-            </CardContent>
-          </Card>
+          {isAdmin && (
+            <Card className="shadow-glow border-border/50">
+              <CardHeader>
+                <CardTitle className="text-roma-gold flex items-center gap-2">
+                  <Upload className="h-5 w-5" />
+                  Carica Contenuti
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground mb-4">
+                  Condividi i tuoi momenti romanisti con la community
+                </p>
+                <Button asChild variant="secondary" className="w-full">
+                  <Link to="/upload">Carica Contenuti</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          )}
         </div>
         
         <div className="grid md:grid-cols-3 gap-6">
@@ -99,22 +105,24 @@ const Community = () => {
             </CardContent>
           </Card>
           
-          <Card className="shadow-glow border-border/50">
-            <CardHeader>
-              <CardTitle className="text-roma-gold flex items-center gap-2">
-                <Heart className="h-5 w-5" />
-                Foto & Video
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground mb-4">
-                Condividi i tuoi momenti romanisti
-              </p>
-              <Button asChild variant="secondary" className="w-full">
-                <Link to="/upload">Carica Contenuti</Link>
-              </Button>
-            </CardContent>
-          </Card>
+          {isAdmin && (
+            <Card className="shadow-glow border-border/50">
+              <CardHeader>
+                <CardTitle className="text-roma-gold flex items-center gap-2">
+                  <Heart className="h-5 w-5" />
+                  Foto & Video
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground mb-4">
+                  Condividi i tuoi momenti romanisti
+                </p>
+                <Button asChild variant="secondary" className="w-full">
+                  <Link to="/upload">Carica Contenuti</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          )}
         </div>
         
         <Card className="shadow-roma border-border/50">

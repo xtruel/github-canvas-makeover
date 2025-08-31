@@ -19,6 +19,16 @@ authRouter.post('/auth/dev-login', async (req, res) => {
   res.json({ ok: true, user: { id: user.id, email: user.email, role: user.role } });
 });
 
+authRouter.get('/auth/me', async (req: any, res) => {
+  const id = req.cookies?.sessionUserId;
+  if (!id) return res.status(401).json({ error: 'Not authenticated' });
+
+  const user = await prisma.user.findUnique({ where: { id } });
+  if (!user) return res.status(401).json({ error: 'User not found' });
+
+  res.json({ user: { id: user.id, email: user.email, role: user.role } });
+});
+
 authRouter.post('/auth/logout', (req, res) => {
   res.clearCookie('sessionUserId');
   res.json({ ok: true });

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { prisma } from '../prisma/client.js';
-import { authRequired, AuthRequest } from '../auth/authMiddleware.js';
+import { requireAdmin, AuthRequest } from '../auth/authMiddleware.js';
 
 export const postsRouter = Router();
 
@@ -25,7 +25,7 @@ postsRouter.get('/posts', async (req, res) => {
   res.json({ items, nextCursor });
 });
 
-postsRouter.post('/posts', authRequired(), async (req: AuthRequest, res) => {
+postsRouter.post('/posts', requireAdmin(), async (req: AuthRequest, res) => {
   const { type, title, body, mediaId } = req.body || {};
   if (!type || !['TEXT','IMAGE','VIDEO'].includes(type)) return res.status(400).json({ error: 'invalid type' });
   if (!title) return res.status(400).json({ error: 'title required' });

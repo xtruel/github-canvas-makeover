@@ -70,13 +70,13 @@ const RomaMap = () => {
       description: 'Cuore pulsante dell\'eleganza romana, Piazza di Spagna incanta con la sua scenografica scalinata di Trinità dei Monti - 135 gradini in travertino progettati da Francesco De Sanctis (1723-1726). Ai piedi, la Fontana della Barcaccia di Pietro Bernini (padre del più famoso Gian Lorenzo) ricorda l\'alluvione del Tevere del 1598. Via dei Condotti, che si apre sulla piazza, è il salotto dello shopping di lusso con le boutique delle più prestigiose maison internazionali. Qui hanno vissuto poeti romantici come Keats e Byron nella Casa-Museo alla base della scalinata.',
       image: piazzaSpagnaImage
     },
-    { 
-      name: 'Castel Sant\'Angelo', 
-      coords: [12.4663, 41.9031], 
-      type: 'historical', 
+    {
+      name: 'Castel Sant\'Angelo',
+      coords: [12.4663, 41.9031],
+      type: 'historical',
       color: '#6B7280',
       description: 'Nato come Mausoleo di Adriano (139 d.C.), questo cilindro di travertino e peperino è diventato nei secoli fortezza inespugnabile, prigione pontificia e residenza papale rinascimentale. Il Passetto di Borgo, corridoio sopraelevato di 800 metri, lo collegava segretamente al Vaticano per le fughe dei papi in pericolo. Oggi museo con 58 stanze riccamente affrescate, ospita la Sala Paolina, gli appartamenti papali e una terrazza panoramica mozzafiato. La statua bronzea dell\'Arcangelo Michele che corona la fortezza ricorda la visione di Papa Gregorio Magno che nel 590 vide l\'angelo rinfoderare la spada, annunciando la fine della peste.',
-      image: 'https://images.unsplash.com/photo-1569949381669-ecf31ae8e613?w=500'
+      image: 'https://turismoroma.it/sites/default/files/monumenti_e_siti_archeologici/castel_sant_angelo_2.jpg'
     },
     { 
       name: 'Vittoriano', 
@@ -92,7 +92,7 @@ const RomaMap = () => {
       type: 'historical',
       color: '#6B7280',
       description: 'La più grande basilica del mondo cristiano, capolavoro del Rinascimento e Barocco. Progettata da Bramante, Michelangelo e Bernini. La cupola di Michelangelo domina Roma con i suoi 136 metri di altezza.',
-      image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=500'
+      image: 'https://turismoroma.it/sites/default/files/slide_san_pietro_1.jpg'
     },
     {
       name: 'Fori Imperiali',
@@ -100,7 +100,7 @@ const RomaMap = () => {
       type: 'historical',
       color: '#6B7280',
       description: 'Complesso di piazze monumentali costruite tra il 46 a.C. e il 113 d.C. dai vari imperatori romani. Include il Foro di Cesare, di Augusto, di Nerva e di Traiano con la famosa Colonna Traiana.',
-      image: 'https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=500'
+      image: 'https://turismoroma.it/sites/default/files/monumenti_e_siti_archeologici/fori_imperiali_4.jpg'
     },
     {
       name: 'Villa Borghese',
@@ -308,7 +308,7 @@ const RomaMap = () => {
       type: 'stadium', 
       color: '#D97706',
       description: 'Tempio del calcio capitolino con capienza di 70.634 spettatori, inaugurato nel 1927 e ristrutturato per i Mondiali di Italia \'90. Situato nel Foro Italico, è la casa di AS Roma e SS Lazio, teatro dei derby più accesi d\'Italia che dividono la città in due. La Curva Sud giallorossa e la Curva Nord biancoceleste creano un\'atmosfera elettrizzante durante le partite. Ha ospitato le Olimpiadi del 1960, la finale dei Mondiali 1990 (Germania Ovest-Argentina), due finali di Champions League (1996, 2009) e concerti memorabili di artisti internazionali. Proprietà del CONI, è considerato uno degli stadi più belli e suggestivi d\'Europa.',
-      image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=500'
+      image: 'https://turismoroma.it/sites/default/files/stadio_olimpico_roma_1.jpg'
     },
     {
       name: 'Stadio Flaminio',
@@ -916,10 +916,14 @@ const RomaMap = () => {
   };
 
   // Check if mobile using pointer: coarse OR width < 768 for better Android detection
+  // Also consider iPad as tablet (separate from mobile phone)
   useEffect(() => {
     const checkMobile = () => {
       const hasCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
       const isNarrowScreen = window.innerWidth < 768;
+      const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024 && hasCoarsePointer;
+      
+      // Treat tablets (iPad) as mobile for layout but with different sizing
       setIsMobile(hasCoarsePointer || isNarrowScreen);
     };
     
@@ -1096,10 +1100,26 @@ const RomaMap = () => {
     <div className="relative w-full h-full bg-background overflow-hidden">
       {/* Mobile Layout - Square map with bottom drawer */}
       {isMobile ? (
-        <div className="flex flex-col h-full min-h-[500px]">
+        <div className="flex flex-col h-full min-h-[500px] roma-map-container">
           {/* Header */}
           <div className="bg-background/95 backdrop-blur-sm p-3 border-b border-border/50 z-30 flex-shrink-0">
-            <h2 className="text-lg font-semibold text-roma-gold text-center">Discover the Eternal City</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg sm:text-xl font-semibold text-roma-gold">Discover the Eternal City</h2>
+              {/* Test popup button - for development */}
+              <button 
+                onClick={() => setSelectedPlace({
+                  name: 'Colosseo',
+                  coords: [12.4924, 41.8902],
+                  type: 'historical',
+                  color: '#6B7280',
+                  description: 'L\'Amphitheatrum Flavium, vero nome del Colosseo, fu costruito dall\'imperatore Vespasiano nel 72 d.C. e inaugurato dal figlio Tito nell\'80 d.C. Questo colosso architettonico, alto 50 metri con quattro ordini di arcate (dorico, ionico, corinzio e composito), poteva ospitare tra 50.000 e 80.000 spettatori.',
+                  image: 'https://turismoroma.it/sites/default/files/colosseo_slide_0.jpg'
+                })}
+                className="text-xs bg-roma-red/20 hover:bg-roma-red/30 px-2 py-1 rounded transition-colors"
+              >
+                Test
+              </button>
+            </div>
           </div>
           
           {/* Horizontal Legend */}
@@ -1142,9 +1162,9 @@ const RomaMap = () => {
             </div>
           </div>
           
-          {/* Square Map Container - Constrained by screen width */}
+          {/* Square Map Container - Responsive sizing */}
           <div className="px-3 py-3 flex-shrink-0">
-            <div className="aspect-square w-full relative rounded-lg overflow-hidden shadow-roma border border-border/50">
+            <div className="aspect-square w-full max-w-2xl mx-auto relative rounded-lg overflow-hidden shadow-roma border border-border/50">
               <div 
                 ref={mapContainer} 
                 className="absolute inset-0 w-full h-full"
@@ -1164,10 +1184,10 @@ const RomaMap = () => {
           
           {/* Bottom Drawer for selected place */}
           <div 
-            className="bg-background border-t border-border/50 overflow-y-auto transition-all duration-300 ease-in-out flex-shrink-0"
+            className="roma-map-popup-mobile overflow-y-auto transition-all duration-300 ease-in-out flex-shrink-0"
             style={{ 
-              height: selectedPlace ? 'min(40vh, 300px)' : '0vh',
-              maxHeight: 'min(40vh, 300px)'
+              height: selectedPlace ? 'min(50vh, 400px)' : '0vh',
+              maxHeight: 'min(50vh, 400px)'
             }}
           >
             <div className="min-h-full">
@@ -1193,7 +1213,7 @@ const RomaMap = () => {
                       <img 
                         src={selectedPlace.image} 
                         alt={selectedPlace.name}
-                        className="w-full h-48 object-cover rounded-lg shadow-md"
+                        className="w-full h-56 sm:h-64 object-cover rounded-lg roma-map-image shadow-lg border border-border/20"
                         onError={(e) => {
                           console.log('Image failed to load:', selectedPlace.image);
                           e.currentTarget.style.display = 'none';
@@ -1275,7 +1295,7 @@ const RomaMap = () => {
 
             {/* Desktop Side Panel */}
             {selectedPlace && (
-              <div className="w-1/3 bg-background/95 backdrop-blur-sm rounded-lg shadow-lg border border-border/50 flex flex-col">
+              <div className="w-1/3 roma-map-popup-desktop rounded-lg shadow-lg flex flex-col">
                 <div className="flex justify-between items-start p-4 border-b border-border/50">
                   <div className="flex-1">
                     <h3 className="text-lg font-bold text-foreground">{selectedPlace.name}</h3>
@@ -1294,7 +1314,7 @@ const RomaMap = () => {
                     <img 
                       src={selectedPlace.image} 
                       alt={selectedPlace.name}
-                      className="w-full h-32 object-cover rounded-md mb-3"
+                      className="w-full h-40 lg:h-48 object-cover rounded-lg roma-map-image shadow-lg border border-border/20 mb-4"
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
                       }}

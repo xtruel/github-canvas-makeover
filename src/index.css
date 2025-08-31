@@ -133,4 +133,41 @@ All colors MUST be HSL.
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  /* Map responsive improvements */
+  .roma-map-popup-mobile {
+    @apply bg-background backdrop-blur-md border-t;
+    border-color: hsl(var(--border) / 0.6);
+    background-color: hsl(var(--background) / 0.98);
+    box-shadow: 0 -8px 32px -4px rgba(0, 0, 0, 0.3);
+  }
+
+  .roma-map-popup-desktop {
+    @apply bg-background backdrop-blur-md border;
+    border-color: hsl(var(--border) / 0.6);
+    background-color: hsl(var(--background) / 0.98);
+    box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.2);
+  }
+
+  .roma-map-image {
+    @apply transition-transform duration-300 hover:scale-105;
+  }
+
+  .roma-map-image:hover {
+    box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Mobile specific optimizations */
+  @media (max-width: 768px) {
+    .roma-map-popup-mobile {
+      border-radius: 16px 16px 0 0;
+    }
+  }
+
+  /* iPad and tablet optimizations */
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .roma-map-container {
+      @apply px-4;
+    }
+  }
 }

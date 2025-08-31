@@ -1,0 +1,1 @@
+import { PrismaClient } from '@prisma/client';\nexport const prisma = new PrismaClient();\n

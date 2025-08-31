@@ -1,0 +1,1 @@
+import { Response, NextFunction } from 'express';\nimport { AuthRequest } from './auth.js';\nexport function requireRole(role: 'ADMIN') { return (req: AuthRequest, res: Response, next: NextFunction) => { if (!req.user) return res.status(401).json({ error: 'Unauthenticated' }); if (req.user.role !== role) return res.status(403).json({ error: 'Forbidden' }); next(); }; }\n

@@ -1,0 +1,1 @@
+import { prisma } from '../prisma.js';\nimport { log } from '../utils/logger.js';\nexport async function audit(action: string, entityType: string, entityId?: string, diff?: any, userId?: string) { try { await prisma.auditLog.create({ data: { action, entityType, entityId, userId, diff } }); } catch (e) { log.warn('Audit failed', e); } }\n

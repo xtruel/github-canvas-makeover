@@ -1,0 +1,94 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+enum MediaStatus {
+  PENDING
+  READY
+}
+
+enum ArticleStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum PostType {
+  TEXT
+  IMAGE
+  VIDEO
+}
+
+enum PostStatus {
+  PUBLISHED
+  HIDDEN
+}
+
+model User {
+  id             String          @id @default(cuid())
+  email          String          @unique
+  name           String?
+  role           UserRole       @default(USER)
+  passwordHash   String?
+  articles       Article[]
+  posts          CommunityPost[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model MediaAsset {
+  id             String          @id @default(cuid())
+  type           MediaType
+  status         MediaStatus    @default(PENDING)
+  originalPath   String
+  originalUrl    String
+  mimeType       String
+  width          Int?
+  height         Int?
+  durationSeconds Int?
+  createdAt      DateTime       @default(now())
+  articleCover   Article[]       @relation("ArticleCover")
+  posts          CommunityPost[]
+}
+
+model Article {
+  id             String          @id @default(cuid())
+  title          String
+  body           String
+  slug           String          @unique
+  status         ArticleStatus   @default(DRAFT)
+  language       String
+  coverMediaId   String?
+  coverMedia     MediaAsset?     @relation("ArticleCover", fields: [coverMediaId], references: [id])
+  publishedAt    DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model CommunityPost {
+  id             String          @id @default(cuid())
+  userId        String
+  user           User            @relation(fields: [userId], references: [id])
+  type           PostType
+  title          String
+  body           String?
+  mediaId       String?
+  media          MediaAsset?     
+  status         PostStatus      @default(PUBLISHED)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}

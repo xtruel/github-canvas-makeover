@@ -1,3 +1,4 @@
+@import './features/music/music.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

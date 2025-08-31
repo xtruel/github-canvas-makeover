@@ -1,4 +1,4 @@
-import { Home, Map, Calendar, Users, Trophy, Settings, MessageCircle, FileText, Info, Upload } from "lucide-react"
+import { Home, Map, Calendar, Users, Trophy, Settings, MessageCircle, FileText, Info, Upload, Music } from "lucide-react"
 import { NavLink, useLocation } from "react-router-dom"
 
 import {
@@ -23,6 +23,7 @@ const items = [
   { title: "Articoli", url: "/articles", icon: FileText },
   { title: "Info Forum", url: "/about-forum", icon: Info },
   { title: "Carica Post", url: "/upload", icon: Upload },
+  { title: "Sampler", url: "/sampler", icon: Music },
   { title: "Trofei", url: "/trofei", icon: Trophy },
   { title: "Impostazioni", url: "/impostazioni", icon: Settings },
 ]

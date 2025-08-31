@@ -14,6 +14,7 @@ import Forum from "./pages/Forum";
 import Articles from "./pages/Articles";
 import AboutForum from "./pages/AboutForum";
 import Upload from "./pages/Upload";
+import Sampler from "./pages/Sampler";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/articles" element={<Articles />} />
             <Route path="/about-forum" element={<AboutForum />} />
             <Route path="/upload" element={<Upload />} />
+            <Route path="/sampler" element={<Sampler />} />
             <Route path="/trofei" element={<Trofei />} />
             <Route path="/impostazioni" element={<Impostazioni />} />
             <Route path="*" element={<NotFound />} />

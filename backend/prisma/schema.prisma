@@ -1,5 +1,5 @@
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -91,4 +91,11 @@ model CommunityPost {
   status         PostStatus      @default(PUBLISHED)
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
+}
+
+model Canvas {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

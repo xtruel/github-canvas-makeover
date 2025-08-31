@@ -1,17 +1,42 @@
 version: "3.9"
 services:
-  backend:
-    build:
-      context: .
-      dockerfile: backend/Dockerfile
-    container_name: community-backend
-    ports:
-      - "4000:4000"
+  # PostgreSQL database service
+  db:
+    image: postgres:16-alpine
+    container_name: canvas-postgres
     environment:
-      NODE_ENV: development
-      DATABASE_URL: "file:./dev.db"
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: canvas_db
+    ports:
+      - "5432:5432"
     volumes:
-      - ./backend/uploads:/app/uploads
-      - ./backend/prisma:/app/prisma:ro
-    command: ["node", "dist/server.js"]
-    # For hot reload in dev you could switch to: npm run dev (needs nodemon)
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d canvas_db"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend application service (commented for manual development)
+  # Uncomment when you want to run the full stack with Docker
+  # backend:
+  #   build:
+  #     context: .
+  #     dockerfile: backend/Dockerfile
+  #   container_name: canvas-backend
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     NODE_ENV: development
+  #     DATABASE_URL: "postgresql://user:password@db:5432/canvas_db"
+  #   volumes:
+  #     - ./backend/uploads:/app/uploads
+  #     - ./backend/prisma:/app/prisma:ro
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #   command: ["node", "dist/index.js"]
+
+volumes:
+  postgres_data:

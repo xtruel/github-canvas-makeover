@@ -1,0 +1,1 @@
+export const log = { info: (...a: any[]) => console.log('[INFO]', ...a), error: (...a: any[]) => console.error('[ERROR]', ...a), warn: (...a: any[]) => console.warn('[WARN]', ...a), debug: (...a: any[]) => { if (process.env.LOG_LEVEL === 'debug') console.log('[DEBUG]', ...a); } };\n

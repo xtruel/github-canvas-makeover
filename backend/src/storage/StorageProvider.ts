@@ -1,0 +1,1 @@
+export interface PresignResult { uploadUrl: string; path: string; publicUrl: string; }\nexport interface StorageProvider { getPresignedPutUrl(path: string, mimeType: string, expiresSeconds: number): Promise<PresignResult>; getPublicUrl(path: string): string; verifyObject?(path: string): Promise<boolean>; saveLocal?(path: string, data: Buffer): Promise<void>; }\n

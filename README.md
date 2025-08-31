@@ -66,6 +66,12 @@ Posts:
 - `GET /posts?limit=20&cursor=` – cursor pagination
 - `POST /posts` (auth) create post (validation by type)
 
+Canvas Posts:
+- `POST /api/canvas/:id/post` create post in Canvas (JSON for text, multipart for media)
+- `GET /api/canvas/:id/posts` list all posts for a Canvas
+- `POST /api/canvas` create new Canvas (helper)
+- `GET /api/canvas` list all Canvases (helper)
+
 ### Auth (Dev Mode Only)
 Cookie `sessionUserId` looked up each request. Use dev-login to simulate users/admins.
 
@@ -78,6 +84,95 @@ Cookie `sessionUserId` looked up each request. Use dev-login to simulate users/a
 5. Asset becomes READY and accessible at `/uploads/:id`
 
 Current storage: local filesystem `backend/uploads/`. Future: S3 / MinIO.
+
+---
+## 3b. Canvas Media Posts API
+
+Canvas media posts support text, image, and video content with simple file upload and storage.
+
+### Data Model
+- **Canvas**: Container for posts (id, title, description)  
+- **Post**: Individual content item (id, canvasId, type, content/fileUrl)
+- **Types**: TEXT (JSON content), IMAGE, VIDEO (uploaded files)
+
+### API Endpoints
+
+#### Create Text Post
+```bash
+POST /api/canvas/:id/post
+Content-Type: application/json
+
+{
+  "type": "TEXT",
+  "content": "Your text content here"
+}
+```
+
+#### Create Image Post  
+```bash
+POST /api/canvas/:id/post
+Content-Type: multipart/form-data
+
+# Form fields:
+type=IMAGE
+file=(binary image data)
+
+# Supported formats: jpg, png, gif, webp
+# Max size: 10MB
+```
+
+#### Create Video Post
+```bash
+POST /api/canvas/:id/post  
+Content-Type: multipart/form-data
+
+# Form fields:
+type=VIDEO
+file=(binary video data)
+
+# Supported formats: mp4, webm, mov
+# Max size: 50MB
+```
+
+#### Get Canvas Posts
+```bash
+GET /api/canvas/:id/posts
+# Returns: array of posts with type, content/fileUrl, timestamps
+```
+
+### Storage Notes
+- Files stored locally in `backend/uploads/` (for MVP)
+- Images/videos accessible via `/uploads/{filename}` URLs
+- **Future**: Easy migration to S3/CloudFlare R2 by updating file storage logic in `canvas.ts`
+- File validation: MIME types, size limits enforced server-side
+
+### Usage Examples
+
+**Creating a Canvas:**
+```bash
+curl -X POST http://localhost:4000/api/canvas \
+  -H "Content-Type: application/json" \
+  -d '{"title": "My Canvas", "description": "A test canvas"}'
+```
+
+**Adding text post:**
+```bash
+curl -X POST http://localhost:4000/api/canvas/{canvas-id}/post \
+  -H "Content-Type: application/json" \
+  -d '{"type": "TEXT", "content": "Hello world!"}'
+```
+
+**Adding image post:**
+```bash
+curl -X POST http://localhost:4000/api/canvas/{canvas-id}/post \
+  -F "type=IMAGE" \
+  -F "file=@image.jpg"
+```
+
+**Getting posts:**
+```bash
+curl http://localhost:4000/api/canvas/{canvas-id}/posts
+```
 
 ---
 ## 4. Development Environment & Devcontainer

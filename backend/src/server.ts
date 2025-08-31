@@ -9,6 +9,7 @@ import { mediaRouter } from './routes/media.js';
 import { uploadsPutRouter } from './routes/uploadsPut.js';
 import { articlesRouter } from './routes/articles.js';
 import { postsRouter } from './routes/posts.js';
+import { canvasRouter } from './routes/canvas.js';
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(authRouter);
 app.use(mediaRouter);
 app.use(articlesRouter);
 app.use(postsRouter);
+app.use(canvasRouter);
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {

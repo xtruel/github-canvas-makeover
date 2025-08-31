@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { prisma } from '../prisma/client.js';
-import { UserRole } from '@prisma/client';
+
+// Define UserRole type locally to avoid Prisma client dependency issues during build
+type UserRole = 'USER' | 'ADMIN';
 
 export interface AuthRequest extends Request {
   user?: { id: string; role: UserRole };

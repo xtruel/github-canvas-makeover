@@ -2,8 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { RomaMatches } from "@/components/RomaMatches";
 import RomaMap from "@/components/RomaMap";
-import { MapPin, Calendar, Users, Trophy, MessageCircle, Settings, ArrowRight } from "lucide-react";
+import { MapPin, Calendar, Users, Trophy, MessageCircle, Settings, ArrowRight, Music } from "lucide-react";
 import { Link } from "react-router-dom";
+import { MiniPlayerPreview } from "@/features/music/components/MiniPlayerPreview";
 
 const Index = () => {
   const features = [
@@ -29,10 +30,10 @@ const Index = () => {
       color: "text-roma-gold"
     },
     {
-      title: "Trofei",
-      description: "Celebra la storia gloriosa della Roma",
-      icon: Trophy,
-      link: "/trofei",
+      title: "Music Player",
+      description: "Ascolta gli inni e i canti della Roma",
+      icon: Music,
+      link: "/albums",
       color: "text-roma-yellow"
     }
   ];
@@ -157,6 +158,14 @@ const Index = () => {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+
+        {/* Music Player Preview */}
+        <div className="mb-16">
+          <h2 className="text-2xl font-bold mb-6 text-center text-foreground">Music Player</h2>
+          <div className="max-w-md mx-auto">
+            <MiniPlayerPreview />
           </div>
         </div>
 

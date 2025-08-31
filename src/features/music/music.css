@@ -1,0 +1,187 @@
+/* Music Player Feature Styles - Roma Theme */
+
+/* Album Art Gradients */
+.music-album-gradient {
+  background: linear-gradient(135deg, 
+    hsl(var(--roma-red)) 0%, 
+    hsl(var(--roma-gold)) 50%, 
+    hsl(var(--roma-yellow)) 100%);
+}
+
+.music-album-overlay {
+  background: linear-gradient(rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.4) 100%);
+}
+
+/* Player Controls */
+.music-control-button {
+  @apply border border-roma-gold/30 bg-background/80 backdrop-blur-sm 
+         hover:border-roma-gold hover:bg-roma-red/10 
+         transition-all duration-300;
+}
+
+.music-control-button:hover {
+  box-shadow: 0 0 20px hsl(var(--roma-gold) / 0.3);
+}
+
+.music-control-button.active {
+  @apply border-roma-gold bg-roma-red/20;
+  box-shadow: 0 0 15px hsl(var(--roma-gold) / 0.4);
+}
+
+/* Progress Bar */
+.music-progress-track {
+  @apply bg-muted/30 rounded-full;
+}
+
+.music-progress-fill {
+  background: linear-gradient(90deg, 
+    hsl(var(--roma-red)) 0%, 
+    hsl(var(--roma-gold)) 100%);
+  @apply rounded-full transition-all duration-300;
+}
+
+.music-progress-thumb {
+  @apply bg-roma-gold rounded-full border-2 border-background;
+  box-shadow: 0 0 10px hsl(var(--roma-gold) / 0.5);
+}
+
+/* Volume Control */
+.music-volume-track {
+  @apply bg-muted/20 rounded-full;
+}
+
+.music-volume-fill {
+  @apply bg-roma-gold rounded-full;
+}
+
+/* Equalizer Bars Animation */
+.music-equalizer-bar {
+  @apply bg-roma-gold rounded-sm;
+  animation: equalizer 1.5s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
+.music-equalizer-bar:nth-child(1) { animation-delay: 0.1s; }
+.music-equalizer-bar:nth-child(2) { animation-delay: 0.2s; }
+.music-equalizer-bar:nth-child(3) { animation-delay: 0.15s; }
+.music-equalizer-bar:nth-child(4) { animation-delay: 0.3s; }
+.music-equalizer-bar:nth-child(5) { animation-delay: 0.25s; }
+
+@keyframes equalizer {
+  0%, 100% { transform: scaleY(0.3); }
+  25% { transform: scaleY(0.8); }
+  50% { transform: scaleY(1); }
+  75% { transform: scaleY(0.6); }
+}
+
+/* Knob Controls */
+.music-knob {
+  @apply relative rounded-full border-2 border-roma-gold/30 bg-gradient-to-br 
+         from-muted to-card backdrop-blur-sm cursor-pointer
+         hover:border-roma-gold transition-all duration-300;
+}
+
+.music-knob:hover {
+  box-shadow: 0 0 15px hsl(var(--roma-gold) / 0.2);
+}
+
+.music-knob-indicator {
+  @apply absolute bg-roma-gold rounded-sm;
+  transform-origin: bottom center;
+}
+
+/* Track List Items */
+.music-track-item {
+  @apply border border-border/50 bg-card/50 backdrop-blur-sm 
+         hover:border-roma-gold/50 hover:bg-roma-red/5
+         transition-all duration-300 cursor-pointer;
+}
+
+.music-track-item.active {
+  @apply border-roma-gold bg-roma-red/10;
+  box-shadow: 0 0 15px hsl(var(--roma-gold) / 0.2);
+}
+
+.music-track-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px hsl(var(--roma-red) / 0.1);
+}
+
+/* Mini Player Specific */
+.music-mini-player {
+  @apply border border-border/30 bg-card/80 backdrop-blur-md
+         shadow-lg rounded-lg;
+  box-shadow: 0 8px 32px hsl(var(--roma-red) / 0.1);
+}
+
+.music-mini-album {
+  @apply rounded-md overflow-hidden;
+}
+
+.music-mini-controls {
+  @apply gap-2;
+}
+
+.music-mini-control-btn {
+  @apply w-8 h-8 rounded-full border border-roma-gold/30 bg-background/60
+         hover:border-roma-gold hover:bg-roma-red/10 
+         flex items-center justify-center transition-all duration-300;
+}
+
+.music-mini-control-btn:hover {
+  box-shadow: 0 0 10px hsl(var(--roma-gold) / 0.3);
+}
+
+/* Page Backgrounds */
+.music-page-bg {
+  background: radial-gradient(ellipse at top, 
+    hsl(var(--roma-red) / 0.1) 0%, 
+    hsl(var(--background)) 50%);
+}
+
+.music-albums-grid {
+  @apply grid gap-6;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.music-album-card {
+  @apply border border-border/30 bg-card/60 backdrop-blur-sm rounded-lg overflow-hidden
+         hover:border-roma-gold/50 hover:scale-105 transition-all duration-300 cursor-pointer;
+}
+
+.music-album-card:hover {
+  box-shadow: 0 10px 30px hsl(var(--roma-red) / 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .music-albums-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  
+  .music-mini-player {
+    @apply p-2;
+  }
+  
+  .music-mini-control-btn {
+    @apply w-6 h-6;
+  }
+}
+
+/* Animation for playing state */
+.music-playing-pulse {
+  animation: playing-pulse 2s ease-in-out infinite;
+}
+
+@keyframes playing-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Dark mode enhancements */
+.dark .music-album-gradient {
+  background: linear-gradient(135deg, 
+    hsl(var(--roma-red) / 0.8) 0%, 
+    hsl(var(--roma-gold) / 0.6) 50%, 
+    hsl(var(--roma-yellow) / 0.4) 100%);
+}

@@ -92,6 +92,7 @@ Canvas:
 - Note: Hard delete (not soft delete)
 
 *Note: Total count in pagination is intentionally omitted (TODO for future).*
+*Note: Canvas creation (POST) endpoint is not included in this implementation as it was not in the requirements.*
 
 ### Auth (Dev Mode Only)
 Cookie `sessionUserId` looked up each request. Use dev-login to simulate users/admins.
@@ -171,6 +172,13 @@ Security:
 
 Analytics:
 - Event tracking pipeline
+
+Canvas Features (Post-merge TODOs):
+- Add total count in pagination (requires extra count query or window function)
+- Add search/filtering for Canvas list
+- Add Canvas creation (POST) endpoint
+- Add OpenAPI spec generation for Canvas endpoints
+- Add batch operations (bulk delete, bulk update)
 
 ---
 ## 7. Local Development Quick Start

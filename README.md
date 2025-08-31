@@ -1,104 +1,213 @@
-# Welcome to your Lovable project
+# Project: Roma Data + Community Platform
 
-## Roma Matches Data Pipeline
+## Sections
+1. Roma Matches Data Pipeline (OpenFootball)
+2. Community Backend (Express + Prisma + SQLite)
+3. Media Upload (local presign/finalize flow)
+4. Development & Devcontainer
+5. Docker & CI Workflows
+6. Roadmap (Next Features)
+7. Local Development Quick Start
 
-This project includes a zero-keys Roma matches data pipeline using OpenFootball community data:
+---
+## 1. Roma Matches Data Pipeline
+(Existing from main branch)
+
+Zero-keys Roma matches data pipeline using OpenFootball community data.
 
 ### Features
-- **No API Keys Required**: Uses open-source [OpenFootball](https://github.com/openfootball/italy) data
+- **No API Keys Required**: Uses open-source [OpenFootball](https://github.com/openfootball/italy)
 - **Automated Updates**: GitHub Actions workflow updates matches every 6 hours
-- **Fallback System**: Falls back to Supabase data if OpenFootball is unavailable
+- **Fallback System**: Falls back to Supabase data if unavailable
 - **Non-Live Data**: Accepts slower updates in exchange for no API dependencies
 
-### Data Source
-- **Source**: OpenFootball community-maintained Serie A data
-- **Update Frequency**: Every 6 hours (configurable via GitHub Actions)
-- **Limitations**: 
-  - Not live/real-time (depends on community updates)
-  - May lag behind actual match results
-  - No minute-by-minute match status
-  - Serie A men's matches only (no women's matches in OpenFootball)
+See original section for file references:
+- `scripts/updateRomaOpenfootball.ts`
+- `scripts/openfootball/parseSerieA.ts`
+- `.github/workflows/roma-openfootball.yml`
+- `data/roma-matches.json` -> `public/data/roma-matches.json`
 
-### Files
-- `scripts/updateRomaOpenfootball.ts` - Main update script
-- `scripts/openfootball/parseSerieA.ts` - Parser for OpenFootball data format
-- `.github/workflows/roma-openfootball.yml` - Automated update workflow
-- `data/roma-matches.json` - Generated matches data
-- `public/data/roma-matches.json` - Data accessible to frontend
+---
+## 2. Community Backend
+Implemented on branch `feature/community-backend`.
 
-### Manual Update
-```bash
-npx tsx scripts/updateRomaOpenfootball.ts
-```
-
-## Project info
-
-**URL**: https://lovable.dev/projects/ad45f660-19d6-41e8-8460-2ddc6c86b1cc
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/ad45f660-19d6-41e8-8460-2ddc6c86b1cc) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
+### Stack
+- Node.js + Express
+- Prisma ORM (SQLite for dev)
 - TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- Simple cookie-based dev auth (dev-login) – not for production
 
-## How can I deploy this project?
+### Data Model (prisma/schema.prisma)
+- User (role: USER | ADMIN)
+- Article (draft/published, cover media)
+- CommunityPost (TEXT | IMAGE | VIDEO, status PUBLISHED | HIDDEN)
+- MediaAsset (IMAGE | VIDEO, status PENDING | READY)
 
-Simply open [Lovable](https://lovable.dev/projects/ad45f660-19d6-41e8-8460-2ddc6c86b1cc) and click on Share -> Publish.
+### Key Endpoints
+Auth:
+- `POST /auth/dev-login` { email, role? } → sets `sessionUserId` cookie (only if NODE_ENV !== production)
+- `POST /auth/logout`
 
-## Can I connect a custom domain to my Lovable project?
+Health:
+- `GET /health`
 
-Yes, you can!
+Media:
+- `POST /media/presign` (auth) – create MediaAsset (PENDING)
+- `POST /admin/media/presign` (admin)
+- `PUT /uploads/:id` raw file upload
+- `POST /media/:id/finalize` (auth) → mark READY, store dimensions
+- `POST /admin/media/:id/finalize`
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Articles (admin):
+- `GET /articles` (public published)
+- `POST /admin/articles` create (DRAFT or PUBLISHED)
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Posts:
+- `GET /posts?limit=20&cursor=` – cursor pagination
+- `POST /posts` (auth) create post (validation by type)
+
+### Auth (Dev Mode Only)
+Cookie `sessionUserId` looked up each request. Use dev-login to simulate users/admins.
+
+---
+## 3. Media Upload Flow
+1. Client calls `/media/presign` with filename, mimeType, type (IMAGE/VIDEO)
+2. Server creates MediaAsset (status PENDING) → returns `assetId`, `uploadUrl`
+3. Client `PUT` file to `uploadUrl`
+4. Client `POST /media/:id/finalize` with optional width/height
+5. Asset becomes READY and accessible at `/uploads/:id`
+
+Current storage: local filesystem `backend/uploads/`. Future: S3 / MinIO.
+
+---
+## 4. Development Environment & Devcontainer
+A `.devcontainer/devcontainer.json` is provided so you can open a GitHub Codespace or local VS Code Dev Container:
+- Installs Node 20
+- Runs `npm install` in root and backend
+- You can then run backend + frontend concurrently.
+
+---
+## 5. Docker & CI
+### Backend Dockerfile
+Multi-stage build producing a production image that runs `node dist/server.js`.
+
+### docker-compose.yml (dev convenience)
+Runs backend container exposing port 4000 with local volume for uploads.
+
+### GitHub Actions CI (`.github/workflows/ci.yml`)
+- Trigger: push & PR (main / feature/*)
+- Steps: checkout, setup node, install, prisma generate, build backend
+- Placeholder for future: tests, image publish, deploy.
+
+Future planned workflow: build & push Docker image (needs GHCR permissions + secrets).
+
+---
+## 6. Roadmap (High-Level)
+(Will be created as GitHub Issues)
+
+MVP Enhancements:
+- Media preview inline in post list
+- Post detail page `/post/:id`
+- Comments model + API + UI
+- Infinite scroll (cursor based)
+- Edit / soft delete own posts
+
+Moderation & Features:
+- Hide/unhide (admin), user flagging
+- Link posts (type LINK + metadata fetch)
+- Markdown editor + sanitization
+- Proper auth (email+password, then OAuth)
+- Rate limiting
+
+Media & Infra:
+- Server-side size/MIME validation
+- S3-compatible storage (MinIO dev → S3 prod)
+- Video transcoding + thumbnails
+
+DevOps & Quality:
+- Docker Compose with Postgres (future)
+- CI: lint, test, type-check, build
+- Deploy workflow & preview environment
+- Structured logging & centralized error handler
+- Env validation (zod)
+
+UX:
+- User profile pages
+- Reactions / upvotes
+- Notifications (comment on your post)
+- Full-text search (SQLite FTS5 → Postgres)
+
+Security:
+- Input sanitization
+- helmet + stricter headers
+- CSRF strategy (if forms) / JWT alternative
+
+Analytics:
+- Event tracking pipeline
+
+---
+## 7. Local Development Quick Start
+
+Frontend (assuming existing root setup):
+```bash
+npm install
+npm run dev
+# Opens Vite dev server (e.g. :5173)
+```
+
+Backend:
+```bash
+cd backend
+cp .env.example .env
+npm install
+npx prisma migrate dev --name init
+npm run dev   # runs on http://localhost:4000
+```
+
+Dev Login (user):
+```bash
+curl -X POST http://localhost:4000/auth/dev-login \
+  -H 'Content-Type: application/json' \
+  -d '{"email":"user@example.com"}'
+```
+Admin:
+```bash
+curl -X POST http://localhost:4000/auth/dev-login \
+  -H 'Content-Type: application/json' \
+  -d '{"email":"admin@example.com","role":"ADMIN"}'
+```
+
+Create Post (TEXT example):
+```bash
+curl -X POST http://localhost:4000/posts \
+  -H 'Content-Type: application/json' \
+  --cookie "sessionUserId=<ID_FROM_DEV_LOGIN>" \
+  -d '{"type":"TEXT","title":"Ciao Roma","body":"Forza!"}'
+```
+
+Media Upload (manual sample):
+```bash
+# 1 presign
+curl -X POST http://localhost:4000/media/presign \
+  -H 'Content-Type: application/json' \
+  --cookie "sessionUserId=<ID>" \
+  -d '{"filename":"test.png","mimeType":"image/png","type":"IMAGE"}'
+# Response → assetId, uploadUrl
+# 2 upload file
+curl -X PUT http://localhost:4000/uploads/<assetId> --data-binary @test.png
+# 3 finalize
+curl -X POST http://localhost:4000/media/<assetId>/finalize \
+  -H 'Content-Type: application/json' \
+  --cookie "sessionUserId=<ID>" \
+  -d '{"width":800,"height":600}'
+```
+
+---
+## Preview / Deployment Notes
+A direct automated deployment isn’t configured yet (needs container registry + host secrets). Recommended interim preview path:
+1. Open repository in GitHub → Code → Codespaces → Create (uses devcontainer) – run backend & frontend.
+2. (Next) Add workflow to build & push image to GHCR and deploy to Render/Fly (requires secrets: RENDER_API_KEY / FLY_API_TOKEN, etc.).
+
+---
+## License
+(Define here if needed.)

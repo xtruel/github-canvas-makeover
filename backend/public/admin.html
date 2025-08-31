@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Console</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; max-width: 960px; }
+    form, section { margin-bottom: 2rem; padding: 1rem; border: 1px solid #ccc; border-radius: 6px; }
+    h2 { margin-top: 0; }
+    label { display: block; margin-top: .5rem; }
+    input[type=text], input[type=password], textarea { width: 100%; padding: .5rem; }
+    pre { background: #f4f4f4; padding: .75rem; max-height: 300px; overflow: auto; }
+    .row { display: flex; gap: 1rem; }
+    .row > div { flex: 1; }
+    button { cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Admin Console</h1>
+
+  <section id="auth">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label>Username <input name="username" required></label>
+      <label>Password <input name="password" type="password" required></label>
+      <button>Login</button>
+    </form>
+    <p>Token: <code id="token"></code></p>
+  </section>
+
+  <section id="media">
+    <h2>Upload Media</h2>
+    <form id="uploadForm">
+      <input type="file" name="file" required />
+      <button>Upload</button>
+    </form>
+    <div id="mediaList"></div>
+  </section>
+
+  <section id="articles">
+    <h2>Create Article</h2>
+    <form id="articleForm">
+      <label>Title <input name="title" required></label>
+      <label>Body <textarea name="body" rows="6" required></textarea></label>
+      <label>Cover Media ID (optional) <input name="coverId"></label>
+      <label><input type="checkbox" name="published"> Published</label>
+      <button>Create</button>
+    </form>
+    <h3>Latest Articles</h3>
+    <div id="articlesList"></div>
+  </section>
+
+  <script>
+    const tokenEl = document.getElementById('token');
+    let authToken = '';
+
+    function headers(json=true) {
+      const h = {};
+      if (json) h['Content-Type'] = 'application/json';
+      if (authToken) h['Authorization'] = 'Bearer ' + authToken;
+      return h;
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const res = await fetch('/auth/login', {
+        method: 'POST',
+        headers: headers(),
+        body: JSON.stringify({
+          username: fd.get('username'),
+            password: fd.get('password')
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        authToken = data.token;
+        tokenEl.textContent = authToken.slice(0,40) + '...';
+        alert('Logged in');
+      } else {
+        alert('Login failed: ' + (data.error || res.status));
+      }
+    });
+
+    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!authToken) return alert('Login first');
+      const fd = new FormData(e.target);
+      const res = await fetch('/media/upload', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + authToken },
+        body: fd
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert('Uploaded: ' + data.id);
+        loadMedia();
+      } else alert('Upload failed');
+    });
+
+    document.getElementById('articleForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!authToken) return alert('Login first');
+      const fd = new FormData(e.target);
+      const res = await fetch('/articles', {
+        method: 'POST',
+        headers: headers(),
+        body: JSON.stringify({
+          title: fd.get('title'),
+          body: fd.get('body'),
+          coverId: fd.get('coverId') || null,
+          published: fd.get('published') === 'on'
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert('Article created: ' + data.id);
+        loadArticles();
+      } else alert('Failed: ' + (data.error || res.status));
+    });
+
+    async function loadMedia() {
+      const res = await fetch('/media');
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        document.getElementById('mediaList').innerHTML = data.map(m =>
+          '<div><code>'+m.id+'</code> '+m.originalName+' ('+m.mimeType+') <a href="'+m.url+'" target="_blank">open</a></div>'
+        ).join('');
+      }
+    }
+
+    async function loadArticles() {
+      const res = await fetch('/articles');
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        document.getElementById('articlesList').innerHTML = data.map(a =>
+          '<details><summary>'+a.title+' ('+a.id+')</summary><pre>'+a.body.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))+'</pre></details>'
+        ).join('');
+      }
+    }
+
+    loadMedia();
+    loadArticles();
+  </script>
+</body>
+</html>

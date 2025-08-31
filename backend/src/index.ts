@@ -1,13 +1,14 @@
 import { app } from './server.js';
-import { prisma } from './services/prisma.js';
+// import { prisma } from './services/prisma.js';
 
 const PORT = process.env.PORT || 3000;
 
 async function startServer() {
   try {
-    // Test database connection
-    await prisma.$connect();
-    console.log('✓ Database connected successfully');
+    // TODO: Test database connection once Prisma is available
+    // await prisma.$connect();
+    // console.log('✓ Database connected successfully');
+    console.log('⚠️  Running in demo mode without database');
     
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);

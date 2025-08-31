@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { prisma } from '../prisma/client.js';
+// import { prisma } from '../prisma/client.js';
 import { authRequired, requireAdmin, AuthRequest } from '../auth/authMiddleware.js';
 import fs from 'fs';
 import path from 'path';

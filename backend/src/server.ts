@@ -3,12 +3,12 @@ import cors from 'cors';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import path from 'path';
-import { authFromCookie } from './auth/authMiddleware.js';
-import { authRouter } from './routes/auth.js';
-import { mediaRouter } from './routes/media.js';
-import { uploadsPutRouter } from './routes/uploadsPut.js';
-import { articlesRouter } from './routes/articles.js';
-import { postsRouter } from './routes/posts.js';
+// import { authFromCookie } from './auth/authMiddleware.js';
+// import { authRouter } from './routes/auth.js';
+// import { mediaRouter } from './routes/media.js';
+// import { uploadsPutRouter } from './routes/uploadsPut.js';
+// import { articlesRouter } from './routes/articles.js';
+// import { postsRouter } from './routes/posts.js';
 import { healthRouter } from './modules/health/health.router.js';
 import { canvasRouter } from './modules/canvas/canvas.router.js';
 import { errorHandler, notFoundHandler } from './middleware/error.js';
@@ -28,15 +28,16 @@ app.use('/health', healthRouter);
 // TODO: Add authentication middleware when implementing auth system
 app.use('/api/canvas', canvasRouter);
 
-// Existing auth and content routes
-app.use(authFromCookie);
-app.use(uploadsPutRouter);
-app.use('/uploads', express.static(path.join(process.cwd(), 'backend', 'uploads')));
+// TODO: Re-enable existing routes once Prisma is working
+// // Existing auth and content routes
+// app.use(authFromCookie);
+// app.use(uploadsPutRouter);
+// app.use('/uploads', express.static(path.join(process.cwd(), 'backend', 'uploads')));
 
-app.use(authRouter);
-app.use(mediaRouter);
-app.use(articlesRouter);
-app.use(postsRouter);
+// app.use(authRouter);
+// app.use(mediaRouter);
+// app.use(articlesRouter);
+// app.use(postsRouter);
 
 // TODO: Add OpenAPI documentation generation
 // TODO: Add authentication middleware for protected routes

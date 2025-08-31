@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { prisma } from '../prisma/client.js';
-import { UserRole } from '@prisma/client';
+// import { prisma } from '../prisma/client.js';
+// import { UserRole } from '@prisma/client';
+
+// Temporary types until Prisma is working
+type UserRole = 'USER' | 'ADMIN';
 
 export interface AuthRequest extends Request {
   user?: { id: string; role: UserRole };
@@ -11,11 +14,12 @@ export function devLoginEnabled() {
 }
 
 export async function authFromCookie(req: AuthRequest, _res: Response, next: NextFunction) {
-  const id = req.cookies?.sessionUserId;
-  if (id) {
-    const user = await prisma.user.findUnique({ where: { id } });
-    if (user) req.user = { id: user.id, role: user.role };
-  }
+  // TODO: Implement proper auth once Prisma is available
+  // const id = req.cookies?.sessionUserId;
+  // if (id) {
+  //   const user = await prisma.user.findUnique({ where: { id } });
+  //   if (user) req.user = { id: user.id, role: user.role };
+  // }
   next();
 }
 

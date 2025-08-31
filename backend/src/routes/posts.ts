@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { prisma } from '../prisma/client.js';
+// import { prisma } from '../prisma/client.js';
 import { authRequired, AuthRequest } from '../auth/authMiddleware.js';
 
 export const postsRouter = Router();

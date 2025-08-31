@@ -1,19 +1,22 @@
 import { defineConfig } from 'vitest/config';
+import path from 'path';
 
 export default defineConfig({
+  root: __dirname,
   test: {
     globals: true,
     environment: 'node',
     include: ['tests/**/*.test.ts'],
     exclude: ['**/node_modules/**', '**/dist/**'],
+    setupFiles: [],
   },
   resolve: {
     alias: {
-      '@': new URL('./src', import.meta.url).pathname,
+      '@': path.resolve(__dirname, './src'),
     },
   },
-  css: false,
-  esbuild: {
-    target: 'node18',
+  clearScreen: false,
+  optimizeDeps: {
+    disabled: true,
   },
 });

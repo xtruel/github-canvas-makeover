@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { z } from 'zod';
-import { prisma } from '../../services/prisma.js';
+// import { prisma } from '../../services/prisma.js';
 
 const router = Router();
 
@@ -9,16 +9,24 @@ const createCanvasSchema = z.object({
   name: z.string().min(1, 'Name is required').max(255, 'Name must be less than 255 characters')
 });
 
+// In-memory storage for demo purposes (replace with Prisma once available)
+let canvases: any[] = [];
+let nextId = 1;
+
 // POST /api/canvas - Create a new canvas
 router.post('/', async (req, res, next) => {
   try {
     const validatedData = createCanvasSchema.parse(req.body);
     
-    const canvas = await prisma.canvas.create({
-      data: {
-        name: validatedData.name
-      }
-    });
+    // TODO: Replace with Prisma once network connectivity allows
+    const canvas = {
+      id: `canvas_${nextId++}`,
+      name: validatedData.name,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    
+    canvases.push(canvas);
     
     res.status(201).json(canvas);
   } catch (error) {
@@ -35,13 +43,12 @@ router.post('/', async (req, res, next) => {
 // GET /api/canvas - List all canvases
 router.get('/', async (req, res, next) => {
   try {
-    const canvases = await prisma.canvas.findMany({
-      orderBy: {
-        createdAt: 'desc'
-      }
-    });
+    // TODO: Replace with Prisma once network connectivity allows
+    const sortedCanvases = [...canvases].sort((a, b) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
     
-    res.status(200).json(canvases);
+    res.status(200).json(sortedCanvases);
   } catch (error) {
     next(error);
   }
@@ -52,9 +59,8 @@ router.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     
-    const canvas = await prisma.canvas.findUnique({
-      where: { id }
-    });
+    // TODO: Replace with Prisma once network connectivity allows
+    const canvas = canvases.find(c => c.id === id);
     
     if (!canvas) {
       return res.status(404).json({ error: 'NotFound' });

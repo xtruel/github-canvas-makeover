@@ -42,6 +42,7 @@ Implemented on branch `feature/community-backend`.
 - Article (draft/published, cover media)
 - CommunityPost (TEXT | IMAGE | VIDEO, status PUBLISHED | HIDDEN)
 - MediaAsset (IMAGE | VIDEO, status PENDING | READY)
+- Canvas (name, optional description)
 
 ### Key Endpoints
 Auth:
@@ -65,6 +66,32 @@ Articles (admin):
 Posts:
 - `GET /posts?limit=20&cursor=` – cursor pagination
 - `POST /posts` (auth) create post (validation by type)
+
+Canvas:
+- `GET /api/canvas?limit=20&offset=0` – list canvases with pagination
+- `PUT /api/canvas/:id` – update canvas name and/or description
+- `DELETE /api/canvas/:id` – delete canvas (returns 204 No Content)
+
+#### Canvas API Details
+
+**GET /api/canvas**
+- Query parameters:
+  - `limit` (default: 20, max: 100) - Number of items to return
+  - `offset` (default: 0) - Number of items to skip
+- Response: `{ data: Canvas[], pagination: { limit: number, offset: number, count: number } }`
+- Ordering: createdAt descending (newest first)
+
+**PUT /api/canvas/:id**
+- Body: `{ name?: string, description?: string }` (at least one required)
+- Response: 200 with updated Canvas object `{ id, name, description, createdAt, updatedAt }`
+- Errors: 400 if no fields provided, 404 if canvas not found
+
+**DELETE /api/canvas/:id**
+- Response: 204 No Content on success
+- Errors: 404 if canvas not found
+- Note: Hard delete (not soft delete)
+
+*Note: Total count in pagination is intentionally omitted (TODO for future).*
 
 ### Auth (Dev Mode Only)
 Cookie `sessionUserId` looked up each request. Use dev-login to simulate users/admins.

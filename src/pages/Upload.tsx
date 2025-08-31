@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "@/components/ui/sonner";
 import { 
   Upload as UploadIcon, 
   Image, 
@@ -16,8 +18,11 @@ import {
   AlertCircle,
   CheckCircle
 } from "lucide-react";
+import { uploadMedia } from "@/lib/api/media";
+import { createPost } from "@/lib/api/posts";
 
 const Upload = () => {
+  const navigate = useNavigate();
   const [postType, setPostType] = useState<"text" | "image" | "video">("text");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -48,23 +53,73 @@ const Upload = () => {
   };
 
   const handleSubmit = async () => {
-    if (!title.trim()) return;
+    if (!title.trim()) {
+      toast.error("Il titolo è obbligatorio");
+      return;
+    }
+    
+    if (postType === "text" && !content.trim()) {
+      toast.error("Il contenuto è obbligatorio per i post di testo");
+      return;
+    }
+    
+    if ((postType === "image" || postType === "video") && selectedFiles.length === 0) {
+      toast.error(`Seleziona almeno un ${postType === "image" ? "immagine" : "video"}`);
+      return;
+    }
     
     setIsSubmitting(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // Reset form
-    setTitle("");
-    setContent("");
-    setSelectedFiles([]);
-    setTags([]);
-    setIsSubmitting(false);
-    setShowPreview(false);
-    
-    // Show success message
-    alert("Post pubblicato con successo! 🎉");
+    try {
+      let mediaId: string | undefined;
+      
+      // Upload media if files are selected
+      if (selectedFiles.length > 0) {
+        toast.loading("Caricamento file in corso...", { id: "upload-progress" });
+        
+        // For now, upload only the first file
+        const file = selectedFiles[0];
+        const mediaAsset = await uploadMedia(file);
+        mediaId = mediaAsset.id;
+        
+        toast.success("File caricato con successo!", { id: "upload-progress" });
+      }
+      
+      // Create the post
+      toast.loading("Pubblicazione post in corso...", { id: "create-post" });
+      
+      const postData = {
+        type: postType.toUpperCase() as 'TEXT' | 'IMAGE' | 'VIDEO',
+        title: title.trim(),
+        body: content.trim() || undefined,
+        mediaId
+      };
+      
+      await createPost(postData);
+      
+      toast.success("Post pubblicato con successo! 🎉", { id: "create-post" });
+      
+      // Reset form
+      setTitle("");
+      setContent("");
+      setSelectedFiles([]);
+      setTags([]);
+      setShowPreview(false);
+      
+      // Redirect to forum after a short delay
+      setTimeout(() => {
+        navigate("/forum");
+      }, 1500);
+      
+    } catch (error: any) {
+      console.error("Errore durante la pubblicazione:", error);
+      toast.error(error.message || "Errore durante la pubblicazione del post", {
+        id: "upload-progress"
+      });
+      toast.dismiss("create-post");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const getFilePreview = (file: File) => {

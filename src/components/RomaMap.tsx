@@ -97,6 +97,36 @@ const RomaMap = () => {
     };
   }, []);
 
+  const updateMarkers = useCallback((mapInstance: mapboxgl.Map) => {
+    markers.current.forEach(m => { try { m.remove(); } catch {/* ignore */} });
+    markers.current = [];
+    const filtered = getFilteredPlaces();
+    const valid = filtered.filter(place => {
+      const [lng, lat] = place.coords;
+      return Array.isArray(place.coords) && place.coords.length === 2 && !isNaN(lng) && !isNaN(lat) && lng >= -180 && lng <= 180 && lat >= -90 && lat <= 90;
+    });
+    const toShow = isMobile ? valid.slice(0, 30) : valid;
+    toShow.forEach(place => {
+      try {
+        const markerEl = document.createElement('div');
+        markerEl.className = 'custom-marker';
+        markerEl.style.cssText = `background-color: ${place.color}; width: ${isMobile ? '16px' : '20px'}; height: ${isMobile ? '16px' : '20px'}; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 2px solid white; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.3);`;
+        markerEl.addEventListener('click', (e) => { e.stopPropagation(); setSelectedPlace(place); if (isMobile) setIsDrawerOpen(true); });
+        const marker = new mapboxgl.Marker(markerEl).setLngLat(place.coords as [number, number]).addTo(mapInstance);
+        markers.current.push(marker);
+      } catch (err) { 
+        console.error('Error adding marker', err); 
+      }
+    });
+    if (!isMobile) {
+      try { 
+        mapInstance.setFog({ color: 'rgb(255,255,255)', 'high-color': 'rgb(200,200,225)', 'horizon-blend': 0.1 }); 
+      } catch {
+        // Fog not supported in this environment
+      }
+    }
+  }, [isMobile, getFilteredPlaces, setIsDrawerOpen, setSelectedPlace]);
+
   useEffect(() => {
     if (!mapContainer.current) return;
     mapboxgl.accessToken = MAPBOX_TOKEN;
@@ -163,36 +193,6 @@ const RomaMap = () => {
       window.removeEventListener('orientationchange', handleViewportResize);
     };
   }, [isMobile]);
-
-  const updateMarkers = useCallback((mapInstance: mapboxgl.Map) => {
-    markers.current.forEach(m => { try { m.remove(); } catch {/* ignore */} });
-    markers.current = [];
-    const filtered = getFilteredPlaces();
-    const valid = filtered.filter(place => {
-      const [lng, lat] = place.coords;
-      return Array.isArray(place.coords) && place.coords.length === 2 && !isNaN(lng) && !isNaN(lat) && lng >= -180 && lng <= 180 && lat >= -90 && lat <= 90;
-    });
-    const toShow = isMobile ? valid.slice(0, 30) : valid;
-    toShow.forEach(place => {
-      try {
-        const markerEl = document.createElement('div');
-        markerEl.className = 'custom-marker';
-        markerEl.style.cssText = `background-color: ${place.color}; width: ${isMobile ? '16px' : '20px'}; height: ${isMobile ? '16px' : '20px'}; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 2px solid white; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.3);`;
-        markerEl.addEventListener('click', (e) => { e.stopPropagation(); setSelectedPlace(place); if (isMobile) setIsDrawerOpen(true); });
-        const marker = new mapboxgl.Marker(markerEl).setLngLat(place.coords as [number, number]).addTo(mapInstance);
-        markers.current.push(marker);
-      } catch (err) { 
-        console.error('Error adding marker', err); 
-      }
-    });
-    if (!isMobile) {
-      try { 
-        mapInstance.setFog({ color: 'rgb(255,255,255)', 'high-color': 'rgb(200,200,225)', 'horizon-blend': 0.1 }); 
-      } catch {
-        // Fog not supported in this environment
-      }
-    }
-  }, [isMobile, getFilteredPlaces, setIsDrawerOpen, setSelectedPlace]);
 
   return (
     <div className="relative w-full h-full bg-background overflow-hidden">

@@ -209,5 +209,42 @@ A direct automated deployment isn’t configured yet (needs container registry +
 2. (Next) Add workflow to build & push image to GHCR and deploy to Render/Fly (requires secrets: RENDER_API_KEY / FLY_API_TOKEN, etc.).
 
 ---
+## Mobile viewport height handling
+
+This project includes a workaround for the Android Chrome viewport height issue, where the collapsing/expanding URL bar causes layout jumpiness when using `100vh`.
+
+### Implementation
+
+The solution uses a custom CSS property `--app-vh` that is dynamically calculated from `window.innerHeight` and updates on:
+- Window resize
+- Orientation change  
+- Visibility change (when page becomes visible)
+
+### Usage
+
+Use the `h-screen-dvh` utility class instead of `h-screen` for full-height containers:
+
+```tsx
+// Instead of this:
+<div className="min-h-screen">
+
+// Use this:
+<div className="h-screen-dvh flex flex-col">
+```
+
+The `h-screen-dvh` class provides:
+- `min-height: calc(var(--app-vh, 1vh) * 100)` - Uses the dynamic viewport height
+- `min-height: 100dvh` - Progressive enhancement fallback for supporting browsers
+
+### Technical Details
+
+- **Custom property**: `--app-vh` is set to `window.innerHeight * 0.01 + 'px'`
+- **Event listeners**: Automatically updates on resize, orientation change, and visibility change
+- **HMR support**: Properly cleans up event listeners during Vite hot module reload
+- **Fallback**: Uses `1vh` if the custom property is not available
+
+This ensures stable layout height on mobile devices without the jumpiness caused by the collapsing URL bar.
+
+---
 ## License
 (Define here if needed.)

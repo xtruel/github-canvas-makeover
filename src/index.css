@@ -52,6 +52,9 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
 
+    /* Mobile viewport height handling - Android Chrome URL bar workaround */
+    --app-vh: 1vh;
+
     --sidebar-background: 15 75% 50%;
     --sidebar-foreground: 41 89% 89%;
     --sidebar-primary: 45 95% 68%;
@@ -106,12 +109,28 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html {
+    height: 100%;
+  }
+
   body {
     @apply bg-background text-foreground;
+    height: 100%;
+    overflow-x: hidden;
+  }
+
+  #root {
+    height: 100%;
   }
 }
 
 @layer utilities {
+  /* Dynamic viewport height utility - Android Chrome URL bar workaround */
+  .h-screen-dvh {
+    min-height: calc(var(--app-vh, 1vh) * 100);
+    min-height: 100dvh; /* Progressive enhancement for supporting browsers */
+  }
+
   .aspect-square {
     aspect-ratio: 1;
   }

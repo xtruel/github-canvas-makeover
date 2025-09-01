@@ -61,21 +61,21 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section with Gradient */}
-      <div className="relative bg-gradient-to-br from-roma-red via-red-500 to-yellow-400 text-white py-20 px-4">
-        <div className="container mx-auto text-center">
+      <div className="relative bg-gradient-to-br from-roma-red via-red-500 to-yellow-400 text-white pt-24 pb-16 px-4">
+        <div className="w-full md:container md:mx-auto text-center">
           <div className="mb-8">
             <img 
               src="/lovable-uploads/af321201-3c36-40c5-862e-fed415398b56.png"
               alt="AS Roma Official Logo" 
-              className="w-32 h-32 mx-auto object-contain mb-6"
+              className="w-28 h-28 sm:w-32 sm:h-32 mx-auto object-contain mb-6"
             />
           </div>
           
-          <h1 className="text-6xl font-bold mb-6">
+          <h1 className="text-4xl sm:text-6xl font-bold mb-6">
             FORZA ROMA
           </h1>
           
-          <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
+          <p className="text-lg sm:text-xl px-1 mb-8 max-w-2xl mx-auto opacity-90">
             La tua destinazione definitiva per notizie, eventi e contenuti esclusivi dell'AS Roma
           </p>
           

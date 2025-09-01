@@ -203,6 +203,84 @@ curl -X POST http://localhost:4000/media/<assetId>/finalize \
 ```
 
 ---
+## Dynamic Viewport Handling
+
+The frontend includes a robust dynamic viewport height system that handles device orientation changes and on-screen keyboard suppression for optimal mobile experience.
+
+### Purpose
+- Maintains consistent layout height during device rotation
+- Prevents layout jumps when soft keyboards appear/disappear
+- Provides reliable viewport units for full-height designs
+
+### CSS Custom Properties
+
+The system automatically sets these CSS custom properties on `:root`:
+
+- `--app-vh`: 1% unit of current dynamic viewport height (e.g., `8.50px` for 850px viewport)
+- `--app-height`: Full current dynamic viewport height in pixels (e.g., `850px`)
+- `--app-vh-initial`: Baseline 1% unit captured at initialization or rebaseline
+
+### Usage Examples
+
+```css
+/* Full viewport height container */
+.full-height-container {
+  height: calc(var(--app-vh, 1vh) * 100);
+}
+
+/* Alternative using --app-height directly */
+.full-height-alt {
+  height: var(--app-height, 100vh);
+}
+
+/* Percentage of viewport height */
+.half-height {
+  height: calc(var(--app-vh, 1vh) * 50);
+}
+```
+
+### Heuristics & Behavior
+
+**Suppression Logic:**
+- When an editable element (input/textarea/contenteditable) is focused AND viewport shrinks below 75% of baseline → suppress height updates
+- Resume updates when height recovers to ≥85% of baseline OR focus is lost
+- Auto-resume after 3 seconds if no editable element is focused
+
+**Orientation Changes:**
+- Large height deltas (>20% of baseline) with no focused editable → rebaseline automatically
+- Explicit orientation change events → immediate rebaseline
+- Orientation detection via `matchMedia('(orientation: portrait)')` with fallback to aspect ratio
+
+### Debug Mode
+
+Add `?vhdebug` to the URL (non-production builds only) to enable console logging:
+
+```
+[vh] init creating new controller
+[vh] rebaseline orientation-landscape height: 390 initialVh: 3.90px
+[vh] suppress start shrinkRatio: 0.65 currentHeight: 520 initialHeight: 800
+[vh] suppress end reason: resume resumeRatio: 0.87
+```
+
+### Manual Control
+
+The viewport controller is available globally for manual operations:
+
+```javascript
+// Force recalculation (useful after dynamic content changes)
+window.viewportController?.forceRecalc('manual');
+
+// Force rebaseline (sets new baseline height)
+window.viewportController?.forceRebaseline('manual');
+```
+
+### Browser Compatibility
+
+- **Modern browsers**: Uses `window.visualViewport` API for precise measurements
+- **Fallback**: Uses `window.innerHeight` for browsers without visualViewport support
+- **HMR-safe**: Prevents duplicate event handlers during development hot reloads
+
+---
 ## Preview / Deployment Notes
 A direct automated deployment isn’t configured yet (needs container registry + host secrets). Recommended interim preview path:
 1. Open repository in GitHub → Code → Codespaces → Create (uses devcontainer) – run backend & frontend.

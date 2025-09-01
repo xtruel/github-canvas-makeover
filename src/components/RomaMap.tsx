@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { X, ChevronUp, ChevronDown } from 'lucide-react';
@@ -29,6 +29,7 @@ const RomaMap = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMapLoading, setIsMapLoading] = useState(true);
+  const [mapExpanded, setMapExpanded] = useState(false);
   const [activeFilters, setActiveFilters] = useState<string[]>(['historical', 'pub', 'club', 'neighborhood', 'stadium', 'roma-men', 'roma-women']);
   const markers = useRef<mapboxgl.Marker[]>([]);
 
@@ -36,7 +37,7 @@ const RomaMap = () => {
   const MAPBOX_TOKEN = 'pk.eyJ1IjoiZnVyaWVyb21hbmUiLCJhIjoiY21lanVmMWVnMDFsdjJrczc2Mm12Y3QyNyJ9.J1I-1msTs5pOeccQAuQ4yg';
 
   // Luoghi di Roma (data unchanged)
-  const romaPlaces = [
+  const romaPlaces = useMemo(() => [
     { name: 'Colosseo', coords: [12.4924, 41.8902], type: 'historical', color: '#6B7280', description: 'L\'Amphitheatrum Flavium, vero nome del Colosseo, fu costruito dall\'imperatore Vespasiano nel 72 d.C. e inaugurato dal figlio Tito nell\'80 d.C. Questo colosso architettonico,[...]', image: 'https://turismoroma.it/sites/default/files/colosseo_slide_0.jpg' },
     { name: 'Pantheon', coords: [12.4768, 41.8986], type: 'historical', color: '#6B7280', description: 'Capolavoro assoluto dell\'ingegneria romana, il Pantheon fu ricostruito dall\'imperatore Adriano tra il 112 e il 124 d.C. La sua cupola emisferica in calcestruzzo, con diametro[...]', image: pantheonImage },
     { name: 'Fontana di Trevi', coords: [12.4833, 41.9009], type: 'historical', color: '#6B7280', description: 'Opera barocca monumentale progettata da Nicola Salvi e commissionata da Papa Clemente XII nel 1732. Completata trent\'anni dopo da Giuseppe Pannini (Salvi morì nel 1751), misu[...]', image: 'https://turismoroma.it/sites/default/files/Fontane%20-%20Fontana%20di%20Trevi_1920x1080mba-07410189%20%C2%A9%20Clickalps%20_%20AGF%20foto.jpg' },
@@ -50,7 +51,7 @@ const RomaMap = () => {
     { name: 'Circo Massimo', coords: [12.4854, 41.8857], type: 'historical', color: '#6B7280', description: 'Il più grande stadio dell\'antichità, lungo 621 metri e largo 118, poteva ospitare fino a 250.000 spettatori per le corse dei carri. Oggi è un parco pubblico che conserva l[...]', image: 'https://images.unsplash.com/photo-1588773163068-ca4ae4a08742?w=500' },
     { name: 'Campo de\' Fiori', coords: [12.4728, 41.8957], type: 'neighborhood', color: '#16A34A', description: 'Piazza storica con mercato mattutino dal 1869 e vivace vita notturna. Al centro la statua di Giordano Bruno, bruciato qui nel 1600. Circondata da osterie tradizionali e locali[...]', image: 'https://images.unsplash.com/photo-1582719471274-15abce5b07c3?w=500' },
     // ... (KEEP ALL OTHER ENTRIES UNCHANGED from existing file) ...
-  ];
+  ], []);
 
   const getTypeLabel = (type: string) => {
     switch (type) {
@@ -67,8 +68,68 @@ const RomaMap = () => {
 
   const toggleFilter = (type: string) => setActiveFilters([type]);
   const showAllFilters = () => setActiveFilters(['historical', 'pub', 'club', 'neighborhood', 'stadium', 'roma-men', 'roma-women']);
-  const getFilteredPlaces = () => romaPlaces.filter(p => activeFilters.includes(p.type));
+  const getFilteredPlaces = useCallback(() => romaPlaces.filter(p => activeFilters.includes(p.type)), [activeFilters, romaPlaces]);
   const getPlaceCount = (type: string) => romaPlaces.filter(p => p.type === type).length;
+
+  const toggleMapExpansion = () => {
+    setMapExpanded(!mapExpanded);
+  };
+
+  const updateMarkers = useCallback((mapInstance: mapboxgl.Map) => {
+    markers.current.forEach(m => { try { m.remove(); } catch { /* ignore */ } });
+    markers.current = [];
+    const filtered = getFilteredPlaces();
+    const valid = filtered.filter(place => {
+      const [lng, lat] = place.coords;
+      return Array.isArray(place.coords) && place.coords.length === 2 && !isNaN(lng) && !isNaN(lat) && lng >= -180 && lng <= 180 && lat >= -90 && lat <= 90;
+    });
+    const toShow = isMobile ? valid.slice(0, 30) : valid;
+    toShow.forEach(place => {
+      try {
+        const markerEl = document.createElement('div');
+        markerEl.className = 'custom-marker';
+        markerEl.title = place.name; // Add accessibility title
+        
+        // Create marker with image if available
+        if (place.image) {
+          const markerSize = isMobile ? '28px' : '32px';
+          markerEl.style.cssText = `
+            width: ${markerSize}; 
+            height: ${markerSize}; 
+            border-radius: 50% 50% 50% 0; 
+            transform: rotate(-45deg); 
+            border: 3px solid ${place.color}; 
+            cursor: pointer; 
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+            background-image: url('${place.image}');
+            background-size: cover;
+            background-position: center;
+            outline: 2px solid white;
+            outline-offset: -1px;
+          `;
+        } else {
+          // Default colored marker
+          markerEl.style.cssText = `
+            background-color: ${place.color}; 
+            width: ${isMobile ? '16px' : '20px'}; 
+            height: ${isMobile ? '16px' : '20px'}; 
+            border-radius: 50% 50% 50% 0; 
+            transform: rotate(-45deg); 
+            border: 2px solid white; 
+            cursor: pointer; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+          `;
+        }
+        
+        markerEl.addEventListener('click', (e) => { e.stopPropagation(); setSelectedPlace(place); if (isMobile) setIsDrawerOpen(true); });
+        const marker = new mapboxgl.Marker(markerEl).setLngLat(place.coords as [number, number]).addTo(mapInstance);
+        markers.current.push(marker);
+      } catch (err) { console.error('Error adding marker', err); }
+    });
+    if (!isMobile) {
+      try { mapInstance.setFog({ color: 'rgb(255,255,255)', 'high-color': 'rgb(200,200,225)', 'horizon-blend': 0.1 }); } catch { /* ignore */ }
+    }
+  }, [getFilteredPlaces, isMobile, setSelectedPlace, setIsDrawerOpen]);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -123,35 +184,23 @@ const RomaMap = () => {
       setIsMapLoading(true);
       mapInstance.remove();
     };
-  }, [isMobile]);
+  }, [isMobile, updateMarkers]);
 
   useEffect(() => {
     if (map.current && !isMapLoading) updateMarkers(map.current);
-  }, [activeFilters, isMobile, isMapLoading]);
+  }, [updateMarkers, isMapLoading]);
 
-  const updateMarkers = (mapInstance: mapboxgl.Map) => {
-    markers.current.forEach(m => { try { m.remove(); } catch {} });
-    markers.current = [];
-    const filtered = getFilteredPlaces();
-    const valid = filtered.filter(place => {
-      const [lng, lat] = place.coords;
-      return Array.isArray(place.coords) && place.coords.length === 2 && !isNaN(lng) && !isNaN(lat) && lng >= -180 && lng <= 180 && lat >= -90 && lat <= 90;
-    });
-    const toShow = isMobile ? valid.slice(0, 30) : valid;
-    toShow.forEach(place => {
-      try {
-        const markerEl = document.createElement('div');
-        markerEl.className = 'custom-marker';
-        markerEl.style.cssText = `background-color: ${place.color}; width: ${isMobile ? '16px' : '20px'}; height: ${isMobile ? '16px' : '20px'}; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 2px solid white; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.3);`;
-        markerEl.addEventListener('click', (e) => { e.stopPropagation(); setSelectedPlace(place); if (isMobile) setIsDrawerOpen(true); });
-        const marker = new mapboxgl.Marker(markerEl).setLngLat(place.coords as [number, number]).addTo(mapInstance);
-        markers.current.push(marker);
-      } catch (err) { console.error('Error adding marker', err); }
-    });
-    if (!isMobile) {
-      try { mapInstance.setFog({ color: 'rgb(255,255,255)', 'high-color': 'rgb(200,200,225)', 'horizon-blend': 0.1 }); } catch {}
+  // Handle map resize when expansion state changes
+  useEffect(() => {
+    if (map.current && !isMapLoading && isMobile) {
+      // Use requestAnimationFrame to ensure DOM has updated
+      requestAnimationFrame(() => {
+        if (map.current) {
+          map.current.resize();
+        }
+      });
     }
-  };
+  }, [mapExpanded, isMobile, isMapLoading]);
 
   return (
     <div className="relative w-full h-full bg-background overflow-hidden">
@@ -180,9 +229,27 @@ const RomaMap = () => {
               <button onClick={showAllFilters} className="px-2.5 py-1.5 rounded-full text-xs text-roma-gold hover:text-roma-yellow border border-roma-gold/30 hover:bg-roma-gold/10 transition-all flex-shrink-0">Tutti</button>
             </div>
           </div>
-          <div className="w-full flex-shrink-0" style={{ height: 'min(55vh, 420px)' }}>
+          <div className="w-full flex-shrink-0" style={{ 
+            height: mapExpanded 
+              ? 'calc(var(--app-height, 100vh) * 0.72)' 
+              : 'min(calc(var(--app-height, 100vh) * 0.5), 420px)' 
+          }}>
             <div className="relative w-full h-full rounded-lg overflow-hidden shadow-roma border border-border/50">
               <div ref={mapContainer} className="absolute inset-0 w-full h-full" />
+              
+              {/* Map Toggle Button */}
+              <button 
+                onClick={toggleMapExpansion}
+                className="absolute top-3 right-3 z-20 bg-background/95 backdrop-blur-sm p-2 rounded-full shadow-lg border border-border/50 hover:bg-muted/50 transition-all"
+                aria-label={mapExpanded ? 'Collapse map' : 'Expand map'}
+              >
+                {mapExpanded ? (
+                  <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                ) : (
+                  <ChevronUp className="w-4 h-4 text-muted-foreground" />
+                )}
+              </button>
+              
               {isMapLoading && (
                 <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-30">
                   <div className="text-center">
@@ -193,7 +260,16 @@ const RomaMap = () => {
               )}
             </div>
           </div>
-          <div className="bg-background border-t border-border/50 overflow-y-auto transition-all duration-300 ease-in-out" style={{ height: selectedPlace ? 'min(35vh, 300px)' : '0px', maxHeight: 'min(35vh, 300px)' }}>
+          <div className="bg-background border-t border-border/50 overflow-y-auto transition-all duration-300 ease-in-out" style={{ 
+            height: selectedPlace 
+              ? mapExpanded 
+                ? 'min(calc(var(--app-height, 100vh) * 0.28), 250px)' 
+                : 'min(calc(var(--app-height, 100vh) * 0.35), 300px)'
+              : '0px', 
+            maxHeight: mapExpanded 
+              ? 'min(calc(var(--app-height, 100vh) * 0.28), 250px)' 
+              : 'min(calc(var(--app-height, 100vh) * 0.35), 300px)'
+          }}>
             <div className="min-h-full">
               {selectedPlace && (
                 <div className="p-4 pb-8">

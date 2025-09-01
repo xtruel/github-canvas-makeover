@@ -106,9 +106,39 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html { -webkit-text-size-adjust: 100%; }
   body {
     @apply bg-background text-foreground;
+    margin: 0;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh; /* dynamic viewport */
+    overflow-x: hidden;
   }
+
+  .app-shell {
+    --app-max-width: 760px; /* adjustable */
+    box-sizing: border-box;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1rem 2.5rem;
+    max-width: 100%;
+  }
+  @media (min-width: 820px) {
+    .app-shell { max-width: var(--app-max-width); padding-left: 1.25rem; padding-right: 1.25rem; }
+  }
+  @supports (padding: max(0px)) {
+    .app-shell {
+      padding-left: max(env(safe-area-inset-left), 1rem);
+      padding-right: max(env(safe-area-inset-right), 1rem);
+      padding-top: max(env(safe-area-inset-top), 0.75rem);
+      padding-bottom: max(env(safe-area-inset-bottom), 1rem);
+    }
+  }
+  img, video, canvas, svg, iframe { max-width: 100%; height: auto; display: block; }
+  :where(p, li, h1, h2, h3, h4, h5, h6, span, a, div, code, pre) { overflow-wrap: anywhere; word-break: break-word; }
+  body, button, input, textarea { font-synthesis: none; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
 }
 
 @layer utilities {
@@ -133,4 +163,7 @@ All colors MUST be HSL.
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  html[data-debug-overflow] * { outline: 1px solid rgba(255,0,0,0.35); }
+  .full-dvh { min-height: 100vh; min-height: 100dvh; }
 }

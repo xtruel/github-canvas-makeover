@@ -146,6 +146,85 @@ Analytics:
 - Event tracking pipeline
 
 ---
+## 6. Dynamic Viewport Height Management
+
+The project includes a robust dynamic viewport height system that handles orientation changes and keyboard visibility on mobile devices.
+
+### Features
+
+- **Orientation Change Detection**: Automatically detects and handles portrait/landscape orientation changes
+- **Smart Keyboard Suppression**: Only suppresses viewport updates when editable elements are focused AND keyboard is visible
+- **Automatic Rebaseline**: Resets the baseline height on orientation changes or large viewport deltas
+- **Debug Utilities**: Development tools for testing and debugging viewport behavior
+- **Performance Optimized**: Uses RAF batching and named event handlers for efficient updates
+
+### CSS Custom Properties
+
+The system sets these CSS custom properties on the document root:
+
+- `--app-vh`: 1% of the current viewport height (e.g., "3.9px")
+- `--app-height`: Current viewport height in pixels (e.g., "390px")
+- `--app-vh-initial`: 1% of the baseline viewport height (updated on rebaseline)
+
+### Usage in CSS
+
+```css
+.full-height {
+  height: var(--app-height);
+}
+
+.quarter-height {
+  height: calc(var(--app-vh) * 25);
+}
+```
+
+### Orientation Handling & Rebaseline
+
+The system automatically rebaselines (resets the initial height) when:
+
+1. **Orientation change detected**: Portrait ↔ Landscape transition
+2. **Large delta without keyboard**: Height change >20% when no editable element is focused
+3. **Manual rebaseline**: Via debug utilities
+
+### Keyboard Suppression Logic
+
+Viewport updates are suppressed only when:
+- An editable element (input, textarea, select, contentEditable) has focus
+- Viewport height drops below 75% of initial height
+- Updates resume when height rises above 85% or focus is lost
+
+### Debug Mode
+
+Add `?vhdebug` to the URL to enable debug logging:
+
+```
+http://localhost:8080/?vhdebug
+```
+
+In development, access debug utilities via browser console:
+
+```javascript
+// View current state
+window.viewportController.getState()
+
+// Force recalculation
+window.viewportController.forceRecalc('testing')
+
+// Force rebaseline
+window.viewportController.forceRebaseline('manual-reset')
+```
+
+### Testing Orientation Changes
+
+1. Open Chrome DevTools
+2. Toggle device toolbar (Ctrl+Shift+M)
+3. Select a mobile device (e.g., iPhone 14)
+4. Click the rotate icon to test orientation changes
+5. Monitor console logs with `?vhdebug` parameter
+
+The system should automatically detect orientation changes and update CSS variables accordingly.
+
+---
 ## 7. Local Development Quick Start
 
 Frontend (assuming existing root setup):

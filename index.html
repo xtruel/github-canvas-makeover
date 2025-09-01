@@ -20,6 +20,71 @@
 
   <body>
     <div id="root"></div>
+    
+    <!-- Viewport normalization script for Android zoom issues -->
+    <script>
+      (function() {
+        // Temporarily enforce scale constraints to normalize zoom, then restore user zoom capability
+        const metaViewport = document.querySelector('meta[name="viewport"]');
+        if (metaViewport) {
+          const originalContent = metaViewport.getAttribute('content');
+          
+          // Temporarily set maximum and minimum scale to 1 to snap zoom to 1x
+          metaViewport.setAttribute('content', originalContent + ',maximum-scale=1,minimum-scale=1');
+          
+          // After 500ms, restore user zoom capability by setting maximum-scale=5
+          setTimeout(function() {
+            // Only append maximum-scale=5 if it's not already present
+            const currentContent = metaViewport.getAttribute('content');
+            if (!currentContent.includes('maximum-scale=5')) {
+              metaViewport.setAttribute('content', originalContent + ',maximum-scale=5');
+            }
+          }, 500);
+        }
+      })();
+    </script>
+    
+    <!-- Dynamic viewport height CSS variable for URL bar collapse handling -->
+    <script>
+      (function() {
+        function setAppVh() {
+          // Set CSS custom property for 1% of viewport height
+          document.documentElement.style.setProperty('--app-vh', window.innerHeight * 0.01 + 'px');
+        }
+        
+        // Set initial value
+        setAppVh();
+        
+        // Update on resize (handles URL bar show/hide on mobile)
+        window.addEventListener('resize', setAppVh);
+        window.addEventListener('orientationchange', function() {
+          // Small delay after orientation change to get correct dimensions
+          setTimeout(setAppVh, 100);
+        });
+      })();
+    </script>
+    
+    <!-- 
+    Optional debug overlay for troubleshooting viewport issues
+    Uncomment to enable debugging mode:
+    
+    <script>
+      // Debug overlay to identify elements causing horizontal overflow
+      if (location.search.includes('debug-viewport')) {
+        setTimeout(function() {
+          document.documentElement.setAttribute('data-debug-overflow', '');
+          const overflowElements = [...document.querySelectorAll('*')]
+            .filter(e => e.scrollWidth > document.documentElement.clientWidth);
+          overflowElements.forEach(e => {
+            e.classList.add('debug-overflow');
+            e.setAttribute('data-width', e.scrollWidth + 'px');
+            console.warn('Overflow element:', e, 'Width:', e.scrollWidth);
+          });
+        }, 1000);
+      }
+    </script>
+    -->
+    
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

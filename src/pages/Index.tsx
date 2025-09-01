@@ -71,7 +71,7 @@ const Index = () => {
             />
           </div>
           
-          <h1 className="text-6xl font-bold mb-6">
+          <h1 className="hero-title mb-6">
             FORZA ROMA
           </h1>
           

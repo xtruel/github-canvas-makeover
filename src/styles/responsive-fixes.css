@@ -23,6 +23,19 @@ body {
   box-sizing: border-box;
 }
 
+/* Additional layout overflow containment for mobile */
+.min-h-screen {
+  overflow-x: hidden;
+}
+
+/* Force all flexbox layouts to respect container bounds */
+.flex,
+.flex-1,
+.flex-col {
+  min-width: 0;
+  overflow-x: hidden;
+}
+
 /* Constrain map containers to prevent overflow */
 #map,
 .map,

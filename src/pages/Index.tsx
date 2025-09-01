@@ -2,66 +2,27 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { RomaMatches } from "@/components/RomaMatches";
 import RomaMap from "@/components/RomaMap";
-import { MapPin, Calendar, Users, Trophy, MessageCircle, Settings, ArrowRight } from "lucide-react";
+import { MapPin, Calendar, Users, Trophy, MessageCircle, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Index = () => {
   const features = [
-    {
-      title: "Mappa Romanisti",
-      description: "Trova altri tifosi della Roma nella tua zona",
-      icon: MapPin,
-      link: "/mappa",
-      color: "text-roma-gold"
-    },
-    {
-      title: "Eventi",
-      description: "Scopri raduni e partite da guardare insieme",
-      icon: Calendar,
-      link: "/eventi",
-      color: "text-roma-yellow"
-    },
-    {
-      title: "Community",
-      description: "Discuti e condividi la passione giallorossa",
-      icon: MessageCircle,
-      link: "/community",  
-      color: "text-roma-gold"
-    },
-    {
-      title: "Trofei",
-      description: "Celebra la storia gloriosa della Roma",
-      icon: Trophy,
-      link: "/trofei",
-      color: "text-roma-yellow"
-    }
+    { title: "Mappa Romanisti", description: "Trova altri tifosi della Roma nella tua zona", icon: MapPin, link: "/mappa", color: "text-roma-gold" },
+    { title: "Eventi", description: "Scopri raduni e partite da guardare insieme", icon: Calendar, link: "/eventi", color: "text-roma-yellow" },
+    { title: "Community", description: "Discuti e condividi la passione giallorossa", icon: MessageCircle, link: "/community",  color: "text-roma-gold" },
+    { title: "Trofei", description: "Celebra la storia gloriosa della Roma", icon: Trophy, link: "/trofei", color: "text-roma-yellow" }
   ];
 
   const breakingNews = [
-    {
-      title: "Roma Prepara Derby della Capitale",
-      description: "La squadra si allena intensamente per la sfida contro la Lazio",
-      category: "Training",
-      time: "2 ore fa"
-    },
-    {
-      title: "Nuovo Store Ufficiale a Milano",
-      description: "Aperto il nuovo punto vendita per i tifosi del nord",
-      category: "Fan Zone", 
-      time: "5 ore fa"
-    },
-    {
-      title: "Raduno Romanisti Domenica",
-      description: "Tutti i tifosi sono invitati al raduno settimanale",
-      category: "Community",
-      time: "1 giorno fa"
-    }
+    { title: "Roma Prepara Derby della Capitale", description: "La squadra si allena intensamente per la sfida contro la Lazio", category: "Training", time: "2 ore fa" },
+    { title: "Nuovo Store Ufficiale a Milano", description: "Aperto il nuovo punto vendita per i tifosi del nord", category: "Fan Zone",  time: "5 ore fa" },
+    { title: "Raduno Romanisti Domenica", description: "Tutti i tifosi sono invitati al raduno settimanale", category: "Community", time: "1 giorno fa" }
   ];
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section with Gradient */}
-      <div className="relative bg-gradient-to-br from-roma-red via-red-500 to-yellow-400 text-white py-20 px-4">
+      {/* Hero Section */}
+      <div className="hero-android-full relative bg-gradient-to-br from-roma-red via-red-500 to-yellow-400 text-white py-20 px-4">
         <div className="container mx-auto text-center">
           <div className="mb-8">
             <img 
@@ -70,15 +31,12 @@ const Index = () => {
               className="w-32 h-32 mx-auto object-contain mb-6"
             />
           </div>
-          
           <h1 className="text-6xl font-bold mb-6">
             FORZA ROMA
           </h1>
-          
           <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
             La tua destinazione definitiva per notizie, eventi e contenuti esclusivi dell'AS Roma
           </p>
-          
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="bg-white text-roma-red hover:bg-gray-100">
               <Link to="/eventi">Ultimi Eventi</Link>
@@ -91,7 +49,6 @@ const Index = () => {
       </div>
 
       <div className="container mx-auto px-4 py-12">
-        {/* Mappa Interattiva Roma */}
         <div className="mb-16">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-foreground mb-4">Esplora Roma Giallorossa</h2>
@@ -104,12 +61,10 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Prossime Partite - Sezione Principale */}
         <div className="mb-16">
           <RomaMatches />
         </div>
 
-        {/* Breaking News Section */}
         <div className="mb-16">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold text-foreground">Ultime Notizie</h2>
@@ -117,7 +72,6 @@ const Index = () => {
               Vedi Tutto <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
-          
           <div className="grid md:grid-cols-3 gap-6">
             {breakingNews.map((news, index) => (
               <Card key={index} className="shadow-glow border-border/50 hover:shadow-roma transition-all duration-300 hover:scale-105">
@@ -139,7 +93,6 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Features Section */}
         <div className="mb-16">
           <h2 className="text-3xl font-bold mb-8 text-center text-foreground">Esplora la Community</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -160,7 +113,6 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Stats Section */}
         <Card className="shadow-roma border-border/50 bg-gradient-to-r from-roma-red/10 to-roma-gold/10">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl text-roma-gold mb-4">Forza Roma Sempre</CardTitle>

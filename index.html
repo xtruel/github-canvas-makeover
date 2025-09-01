@@ -3,6 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <script>
+      // Fix for Android Chrome auto-zoom issue
+      (function() {
+        if (/Android/i.test(navigator.userAgent)) {
+          var viewport = document.querySelector('meta[name="viewport"]');
+          if (viewport) {
+            var originalContent = viewport.getAttribute('content');
+            // Temporarily constrain scale to prevent auto-zoom
+            viewport.setAttribute('content', originalContent + ',minimum-scale=1,maximum-scale=1');
+            // Restore original viewport after 800ms to re-enable user zoom
+            setTimeout(function() {
+              viewport.setAttribute('content', originalContent);
+            }, 800);
+          }
+        }
+      })();
+    </script>
     <title>Ovunque Romanisti</title>
     <meta name="description" content="La community dei tifosi della Roma ovunque nel mondo" />
     <meta name="author" content="Ovunque Romanisti" />

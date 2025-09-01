@@ -142,3 +142,29 @@ All colors MUST be HSL.
     display: none;
   }
 }
+
+/* Android-specific homepage hero full-width fix */
+@layer components {
+  html.android .hero-android-full,
+  html.android .hero-android-full .container {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+/* Optional: retain some inner horizontal breathing room on the outer hero */
+@layer components {
+  html.android .hero-android-full {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  html.android .hero-android-full .container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+/* End Android hero fix */

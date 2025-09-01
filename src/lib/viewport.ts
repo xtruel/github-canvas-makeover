@@ -328,3 +328,8 @@ export const initViewportHeight = (): ViewportController => {
 export const viewportController = typeof window !== 'undefined' ? 
   () => (window as any).__APP_VH_CTRL as ViewportController | undefined :
   () => undefined;
+
+// For convenience, also make it available on window for easier access from console
+if (typeof window !== 'undefined') {
+  (window as any).viewportController = () => (window as any).__APP_VH_CTRL;
+}

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { X, ChevronUp, ChevronDown } from 'lucide-react';
@@ -65,6 +65,17 @@ const RomaMap = () => {
     }
   };
 
+  // Centralized filter items configuration
+  const filterItems = [
+    { type: 'stadium', color: '#D97706', label: 'Stadi' },
+    { type: 'roma-men', color: '#DC2626', label: 'Roma' },
+    { type: 'roma-women', color: '#9333EA', label: 'Roma Femminile' },
+    { type: 'pub', color: '#2563EB', label: 'Pub & Bar' },
+    { type: 'club', color: '#EC4899', label: 'Club' },
+    { type: 'neighborhood', color: '#16A34A', label: 'Quartieri' },
+    { type: 'historical', color: '#6B7280', label: 'Luoghi Storici' }
+  ];
+
   const toggleFilter = (type: string) => setActiveFilters([type]);
   const showAllFilters = () => setActiveFilters(['historical', 'pub', 'club', 'neighborhood', 'stadium', 'roma-men', 'roma-women']);
   const getFilteredPlaces = () => romaPlaces.filter(p => activeFilters.includes(p.type));
@@ -127,10 +138,34 @@ const RomaMap = () => {
 
   useEffect(() => {
     if (map.current && !isMapLoading) updateMarkers(map.current);
-  }, [activeFilters, isMobile, isMapLoading]);
+  }, [activeFilters, isMobile, isMapLoading, updateMarkers]);
 
-  const updateMarkers = (mapInstance: mapboxgl.Map) => {
-    markers.current.forEach(m => { try { m.remove(); } catch {} });
+  // Add viewport resize effect for mobile map resizing
+  useEffect(() => {
+    if (!isMobile || !map.current) return;
+
+    const handleViewportResize = () => {
+      if (map.current) {
+        map.current.resize();
+      }
+    };
+
+    const vv = (window as unknown as { visualViewport?: VisualViewport }).visualViewport;
+    if (vv) {
+      vv.addEventListener('resize', handleViewportResize);
+    }
+    window.addEventListener('orientationchange', handleViewportResize);
+
+    return () => {
+      if (vv) {
+        vv.removeEventListener('resize', handleViewportResize);
+      }
+      window.removeEventListener('orientationchange', handleViewportResize);
+    };
+  }, [isMobile]);
+
+  const updateMarkers = useCallback((mapInstance: mapboxgl.Map) => {
+    markers.current.forEach(m => { try { m.remove(); } catch {/* ignore */} });
     markers.current = [];
     const filtered = getFilteredPlaces();
     const valid = filtered.filter(place => {
@@ -146,12 +181,18 @@ const RomaMap = () => {
         markerEl.addEventListener('click', (e) => { e.stopPropagation(); setSelectedPlace(place); if (isMobile) setIsDrawerOpen(true); });
         const marker = new mapboxgl.Marker(markerEl).setLngLat(place.coords as [number, number]).addTo(mapInstance);
         markers.current.push(marker);
-      } catch (err) { console.error('Error adding marker', err); }
+      } catch (err) { 
+        console.error('Error adding marker', err); 
+      }
     });
     if (!isMobile) {
-      try { mapInstance.setFog({ color: 'rgb(255,255,255)', 'high-color': 'rgb(200,200,225)', 'horizon-blend': 0.1 }); } catch {}
+      try { 
+        mapInstance.setFog({ color: 'rgb(255,255,255)', 'high-color': 'rgb(200,200,225)', 'horizon-blend': 0.1 }); 
+      } catch {
+        // Fog not supported in this environment
+      }
     }
-  };
+  }, [isMobile, getFilteredPlaces, setIsDrawerOpen, setSelectedPlace]);
 
   return (
     <div className="relative w-full h-full bg-background overflow-hidden">
@@ -162,15 +203,7 @@ const RomaMap = () => {
           </div>
           <div className="bg-background/95 backdrop-blur-sm border-b border-border/50 px-3 py-2 flex-shrink-0">
             <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
-              {[
-                { type: 'stadium', color: '#D97706', label: 'Stadi' },
-                { type: 'roma-men', color: '#DC2626', label: 'Roma' },
-                { type: 'roma-women', color: '#9333EA', label: 'Femminile' },
-                { type: 'pub', color: '#2563EB', label: 'Bar' },
-                { type: 'club', color: '#EC4899', label: 'Club' },
-                { type: 'neighborhood', color: '#16A34A', label: 'Quartieri' },
-                { type: 'historical', color: '#6B7280', label: 'Storici' }
-              ].map(item => (
+              {filterItems.map(item => (
                 <button key={item.type} onClick={() => toggleFilter(item.type)} className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full whitespace-nowrap transition-all duration-200 hover:bg-muted/50 flex-shrink-0 text-xs ${activeFilters.includes(item.type) ? 'opacity-100 bg-muted/30 ring-1 ring-roma-gold/50' : 'opacity-60 hover:opacity-80'}`}> 
                   <div className="w-2 h-2 rounded-full border border-white flex-shrink-0" style={{ backgroundColor: item.color }} />
                   <span className="font-medium">{item.label}</span>
@@ -180,7 +213,7 @@ const RomaMap = () => {
               <button onClick={showAllFilters} className="px-2.5 py-1.5 rounded-full text-xs text-roma-gold hover:text-roma-yellow border border-roma-gold/30 hover:bg-roma-gold/10 transition-all flex-shrink-0">Tutti</button>
             </div>
           </div>
-          <div className="w-full flex-shrink-0" style={{ height: 'min(55vh, 420px)' }}>
+          <div className="w-full flex-shrink-0" style={{ height: 'min(calc(var(--app-height, 100vh) * 0.52), 420px)' }}>
             <div className="relative w-full h-full rounded-lg overflow-hidden shadow-roma border border-border/50">
               <div ref={mapContainer} className="absolute inset-0 w-full h-full" />
               {isMapLoading && (
@@ -193,7 +226,7 @@ const RomaMap = () => {
               )}
             </div>
           </div>
-          <div className="bg-background border-t border-border/50 overflow-y-auto transition-all duration-300 ease-in-out" style={{ height: selectedPlace ? 'min(35vh, 300px)' : '0px', maxHeight: 'min(35vh, 300px)' }}>
+          <div className="bg-background border-t border-border/50 overflow-y-auto transition-all duration-300 ease-in-out" style={{ height: selectedPlace ? 'min(calc(var(--app-height, 100vh) * 0.38), 320px)' : '0px', maxHeight: 'min(calc(var(--app-height, 100vh) * 0.38), 320px)' }}>
             <div className="min-h-full">
               {selectedPlace && (
                 <div className="p-4 pb-8">
@@ -231,15 +264,7 @@ const RomaMap = () => {
                   <button onClick={showAllFilters} className="text-xs text-roma-gold hover:text-roma-yellow underline">Tutti</button>
                 </div>
                 <div className="space-y-1 text-xs">
-                  {[
-                    { type: 'stadium', color: '#D97706', label: 'Stadi' },
-                    { type: 'roma-men', color: '#DC2626', label: 'Partite Roma' },
-                    { type: 'roma-women', color: '#9333EA', label: 'Roma Femminile' },
-                    { type: 'pub', color: '#2563EB', label: 'Pub & Bar' },
-                    { type: 'club', color: '#EC4899', label: 'Club' },
-                    { type: 'neighborhood', color: '#16A34A', label: 'Quartieri' },
-                    { type: 'historical', color: '#6B7280', label: 'Luoghi Storici' }
-                  ].map(item => (
+                  {filterItems.map(item => (
                     <button key={item.type} onClick={() => toggleFilter(item.type)} className={`flex items-center gap-2 w-full p-1.5 rounded transition-all hover:bg-muted/50 text-left ${activeFilters.includes(item.type) ? 'opacity-100' : 'opacity-50 hover:opacity-70'}`}> 
                       <div className="w-3 h-3 rounded-full border border-white flex-shrink-0" style={{ backgroundColor: item.color }} />
                       <span className="truncate text-xs flex-1">{item.label}</span>

@@ -61,7 +61,7 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section with Gradient */}
-      <div className="relative bg-gradient-to-br from-roma-red via-red-500 to-yellow-400 text-white py-20 px-4">
+      <div className="hero-android-full relative bg-gradient-to-br from-roma-red via-red-500 to-yellow-400 text-white py-20 px-4">
         <div className="container mx-auto text-center">
           <div className="mb-8">
             <img 

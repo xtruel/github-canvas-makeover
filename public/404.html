@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <title>Ovunque Romanisti</title>
+    <script>
+      // GitHub Pages SPA redirect
+      // This script handles client-side routing for GitHub Pages
+      (function() {
+        var redirect = sessionStorage.getItem('redirect');
+        sessionStorage.removeItem('redirect');
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, null, redirect);
+        }
+      })();
+      
+      // If this is a direct access to a SPA route, redirect to the main app
+      var pathSegmentsToKeep = 1; // /github-canvas-makeover/
+      var path = location.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/');
+      if (path) {
+        sessionStorage.setItem('redirect', '/github-canvas-makeover/' + (path && '?p=/' + path));
+      }
+      location.replace('/github-canvas-makeover/');
+    </script>
+  </head>
+  <body>
+    <p>Redirecting...</p>
+  </body>
+</html>

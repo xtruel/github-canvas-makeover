@@ -209,5 +209,76 @@ A direct automated deployment isn’t configured yet (needs container registry +
 2. (Next) Add workflow to build & push image to GHCR and deploy to Render/Fly (requires secrets: RENDER_API_KEY / FLY_API_TOKEN, etc.).
 
 ---
+## Dynamic Viewport Handling
+
+This project implements dynamic visual viewport height management to solve mobile layout issues like portrait height freeze and soft-keyboard shrink problems.
+
+### Purpose
+Mobile devices have complex viewport behaviors, especially when virtual keyboards appear or device orientation changes. This system provides stable CSS custom properties that applications can use instead of relying on unreliable `vh` units.
+
+### CSS Variables Available
+The system automatically maintains these CSS custom properties on the `:root` element:
+- `--app-vh`: Current dynamic viewport height as 1% (e.g., `7.41px`)
+- `--app-height`: Current dynamic viewport height in pixels (e.g., `741px`)
+- `--app-vh-initial`: Baseline 1% captured at initialization/rebaseline
+
+### Usage in CSS
+```css
+.full-height {
+  height: calc(var(--app-vh) * 100);
+}
+
+.partial-height {
+  height: calc(var(--app-vh) * 80); /* 80% of dynamic viewport */
+}
+```
+
+### Heuristics and Behavior
+The system uses intelligent heuristics to prevent jarring layout changes:
+
+- **Shrink Suppression**: When an editable element is focused (input, textarea, contenteditable) and viewport shrinks below 75% of initial height, updates are suppressed to prevent layout collapse
+- **Resume Conditions**: Suppression ends when the element loses focus, viewport grows to 85% of initial height, or 3 seconds elapse
+- **Orientation Changes**: Detected via `matchMedia('(orientation: portrait)')` or large viewport deltas (>20%) when no editable element is focused
+- **Rebaseline**: On orientation change, the system captures a new baseline height
+
+### Configuration Constants
+Default ratios (currently not configurable):
+- `SHRINK_SUPPRESS_RATIO`: 0.75 (75%)
+- `RESUME_RATIO`: 0.85 (85%) 
+- `ORIENTATION_DELTA_RATIO`: 0.20 (20%)
+- `AUTO_CLEAR_SUPPRESSION_MS`: 3000ms (3 seconds)
+
+### Debug Mode
+Add `?vhdebug` to the URL to enable debug logging (only works in development mode). Logs include:
+- System initialization
+- Height applications
+- Suppression start/end
+- Orientation changes and rebaselines
+- Manual interventions
+
+### Manual Control
+The viewport controller is exposed globally for manual intervention:
+
+```javascript
+// Force immediate recalculation
+window.viewportController.forceRecalc('manual intervention');
+
+// Force rebaseline (captures new initial height)
+window.viewportController.forceRebaseline('manual');
+```
+
+### Technical Details
+- Uses `window.visualViewport` when available, falls back to `window.innerHeight`
+- Event handling with `requestAnimationFrame` batching to prevent layout thrash
+- HMR-safe: single global instance survives hot reloads during development
+- Focus detection via `element.matches('input, textarea, [contenteditable="true"], [contenteditable=""]')`
+- No external dependencies
+
+### Future Enhancements
+- CustomEvent dispatch layer (not implemented yet)
+- Configurable heuristic ratios
+- Additional debug information
+
+---
 ## License
 (Define here if needed.)

@@ -8,12 +8,22 @@ html {
   overflow-x: hidden;
   width: 100%;
   box-sizing: border-box;
+  /* Ensure proper height for mobile */
+  min-height: var(--app-height);
 }
 
 body {
   overflow-x: hidden;
   width: 100%;
   box-sizing: border-box;
+  /* Ensure proper height for mobile */
+  min-height: var(--app-height);
+}
+
+/* Ensure root container fills the viewport properly on mobile */
+#root {
+  min-height: var(--app-height);
+  width: 100%;
 }
 
 /* Apply border-box to all elements for predictable sizing */

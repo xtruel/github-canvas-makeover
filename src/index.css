@@ -114,12 +114,20 @@ All colors MUST be HSL.
     min-height: var(--app-height);
   }
 
+  #root {
+    min-height: var(--app-height);
+  }
+
   body {
     @apply bg-background text-foreground;
   }
 }
 
 @layer utilities {
+  .min-h-app {
+    min-height: var(--app-height);
+  }
+
   .aspect-square {
     aspect-ratio: 1;
   }

@@ -60,6 +60,10 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 41 89% 89%;
     --sidebar-border: 15 75% 40%;
     --sidebar-ring: 45 95% 68%;
+
+    /* Viewport dynamic fallback values (will be updated by viewport.ts) */
+    --app-height: 100vh; /* fallback before JS runs */
+    --app-vh: 1vh;       /* 1% of fallback viewport */
   }
 
   .dark {
@@ -104,6 +108,10 @@ All colors MUST be HSL.
 @layer base {
   * {
     @apply border-border;
+  }
+
+  html, body {
+    min-height: var(--app-height);
   }
 
   body {

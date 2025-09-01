@@ -109,6 +109,15 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Mobile viewport height base styles */
+  html, body, #root {
+    height: 100%;
+  }
+  
+  body {
+    overflow-x: hidden;
+  }
 }
 
 @layer utilities {
@@ -132,5 +141,13 @@ All colors MUST be HSL.
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+  
+  /* Mobile viewport height utility class */
+  .h-screen-dvh {
+    /* Fallback: use CSS custom property (works once JS runs) */
+    min-height: calc(var(--app-vh, 1vh) * 100);
+    /* Modern browsers: dynamic viewport height */
+    min-height: 100dvh;
   }
 }

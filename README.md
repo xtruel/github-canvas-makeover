@@ -211,3 +211,72 @@ A direct automated deployment isn’t configured yet (needs container registry +
 ---
 ## License
 (Define here if needed.)
+
+---
+## Mobile Viewport Height Handling
+
+This project implements a robust solution for mobile viewport height issues, particularly on Android Chrome where the URL bar dynamically shows/hides during scroll, causing layout instability with `100vh`.
+
+### The Problem
+- Standard CSS `100vh` includes the space behind mobile browser UI elements
+- When the URL bar hides/shows, the viewport height changes but `100vh` doesn't update
+- This causes content jumpiness and gaps in full-height layouts
+
+### The Solution
+We use a combination of:
+1. **CSS Custom Property**: `--app-vh` set to 1% of actual `window.innerHeight`
+2. **Utility Class**: `.h-screen-dvh` with fallback to modern `100dvh`
+3. **JavaScript Monitoring**: Updates `--app-vh` on resize, orientation change, and visibility change
+
+### Usage
+
+#### For Developers
+To make any container fill the full visible height, use the `.h-screen-dvh` class:
+
+```jsx
+// Instead of this:
+<div className="min-h-screen">
+
+// Use this:
+<div className="h-screen-dvh">
+```
+
+#### CSS Implementation
+The utility class provides a fallback chain:
+```css
+.h-screen-dvh {
+  /* Fallback: use CSS custom property (works once JS runs) */
+  min-height: calc(var(--app-vh, 1vh) * 100);
+  /* Modern browsers: dynamic viewport height */
+  min-height: 100dvh;
+}
+```
+
+#### JavaScript Integration
+The viewport height system is automatically initialized in `src/main.tsx`:
+```typescript
+import { initViewportHeight } from './lib/viewport'
+initViewportHeight();
+```
+
+### Browser Support
+- **Fallback**: Works in all browsers supporting CSS custom properties (IE 11+)
+- **Modern**: Uses `100dvh` in browsers that support it (Chrome 108+, Firefox 101+)
+- **Mobile Focus**: Specifically tested on iOS Safari and Android Chrome
+
+### Files Modified
+- `src/lib/viewport.ts` - Core viewport height utilities
+- `src/main.tsx` - Initialization call
+- `src/index.css` - CSS utility class and base styles
+- `src/pages/Index.tsx` - Applied `.h-screen-dvh` to homepage container
+
+### Testing
+The system automatically updates the `--app-vh` value when:
+- Browser window is resized
+- Device orientation changes (mobile)
+- Page becomes visible again (handles mobile browser UI state changes)
+
+You can verify it's working by checking the CSS custom property in browser DevTools:
+```
+:root { --app-vh: 8.44px; } /* Updates dynamically */
+```

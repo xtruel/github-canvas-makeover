@@ -211,3 +211,100 @@ A direct automated deployment isn’t configured yet (needs container registry +
 ---
 ## License
 (Define here if needed.)
+
+---
+## 8. Mobile Viewport Height Handling
+
+This project implements a robust solution for mobile viewport height issues that affect Android Chrome and iOS Safari browsers.
+
+### Problem Statement
+
+Mobile browsers dynamically show/hide UI elements (URL bars, toolbars) which causes layout issues:
+- **iOS Safari**: `100vh` includes area behind dynamic toolbar, causing content to jump when toolbar appears/disappears
+- **Android Chrome**: URL bar collapse/expansion changes available viewport height
+- **Keyboard**: Virtual keyboard appearance can dramatically shrink viewport height, causing unwanted layout shifts
+
+### Solution
+
+We use a JavaScript-driven viewport utility with CSS custom properties that provides:
+
+1. **Dynamic Height Detection**: Uses `visualViewport` API when available, falls back to `window.innerHeight`
+2. **Smart Keyboard Handling**: Suppresses height updates when virtual keyboard is detected to prevent layout jumps
+3. **CSS Custom Properties**: Exposes `--app-vh`, `--app-height`, and `--app-vh-initial` for use in stylesheets
+4. **Modern Fallback Chain**: Uses `100dvh` as progressive enhancement with JS-driven fallback
+
+### CSS Utilities
+
+```css
+/* Dynamic viewport height - updates with browser UI changes */
+.h-screen-dvh {
+  min-height: calc(var(--app-vh, 1vh) * 100);
+  min-height: 100dvh; /* Modern browsers progressive enhancement */
+}
+
+/* Fixed height - uses initial captured height (stable during keyboard) */
+.h-screen-fixed {
+  min-height: var(--app-height, 100vh);
+}
+
+/* Safe area utilities for devices with notches */
+.pad-safe-t { padding-top: env(safe-area-inset-top); }
+.pad-safe-b { padding-bottom: env(safe-area-inset-bottom); }
+.pad-safe-l { padding-left: env(safe-area-inset-left); }
+.pad-safe-r { padding-right: env(safe-area-inset-right); }
+.pad-safe { /* all safe areas */ }
+```
+
+### Implementation
+
+The viewport utility is initialized in `src/main.tsx` before React renders:
+
+```typescript
+import { initViewportHeight } from './lib/viewport'
+initViewportHeight();
+```
+
+Key features in `src/lib/viewport.ts`:
+- Debounced updates using `requestAnimationFrame`
+- Keyboard detection heuristic (height < 75% of initial = keyboard likely open)
+- Event listeners for `resize`, `orientationchange`, `visibilitychange`, and `visualViewport` events
+- HMR (Hot Module Replacement) cleanup support
+- Optional debug logging with `?vhdebug` query parameter
+
+### Usage Guidelines
+
+- **Full-screen layouts**: Use `.h-screen-dvh` for responsive layouts that should adapt to browser UI changes
+- **Fixed layouts**: Use `.h-screen-fixed` for layouts that should remain stable during keyboard interaction
+- **Safe areas**: Add `.pad-safe-t`, `.pad-safe-b` etc. for proper spacing on devices with notches
+- **Hero sections**: Combine with safe area padding: `className="h-screen-dvh pad-safe-t"`
+
+### CSS Custom Properties Reference
+
+| Property | Description | Example Value |
+|----------|-------------|---------------|
+| `--app-vh` | Dynamic viewport height unit (1% of current height) | `8.12px` |
+| `--app-height` | Full dynamic viewport height in pixels | `812px` |
+| `--app-vh-initial` | Initial viewport height unit (captured at load) | `8.12px` |
+
+### Debug Mode
+
+Add `?vhdebug` to any URL to enable console logging of viewport height changes:
+
+```
+[ViewportHeight] Initialized viewport height {height: 812, reason: initialization, timestamp: ...}
+[ViewportHeight] Updated viewport height {height: 768, reason: normal_update, timestamp: ...}
+[ViewportHeight] Suppressing height update due to keyboard {height: 400, reason: keyboard_detected, timestamp: ...}
+```
+
+### Browser Support
+
+- **Modern browsers**: Uses `100dvh` with progressive enhancement
+- **iOS Safari 13+**: Uses `visualViewport` API for accurate height detection
+- **Android Chrome 61+**: Uses `visualViewport` API for URL bar handling
+- **Fallback**: Uses `window.innerHeight` for older browsers
+
+### References
+
+- [CSS viewport units and mobile browsers](https://web.dev/viewport-units/)
+- [Visual Viewport API](https://developer.mozilla.org/en-US/docs/Web/API/Visual_Viewport_API)
+- [CSS env() function for safe areas](https://developer.mozilla.org/en-US/docs/Web/CSS/env())

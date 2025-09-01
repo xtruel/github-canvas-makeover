@@ -8,7 +8,7 @@ interface LayoutProps {
 export function Layout({ children }: LayoutProps) {
   return (
     <SidebarProvider defaultOpen={false}>
-      <div className="min-h-screen flex w-full bg-background">
+      <div className="h-screen-dvh flex w-full bg-background">
         <AppSidebar />
         <div className="flex-1 flex flex-col">
           <header className="h-16 flex items-center border-b border-border/50 bg-card/50 backdrop-blur-sm">

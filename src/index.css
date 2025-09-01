@@ -109,6 +109,11 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Ensure html, body, and root have full height */
+  html, body, #root {
+    height: 100%;
+  }
 }
 
 @layer utilities {
@@ -132,5 +137,43 @@ All colors MUST be HSL.
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+  
+  /* Dynamic viewport height utilities for mobile */
+  .h-screen-dvh {
+    /* JS-driven fallback using custom property */
+    min-height: calc(var(--app-vh, 1vh) * 100);
+    /* Modern browsers supporting dynamic viewport unit */
+    min-height: 100dvh;
+  }
+  
+  /* Uses the initial captured height (stable, pre-keyboard) */
+  .h-screen-fixed {
+    min-height: var(--app-height, 100vh);
+  }
+  
+  /* Safe area utilities for devices with notches */
+  .pad-safe-b {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .pad-safe-t {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .pad-safe-l {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .pad-safe-r {
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  /* Combined safe area padding */
+  .pad-safe {
+    padding-top: env(safe-area-inset-top);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
   }
 }

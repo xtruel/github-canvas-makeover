@@ -59,9 +59,9 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="h-screen-dvh flex flex-col">
       {/* Hero Section with Gradient */}
-      <div className="relative bg-gradient-to-br from-roma-red via-red-500 to-yellow-400 text-white py-20 px-4">
+      <div className="relative bg-gradient-to-br from-roma-red via-red-500 to-yellow-400 text-white py-20 px-4 pad-safe-t">
         <div className="container mx-auto text-center">
           <div className="mb-8">
             <img 
@@ -90,7 +90,8 @@ const Index = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12">
+      <div className="flex-1 overflow-auto pad-safe-b">
+        <div className="container mx-auto px-4 py-12">
         {/* Mappa Interattiva Roma */}
         <div className="mb-16">
           <div className="text-center mb-8">
@@ -182,6 +183,7 @@ const Index = () => {
             </div>
           </CardContent>
         </Card>
+        </div>
       </div>
     </div>
   );

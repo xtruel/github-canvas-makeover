@@ -180,7 +180,7 @@ const RomaMap = () => {
               <button onClick={showAllFilters} className="px-2.5 py-1.5 rounded-full text-xs text-roma-gold hover:text-roma-yellow border border-roma-gold/30 hover:bg-roma-gold/10 transition-all flex-shrink-0">Tutti</button>
             </div>
           </div>
-          <div className="w-full flex-shrink-0" style={{ height: 'min(55vh, 420px)' }}>
+          <div className="w-full flex-shrink-0" style={{ height: 'min(calc(var(--app-height, 100vh) * 0.5), 420px)' }}>
             <div className="relative w-full h-full rounded-lg overflow-hidden shadow-roma border border-border/50">
               <div ref={mapContainer} className="absolute inset-0 w-full h-full" />
               {isMapLoading && (
@@ -193,7 +193,7 @@ const RomaMap = () => {
               )}
             </div>
           </div>
-          <div className="bg-background border-t border-border/50 overflow-y-auto transition-all duration-300 ease-in-out" style={{ height: selectedPlace ? 'min(35vh, 300px)' : '0px', maxHeight: 'min(35vh, 300px)' }}>
+          <div className="bg-background border-t border-border/50 overflow-y-auto transition-all duration-300 ease-in-out" style={{ height: selectedPlace ? 'min(calc(var(--app-height, 100vh) * 0.35), 300px)' : '0px', maxHeight: 'min(calc(var(--app-height, 100vh) * 0.35), 300px)' }}>
             <div className="min-h-full">
               {selectedPlace && (
                 <div className="p-4 pb-8">

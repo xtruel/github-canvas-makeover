@@ -106,8 +106,13 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html, body, #root {
+    height: 100%;
+  }
+
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
   }
 }
 
@@ -132,5 +137,15 @@ All colors MUST be HSL.
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Dynamic viewport height utilities for Android Chrome fix */
+  .h-screen-dvh {
+    min-height: calc(var(--app-vh, 1vh) * 100);
+    min-height: 100dvh; /* Modern browsers supporting dynamic viewport units */
+  }
+
+  .square-map {
+    aspect-ratio: 1 / 1;
   }
 }

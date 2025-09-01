@@ -1,0 +1,69 @@
+/* Responsive / mobile viewport adjustments */
+
+/* Respect iOS safe areas */
+:root {
+  /* You can use these vars inside layouts if needed */
+  --safe-top: env(safe-area-inset-top);
+  --safe-right: env(safe-area-inset-right);
+  --safe-bottom: env(safe-area-inset-bottom);
+  --safe-left: env(safe-area-inset-left);
+}
+
+body {
+  padding:
+    calc(var(--safe-top, 0))
+    calc(var(--safe-right, 0))
+    calc(var(--safe-bottom, 0))
+    calc(var(--safe-left, 0));
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overscroll-behavior-y: contain;
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Utility to help detect accidental horizontal overflow in dev:
+   Add data-debug-overflow to  to outline all elements. */
+html[data-debug-overflow] * {
+  outline: 1px solid rgba(255, 0, 0, 0.25);
+}
+
+/* Image and media scaling */
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Make sure long words / URLs wrap instead of causing overflow */
+:where(p, li, div) {
+  overflow-wrap: anywhere;
+}
+
+/* Example tweak for buttons or nav bars stretching too wide on very small devices */
+@media (max-width: 360px) {
+  .button, button, [role="button"] {
+    padding: 0.55rem 0.9rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Ensure full-height flex layouts account for safe-area and avoid double scroll */
+.full-height-flex {
+  min-height: calc(100vh - var(--safe-top, 0) - var(--safe-bottom, 0));
+  display: flex;
+  flex-direction: column;
+}
+
+/* Optional: smooth scrolling without rubber-band feel inside main content wrappers */
+.main-scroll {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Prevent 1px horizontal jitter caused by subpixel rounding on some browsers */
+body, #root {
+  position: relative;
+}

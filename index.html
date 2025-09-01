@@ -4,6 +4,48 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
     <title>Ovunque Romanisti</title>
+    
+    <!-- Early Android detection script -->
+    <script>
+      (function() {
+        // Detect Android specifically
+        if (/Android/i.test(navigator.userAgent)) {
+          document.documentElement.classList.add('is-android');
+          
+          // Android-specific square map handler
+          let resizeTimeout;
+          
+          function updateMapSquareDimensions() {
+            const mapContainers = document.querySelectorAll('.android-square-map');
+            const viewportWidth = window.innerWidth;
+            
+            mapContainers.forEach(container => {
+              // Force square dimensions: width = height = viewport width
+              container.style.width = viewportWidth + 'px';
+              container.style.height = viewportWidth + 'px';
+              container.style.maxWidth = viewportWidth + 'px';
+              container.style.maxHeight = viewportWidth + 'px';
+            });
+          }
+          
+          function handleAndroidResize() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(updateMapSquareDimensions, 100);
+          }
+          
+          // Initialize when DOM is ready
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+              updateMapSquareDimensions();
+              window.addEventListener('resize', handleAndroidResize);
+            });
+          } else {
+            updateMapSquareDimensions();
+            window.addEventListener('resize', handleAndroidResize);
+          }
+        }
+      })();
+    </script>
     <meta name="description" content="La community dei tifosi della Roma ovunque nel mondo" />
     <meta name="author" content="Ovunque Romanisti" />
     <link rel="icon" href="/lovable-uploads/af321201-3c36-40c5-862e-fed415398b56.png" type="image/png">

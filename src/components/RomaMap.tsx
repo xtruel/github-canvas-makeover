@@ -1144,7 +1144,7 @@ const RomaMap = () => {
           
           {/* Square Map Container - Constrained by screen width */}
           <div className="px-3 py-3 flex-shrink-0">
-            <div className="aspect-square w-full relative rounded-lg overflow-hidden shadow-roma border border-border/50">
+            <div className="aspect-square w-full relative rounded-lg overflow-hidden shadow-roma border border-border/50 android-square-map">
               <div 
                 ref={mapContainer} 
                 className="absolute inset-0 w-full h-full"

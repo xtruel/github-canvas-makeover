@@ -50,6 +50,11 @@ All colors MUST be HSL.
     --shadow-roma: 0 10px 30px -10px hsl(var(--roma-red) / 0.3);
     --shadow-glow: 0 0 40px hsl(var(--roma-red) / 0.2);
 
+    /* Dynamic Viewport Height Variables */
+    --app-vh: 1vh; /* 1% of current viewport height, updated dynamically */
+    --app-height: 100vh; /* Current viewport height in px, updated dynamically */
+    --app-vh-initial: 1vh; /* 1% of initial viewport height baseline */
+
     --radius: 0.5rem;
 
     --sidebar-background: 15 75% 50%;

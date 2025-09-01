@@ -203,6 +203,76 @@ curl -X POST http://localhost:4000/media/<assetId>/finalize \
 ```
 
 ---
+## 8. Dynamic Viewport Handling (Orientation & Keyboard)
+
+The application includes robust dynamic viewport height management to handle mobile device orientation changes and virtual keyboard behavior.
+
+### Features
+- **Orientation Change Detection**: Automatically detects landscape/portrait changes using `matchMedia('(orientation: portrait)')`
+- **Keyboard Suppression**: Prevents layout jumps when virtual keyboards appear/disappear
+- **Visual Viewport API**: Uses modern `visualViewport` API when available, with fallback to `window.innerHeight`
+- **HMR Support**: Proper cleanup for development hot module replacement
+
+### CSS Variables
+The viewport utility provides these CSS custom properties:
+- `--app-vh`: 1% of current dynamic viewport height (equivalent to `1vh` but dynamically updated)
+- `--app-height`: Current viewport height in pixels
+- `--app-vh-initial`: 1% of initial baseline viewport height
+
+### Suppression Logic
+Smart keyboard suppression activates when:
+- An editable element (input, textarea, contentEditable) is focused
+- Viewport height shrinks below 75% of initial baseline (`SHRINK_SUPPRESS_RATIO`)
+
+Suppression ends when:
+- Focus is lost from editable elements
+- Viewport height returns to ≥85% of initial baseline (`RESUME_RATIO`)
+- Auto-timeout after 3 seconds without editable focus (safety mechanism)
+
+### Configuration Thresholds
+```typescript
+const SHRINK_SUPPRESS_RATIO = 0.75; // 75% - start suppression threshold
+const RESUME_RATIO = 0.85;          // 85% - end suppression threshold  
+const ORIENTATION_DELTA_RATIO = 0.20; // 20% - orientation change detection
+const SUPPRESSION_TIMEOUT = 3000;   // 3s - safety auto-clear timeout
+```
+
+### Debug Mode
+Add `?vhdebug` to the URL to enable debug logging (not available in production):
+```
+https://yourapp.com/?vhdebug
+```
+
+Debug logs include:
+- `Orientation change detected` - Device orientation changed
+- `Suppression started/ended` - Keyboard suppression lifecycle
+- `Large delta detected` - Height change treated as orientation change
+- `Force rebaseline` - Manual baseline reset
+
+### API Usage
+
+The viewport system initializes automatically, but provides manual controls:
+
+```typescript
+import { viewportController } from './lib/viewport';
+
+// Force immediate height recalculation
+viewportController.forceRecalc();
+
+// Reset baseline with current height (useful if stuck)
+viewportController.forceRebaseline();
+
+// Get current internal state (readonly)
+const state = viewportController.getState();
+```
+
+### Recovery
+If the viewport gets stuck in suppression mode:
+1. Try `viewportController.forceRebaseline()` in browser console
+2. Refresh the page
+3. Use debug mode (`?vhdebug`) to diagnose the issue
+
+---
 ## Preview / Deployment Notes
 A direct automated deployment isn’t configured yet (needs container registry + host secrets). Recommended interim preview path:
 1. Open repository in GitHub → Code → Codespaces → Create (uses devcontainer) – run backend & frontend.

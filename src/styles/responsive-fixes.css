@@ -76,6 +76,33 @@ object {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+/* Scalable card with containment to prevent transform overflow */
+.scalable-card {
+  contain: layout paint;
+  will-change: transform;
+  transform-origin: center center;
+}
+
+/* Desktop-only hover scaling - only activates on devices with fine pointers */
+@media (hover: hover) and (pointer: fine) {
+  .enable-desktop-hover-scale:hover {
+    transform: scale(1.05);
+  }
+}
+
+/* Disable scaling on touch devices */
+@media (hover: none), (pointer: coarse) {
+  .enable-desktop-hover-scale {
+    transform: none !important;
+  }
+}
+
+/* Text wrapping for long content */
+p, h1, h2, h3, h4, h5, h6, .card, .card * {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 /* Debug helpers - activate by adding data-debug-overflow to <html> */
 html[data-debug-overflow] * {
   outline: 1px solid rgba(255, 0, 0, 0.2) !important;

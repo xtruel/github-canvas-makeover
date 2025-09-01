@@ -62,7 +62,7 @@ const Index = () => {
     <div className="min-h-screen">
       {/* Hero Section with Gradient */}
       <div className="relative bg-gradient-to-br from-roma-red via-red-500 to-yellow-400 text-white py-20 px-4">
-        <div className="container mx-auto text-center">
+        <div className="w-full md:container mx-auto text-center">
           <div className="mb-8">
             <img 
               src="/lovable-uploads/af321201-3c36-40c5-862e-fed415398b56.png"
@@ -120,7 +120,7 @@ const Index = () => {
           
           <div className="grid md:grid-cols-3 gap-6">
             {breakingNews.map((news, index) => (
-              <Card key={index} className="shadow-glow border-border/50 hover:shadow-roma transition-all duration-300 hover:scale-105">
+              <Card key={index} className="shadow-glow border-border/50 hover:shadow-roma transition-all duration-300 scalable-card enable-desktop-hover-scale">
                 <CardHeader>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs bg-roma-red text-white px-2 py-1 rounded-full">{news.category}</span>
@@ -144,7 +144,7 @@ const Index = () => {
           <h2 className="text-3xl font-bold mb-8 text-center text-foreground">Esplora la Community</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
-              <Card key={index} className="shadow-glow border-border/50 hover:shadow-roma transition-all duration-300 hover:scale-105">
+              <Card key={index} className="shadow-glow border-border/50 hover:shadow-roma transition-all duration-300 scalable-card enable-desktop-hover-scale">
                 <CardHeader className="text-center">
                   <feature.icon className={`h-12 w-12 mx-auto mb-4 ${feature.color}`} />
                   <CardTitle className="text-roma-gold">{feature.title}</CardTitle>

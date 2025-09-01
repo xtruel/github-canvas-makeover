@@ -21,5 +21,25 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Optional temporary overflow debugger (remove before production if desired) -->
+    <script>
+      (function () {
+        function logOverflow() {
+          var docW = document.documentElement.clientWidth;
+          var max = 0, culprit = null;
+          document.querySelectorAll('body *').forEach(function(el){
+            var rect = el.getBoundingClientRect();
+            var w = rect.right - document.body.getBoundingClientRect().left;
+            if (w > max) { max = w; culprit = el; }
+          });
+            if (max > docW + 1) {
+              console.warn('Horizontal overflow by', Math.ceil(max - docW), 'px →', culprit);
+            }
+        }
+        window.addEventListener('load', logOverflow);
+        window.addEventListener('resize', logOverflow);
+      })();
+    </script>
   </body>
 </html>

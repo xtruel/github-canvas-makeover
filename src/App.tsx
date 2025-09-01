@@ -23,7 +23,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename="/github-canvas-makeover">
         <Layout>
           <Routes>
             <Route path="/" element={<Index />} />

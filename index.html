@@ -2,11 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
     <title>Ovunque Romanisti</title>
     <meta name="description" content="La community dei tifosi della Roma ovunque nel mondo" />
     <meta name="author" content="Ovunque Romanisti" />
     <link rel="icon" href="/lovable-uploads/af321201-3c36-40c5-862e-fed415398b56.png" type="image/png">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#C41E3A" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Ovunque Romanisti" />
 
     <meta property="og:title" content="Ovunque Romanisti" />
     <meta property="og:description" content="La community dei tifosi della Roma ovunque nel mondo" />
@@ -21,5 +30,19 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Orientation Lock Script -->
+    <script>
+      // Attempt to lock orientation to portrait (non-fatal if unsupported)
+      if ('screen' in window && 'orientation' in window.screen) {
+        try {
+          window.screen.orientation.lock('portrait').catch(() => {
+            // Silently fail if orientation lock is not supported
+          });
+        } catch (e) {
+          // Silently fail if orientation lock is not supported
+        }
+      }
+    </script>
   </body>
 </html>

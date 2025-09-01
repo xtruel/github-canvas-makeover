@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { X, ChevronUp, ChevronDown } from 'lucide-react';
@@ -26,7 +26,15 @@ const RomaMap = () => {
     description?: string;
     image?: string;
   } | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
+  
+  // Synchronous mobile detection to prevent layout jumps
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const hasCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
+    const isNarrow = window.innerWidth < 768;
+    return hasCoarsePointer || isNarrow;
+  });
+  
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMapLoading, setIsMapLoading] = useState(true);
   const [activeFilters, setActiveFilters] = useState<string[]>(['historical', 'pub', 'club', 'neighborhood', 'stadium', 'roma-men', 'roma-women']);
@@ -70,16 +78,18 @@ const RomaMap = () => {
   const getFilteredPlaces = () => romaPlaces.filter(p => activeFilters.includes(p.type));
   const getPlaceCount = (type: string) => romaPlaces.filter(p => p.type === type).length;
 
-  useEffect(() => {
+  // Use useLayoutEffect for synchronous mobile detection before paint
+  useLayoutEffect(() => {
     const checkMobile = () => {
       const hasCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
       const isNarrow = window.innerWidth < 768;
       setIsMobile(hasCoarsePointer || isNarrow);
     };
-    checkMobile();
+    
     const mq = window.matchMedia('(pointer: coarse)');
     mq.addEventListener('change', checkMobile);
     window.addEventListener('resize', checkMobile);
+    
     return () => {
       mq.removeEventListener('change', checkMobile);
       window.removeEventListener('resize', checkMobile);
@@ -137,7 +147,7 @@ const RomaMap = () => {
       const [lng, lat] = place.coords;
       return Array.isArray(place.coords) && place.coords.length === 2 && !isNaN(lng) && !isNaN(lat) && lng >= -180 && lng <= 180 && lat >= -90 && lat <= 90;
     });
-    const toShow = isMobile ? valid.slice(0, 30) : valid;
+    const toShow = valid; // Use full romaPlaces array as requested, don't truncate on mobile
     toShow.forEach(place => {
       try {
         const markerEl = document.createElement('div');
@@ -155,6 +165,13 @@ const RomaMap = () => {
 
   return (
     <div className="relative w-full h-full bg-background overflow-hidden">
+      {/* 
+        GLOBAL LAYOUT NOTE: If height jumps still occur, check:
+        1. Mappa.tsx uses minHeight with --app-height CSS variable
+        2. Global CSS (index.css) defines --app-height which can change dynamically
+        3. Viewport utilities (viewport.ts) may modify --app-height causing layout shifts
+        4. Consider using fixed vh units instead of CSS variables for stable layout
+      */}
       {isMobile ? (
         <div className="flex flex-col h-full">
           <div className="bg-background/95 backdrop-blur-sm p-3 border-b border-border/50 z-30 flex-shrink-0">
@@ -180,8 +197,10 @@ const RomaMap = () => {
               <button onClick={showAllFilters} className="px-2.5 py-1.5 rounded-full text-xs text-roma-gold hover:text-roma-yellow border border-roma-gold/30 hover:bg-roma-gold/10 transition-all flex-shrink-0">Tutti</button>
             </div>
           </div>
-          <div className="w-full flex-shrink-0" style={{ height: 'min(55vh, 420px)' }}>
-            <div className="relative w-full h-full rounded-lg overflow-hidden shadow-roma border border-border/50">
+          
+          {/* Pre-allocated map container with fixed height to prevent layout jumps */}
+          <div className="relative w-full flex-1" style={{ minHeight: 'min(55vh, 420px)', maxHeight: 'min(55vh, 420px)' }}>
+            <div className="absolute inset-0 w-full h-full rounded-lg overflow-hidden shadow-roma border border-border/50">
               <div ref={mapContainer} className="absolute inset-0 w-full h-full" />
               {isMapLoading && (
                 <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-30">
@@ -192,31 +211,39 @@ const RomaMap = () => {
                 </div>
               )}
             </div>
-          </div>
-          <div className="bg-background border-t border-border/50 overflow-y-auto transition-all duration-300 ease-in-out" style={{ height: selectedPlace ? 'min(35vh, 300px)' : '0px', maxHeight: 'min(35vh, 300px)' }}>
-            <div className="min-h-full">
-              {selectedPlace && (
-                <div className="p-4 pb-8">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="flex-1">
-                      <h3 className="text-xl font-bold text-foreground mb-1">{selectedPlace.name}</h3>
-                      <p className="text-sm font-medium" style={{ color: selectedPlace.color }}>{getTypeLabel(selectedPlace.type)}</p>
+            
+            {/* Overlay drawer that slides over the map instead of changing layout flow */}
+            {selectedPlace && (
+              <div 
+                className="absolute inset-x-0 bottom-0 bg-background border-t border-border/50 shadow-lg rounded-t-lg z-40 transition-transform duration-300 ease-in-out"
+                style={{ 
+                  height: 'min(35vh, 300px)',
+                  transform: selectedPlace ? 'translateY(0)' : 'translateY(100%)'
+                }}
+              >
+                <div className="h-full overflow-y-auto">
+                  <div className="p-4 pb-8">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-foreground mb-1">{selectedPlace.name}</h3>
+                        <p className="text-sm font-medium" style={{ color: selectedPlace.color }}>{getTypeLabel(selectedPlace.type)}</p>
+                      </div>
+                      <button onClick={() => setSelectedPlace(null)} className="p-2 rounded-full hover:bg-muted transition-colors active:bg-muted ml-2 flex-shrink-0">
+                        <X className="w-5 h-5 text-muted-foreground" />
+                      </button>
                     </div>
-                    <button onClick={() => setSelectedPlace(null)} className="p-2 rounded-full hover:bg-muted transition-colors active:bg-muted ml-2 flex-shrink-0">
-                      <X className="w-5 h-5 text-muted-foreground" />
-                    </button>
+                    {selectedPlace.image && (
+                      <div className="mb-4">
+                        <img src={selectedPlace.image} alt={selectedPlace.name} className="w-full h-48 object-cover rounded-lg shadow-md" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
+                      </div>
+                    )}
+                    {selectedPlace.description && (
+                      <div className="text-sm text-foreground/90 leading-relaxed"><p>{selectedPlace.description}</p></div>
+                    )}
                   </div>
-                  {selectedPlace.image && (
-                    <div className="mb-4">
-                      <img src={selectedPlace.image} alt={selectedPlace.name} className="w-full h-48 object-cover rounded-lg shadow-md" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
-                    </div>
-                  )}
-                  {selectedPlace.description && (
-                    <div className="text-sm text-foreground/90 leading-relaxed"><p>{selectedPlace.description}</p></div>
-                  )}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       ) : (

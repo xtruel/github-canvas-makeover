@@ -3,4 +3,10 @@ import App from './App.tsx'
 import './index.css'
 import './styles/responsive-fixes.css'
 
+// Dynamic viewport handling (mobile 100vh + keyboard + rotation fixes)
+import { initViewportHeight } from './lib/viewport'
+
+// Safe to call multiple times (internally singleton + HMR aware)
+initViewportHeight()
+
 createRoot(document.getElementById("root")!).render(<App />);

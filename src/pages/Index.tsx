@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { RomaMatches } from "@/components/RomaMatches";
-import RomaMap from "@/components/RomaMap";
+import RomaMapPlaceholder from "@/components/RomaMapPlaceholder";
 import { MapPin, Calendar, Users, Trophy, MessageCircle, Settings, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -100,7 +100,7 @@ const Index = () => {
             </p>
           </div>
           <div className="md:h-[500px] rounded-lg overflow-hidden shadow-roma border border-border/50">
-            <RomaMap />
+            <RomaMapPlaceholder />
           </div>
         </div>
 

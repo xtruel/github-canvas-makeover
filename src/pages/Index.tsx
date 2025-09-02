@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { RomaMatches } from "@/components/RomaMatches";
-import RomaMap from "@/components/RomaMap";
 import { MapPin, Calendar, Users, Trophy, MessageCircle, Settings, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -91,19 +90,6 @@ const Index = () => {
       </div>
 
       <div className="container mx-auto px-4 py-12">
-        {/* Mappa Interattiva Roma */}
-        <div className="mb-16">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Esplora Roma Giallorossa</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Scopri i luoghi storici, gli stadi e i ritrovi dei romanisti nella Città Eterna
-            </p>
-          </div>
-          <div className="md:h-[500px] rounded-lg overflow-hidden shadow-roma border border-border/50">
-            <RomaMap />
-          </div>
-        </div>
-
         {/* Prossime Partite - Sezione Principale */}
         <div className="mb-16">
           <RomaMatches />

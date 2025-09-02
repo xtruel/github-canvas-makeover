@@ -1,0 +1,14 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+  SKIP_MAPBOX_CHECK = "1" # temporarily allow build without Mapbox token
+
+# Optional: if you want previews to be faster, you can keep the skip here as well
+[context.deploy-preview.environment]
+  SKIP_MAPBOX_CHECK = "1"
+
+[context.branch-deploy.environment]
+  SKIP_MAPBOX_CHECK = "1"

@@ -60,30 +60,36 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section with Gradient */}
-      <div className="relative bg-gradient-to-br from-roma-red via-red-500 to-yellow-400 text-white py-20 px-4">
-        <div className="container mx-auto text-center">
+      {/* Hero Section with Roma Gradient */}
+      <div className="relative bg-gradient-roma text-white py-20 px-4">
+        <div className="absolute inset-0 bg-black/10" />
+        <div className="container relative mx-auto text-center">
           <div className="mb-8">
-            <img 
+            <img
               src="/lovable-uploads/af321201-3c36-40c5-862e-fed415398b56.png"
-              alt="AS Roma Official Logo" 
-              className="w-32 h-32 mx-auto object-contain mb-6"
+              alt="AS Roma Official Logo"
+              className="w-28 h-28 mx-auto object-contain mb-6 drop-shadow"
             />
           </div>
-          
-          <h1 className="text-6xl font-bold mb-6">
+
+          <h1 className="font-display text-6xl md:text-7xl font-semibold mb-5 tracking-tight">
             FORZA ROMA
           </h1>
-          
-          <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
+
+          <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto opacity-95">
             La tua destinazione definitiva per notizie, eventi e contenuti esclusivi dell'AS Roma
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-white text-roma-red hover:bg-gray-100">
+            <Button asChild size="lg" className="bg-[hsl(var(--roma-yellow))] text-black hover:brightness-110 shadow-roma">
               <Link to="/eventi">Ultimi Eventi</Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-roma-red">
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="border-white/80 text-white hover:bg-white hover:text-[hsl(var(--roma-red))] shadow-none"
+            >
               <Link to="/community">Entra nella Community</Link>
             </Button>
           </div>

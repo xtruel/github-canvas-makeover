@@ -1,4 +1,4 @@
-import RomaMap from "@/components/RomaMap";
+import MapPlaceholder from "@/components/MapPlaceholder";
 
 const Mappa = () => {
   return (
@@ -7,7 +7,7 @@ const Mappa = () => {
       // Use min-height so internal sections (like map + drawer) have stable space
       style={{ minHeight: "calc(var(--app-height, 100vh) - 4rem)" }}
     >
-      <RomaMap />
+      <MapPlaceholder />
     </div>
   );
 };

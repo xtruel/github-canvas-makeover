@@ -8,6 +8,9 @@
 5. Docker & CI Workflows
 6. Roadmap (Next Features)
 7. Local Development Quick Start
+8. Mapbox Map Integration (Frontend)
+9. Preview / Deployment Notes
+10. License
 
 ---
 ## 1. Roma Matches Data Pipeline
@@ -203,11 +206,44 @@ curl -X POST http://localhost:4000/media/<assetId>/finalize \
 ```
 
 ---
-## Preview / Deployment Notes
-A direct automated deployment isn’t configured yet (needs container registry + host secrets). Recommended interim preview path:
-1. Open repository in GitHub → Code → Codespaces → Create (uses devcontainer) – run backend & frontend.
-2. (Next) Add workflow to build & push image to GHCR and deploy to Render/Fly (requires secrets: RENDER_API_KEY / FLY_API_TOKEN, etc.).
+## 8. Mapbox Map Integration (Frontend)
+The interactive map (component `RomaMapNew`) uses Mapbox GL JS.
+
+### Env Variables (Vite)
+Create a `.env` in project root (or set in Netlify) with:
+```
+VITE_MAPBOX_TOKEN=pk.YOUR_PUBLIC_MAPBOX_TOKEN
+# Optional: override style (default streets-v12)
+VITE_MAPBOX_STYLE=mapbox://styles/mapbox/streets-v12
+```
+
+Only variables prefixed with `VITE_` are exposed to the frontend.
+
+### Local Run
+1. Copy `.env.example` → `.env` and fill the token.
+2. `npm run dev` → map should load.
+
+### Netlify Deployment Notes
+- Add the same variables in Site settings → Build & deploy → Environment.
+- Trigger a new deploy after adding/changing them.
+- If you see endless "Caricamento mappa...": open DevTools → Network → check for 401 on `api.mapbox.com/styles/v1/...`.
+- Ensure the token has at least: Styles: Read, Tilesets: Read (default public token already has these).
+
+### Troubleshooting
+| Symptom | Cause | Fix |
+| ------- | ----- | --- |
+| 401 Unauthorized | Bad token / domain restricted | Use default public token or update restrictions |
+| 403 Style not public | Custom style private | Make style public or switch to `streets-v12` |
+| 404 Style not found | Typo in style ID | Correct `VITE_MAPBOX_STYLE` |
+| Placeholder token string visible | Env var missing at build | Ensure `VITE_MAPBOX_TOKEN` set before deploy |
 
 ---
-## License
-(Define here if needed.)
+## 9. Preview / Deployment Notes
+A direct automated container deployment isn’t configured yet (needs registry + host secrets). Recommended interim preview path:
+1. Codespace / Devcontainer for full stack testing.
+2. Netlify for static frontend (current approach) – uses Vite build.
+3. Future: Add workflow to build & push image to GHCR and deploy to Render/Fly (requires secrets).
+
+---
+## 10. License
+(Define here if needed).

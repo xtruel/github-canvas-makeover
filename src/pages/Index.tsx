@@ -2,10 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { RomaMatches } from "@/components/RomaMatches";
 import RomaMap from "@/components/RomaMap";
+import { usePlatform } from "@/hooks/use-platform";
 import { MapPin, Calendar, Users, Trophy, MessageCircle, Settings, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Index = () => {
+  const { isAndroid } = usePlatform();
   const features = [
     {
       title: "Mappa Romanisti",
@@ -100,7 +102,25 @@ const Index = () => {
             </p>
           </div>
           <div className="md:h-[500px] rounded-lg overflow-hidden shadow-roma border border-border/50">
-            <RomaMap />
+            {isAndroid ? (
+              <div className="h-full flex items-center justify-center bg-muted/20 p-8">
+                <div className="text-center max-w-md">
+                  <MapPin className="h-16 w-16 mx-auto mb-4 text-muted-foreground/50" />
+                  <h3 className="text-xl font-semibold text-foreground mb-2">
+                    Mappa non disponibile su Android
+                  </h3>
+                  <p className="text-muted-foreground mb-4">
+                    La mappa interattiva è temporaneamente disabilitata sui dispositivi Android per test.
+                    Utilizza un dispositivo iOS o desktop per l'esperienza completa.
+                  </p>
+                  <Button asChild variant="outline">
+                    <Link to="/mappa">Visita la pagina mappa dedicata</Link>
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <RomaMap />
+            )}
           </div>
         </div>
 

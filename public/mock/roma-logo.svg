@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-labelledby="title desc">
+  <title id="title">Roma Logo Placeholder</title>
+  <desc id="desc">Placeholder image for Roma logo in mock assets.</desc>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7a1e1e"/>
+      <stop offset="100%" stop-color="#b22222"/>
+    </linearGradient>
+    <style>
+      .frame{fill:#f5c451;opacity:.9}
+      .text{font:700 48px/1.2 'Inter',system-ui,Segoe UI,Roboto,Arial;fill:#0b0b0b}
+      .sub{font:500 18px/1.2 'Inter',system-ui,Segoe UI,Roboto,Arial;fill:#1a1a1a}
+    </style>
+  </defs>
+  <rect width="800" height="450" fill="url(#g)"/>
+  <rect x="24" y="24" width="752" height="402" rx="18" class="frame"/>
+  <g transform="translate(40,80)">
+    <circle cx="70" cy="70" r="60" fill="#7a1e1e" stroke="#0b0b0b" stroke-width="4"/>
+    <text x="160" y="70" class="text">AS Roma</text>
+    <text x="160" y="110" class="sub">Mock asset • roma-logo.svg</text>
+  </g>
+</svg>

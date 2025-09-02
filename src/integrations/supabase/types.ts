@@ -58,6 +58,52 @@ export type Database = {
           venue?: string | null
         }
         Relationships: []
+      },
+      // Added for MVP: articles/posts
+      articles: {
+        Row: {
+          id: string
+          created_at: string
+          title: string
+          content: string | null
+          post_type: 'text' | 'image' | 'video'
+          cover_url: string | null
+          media_urls: string[] | null
+          author: string | null
+          published_at: string | null
+          views: number | null
+          tags: string[] | null
+          status: 'published' | 'draft' | null
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          title: string
+          content?: string | null
+          post_type?: 'text' | 'image' | 'video'
+          cover_url?: string | null
+          media_urls?: string[] | null
+          author?: string | null
+          published_at?: string | null
+          views?: number | null
+          tags?: string[] | null
+          status?: 'published' | 'draft' | null
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          title?: string
+          content?: string | null
+          post_type?: 'text' | 'image' | 'video'
+          cover_url?: string | null
+          media_urls?: string[] | null
+          author?: string | null
+          published_at?: string | null
+          views?: number | null
+          tags?: string[] | null
+          status?: 'published' | 'draft' | null
+        }
+        Relationships: []
       }
     }
     Views: {

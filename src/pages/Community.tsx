@@ -12,23 +12,7 @@ const Community = () => {
       
       <div className="grid gap-6">
         <div className="grid md:grid-cols-3 gap-6">
-          <Card className="shadow-glow border-border/50">
-            <CardHeader>
-              <CardTitle className="text-roma-gold flex items-center gap-2">
-                <Users className="h-5 w-5" />
-                Forum
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground mb-4">
-                Discuti con altri tifosi romanisti da tutto il mondo
-              </p>
-              <Button asChild variant="secondary" className="w-full">
-                <Link to="/forum">Entra nel Forum</Link>
-              </Button>
-            </CardContent>
-          </Card>
-          
+        
           <Card className="shadow-glow border-border/50">
             <CardHeader>
               <CardTitle className="text-roma-gold flex items-center gap-2">
@@ -69,16 +53,17 @@ const Community = () => {
             <CardHeader>
               <CardTitle className="text-roma-gold flex items-center gap-2">
                 <Info className="h-5 w-5" />
-                Info Forum
+                Info Community
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                Scopri come funziona il forum e le regole della community
+                Scopri come funziona la community e le regole di partecipazione
               </p>
-              <Button asChild variant="secondary" className="w-full">
-                <Link to="/about-forum">Info Forum</Link>
-              </Button>
+        -              <Button asChild variant="secondary" className="w-full">
+        -                <Link to="/about-forum">Info Forum</Link>
+        -              </Button>
+        +              <Button variant="secondary" className="w-full">Linee guida</Button>
             </CardContent>
           </Card>
           
@@ -141,6 +126,7 @@ const Community = () => {
             </div>
           </CardContent>
         </Card>
++        {/* Forum feed removed */}
       </div>
     </div>
   );

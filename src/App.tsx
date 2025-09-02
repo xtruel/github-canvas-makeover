@@ -10,9 +10,9 @@ import Eventi from "./pages/Eventi";
 import Community from "./pages/Community";
 import Trofei from "./pages/Trofei";
 import Impostazioni from "./pages/Impostazioni";
-import Forum from "./pages/Forum";
+// Removed Forum
 import Articles from "./pages/Articles";
-import AboutForum from "./pages/AboutForum";
+// Removed AboutForum
 import Upload from "./pages/Upload";
 import NotFound from "./pages/NotFound";
 
@@ -30,9 +30,7 @@ const App = () => (
             <Route path="/mappa" element={<Mappa />} />
             <Route path="/eventi" element={<Eventi />} />
             <Route path="/community" element={<Community />} />
-            <Route path="/forum" element={<Forum />} />
             <Route path="/articles" element={<Articles />} />
-            <Route path="/about-forum" element={<AboutForum />} />
             <Route path="/upload" element={<Upload />} />
             <Route path="/trofei" element={<Trofei />} />
             <Route path="/impostazioni" element={<Impostazioni />} />

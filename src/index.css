@@ -17,16 +17,17 @@ All colors MUST be HSL.
     --popover: 20 30% 8%;
     --popover-foreground: 41 89% 89%;
 
-    --primary: 15 75% 50%;
+    /* Brand mapping */
+    --primary: var(--roma-red);
     --primary-foreground: 41 89% 89%;
 
-    --secondary: 41 89% 89%;
+    --secondary: var(--roma-gold);
     --secondary-foreground: 15 25% 6%;
 
     --muted: 25 35% 12%;
     --muted-foreground: 41 60% 70%;
 
-    --accent: 41 89% 89%;
+    --accent: var(--roma-yellow);
     --accent-foreground: 15 25% 6%;
 
     --destructive: 0 84.2% 60.2%;
@@ -34,32 +35,32 @@ All colors MUST be HSL.
 
     --border: 25 35% 15%;
     --input: 25 35% 15%;
-    --ring: 15 75% 50%;
+    --ring: var(--roma-gold);
 
-    /* Roma Brand Colors */
-    --roma-red: 15 75% 50%;
-    --roma-yellow: 41 89% 89%;
-    --roma-gold: 45 95% 68%;
+    /* Roma Brand Colors (AS Roma) */
+    --roma-red: 342 74% 31%;     /* #8A1538 */
+    --roma-yellow: 46 100% 55%;  /* giallo acceso per hover/highlight */
+    --roma-gold: 48 100% 51%;    /* #FFCB05 */
     --roma-dark: 15 25% 6%;
     
     /* Gradients */
-    --gradient-roma: linear-gradient(135deg, hsl(var(--roma-red)), hsl(41 89% 65%));
+    --gradient-roma: linear-gradient(135deg, hsl(var(--roma-red)), hsl(var(--roma-gold)));
     --gradient-dark: linear-gradient(180deg, hsl(var(--roma-dark)), hsl(25 35% 12%));
     
     /* Shadows */
-    --shadow-roma: 0 10px 30px -10px hsl(var(--roma-red) / 0.3);
-    --shadow-glow: 0 0 40px hsl(var(--roma-red) / 0.2);
+    --shadow-roma: 0 10px 30px -10px hsl(var(--roma-red) / 0.35);
+    --shadow-glow: 0 0 40px hsl(var(--roma-red) / 0.25);
 
     --radius: 0.5rem;
 
-    --sidebar-background: 15 75% 50%;
+    --sidebar-background: var(--roma-red);
     --sidebar-foreground: 41 89% 89%;
-    --sidebar-primary: 45 95% 68%;
+    --sidebar-primary: var(--roma-gold);
     --sidebar-primary-foreground: 15 25% 6%;
-    --sidebar-accent: 15 75% 45%;
+    --sidebar-accent: 342 74% 26%;
     --sidebar-accent-foreground: 41 89% 89%;
-    --sidebar-border: 15 75% 40%;
-    --sidebar-ring: 45 95% 68%;
+    --sidebar-border: 342 74% 28%;
+    --sidebar-ring: var(--roma-gold);
 
     /* Viewport dynamic fallback values (will be updated by viewport.ts) */
     --app-height: 100vh; /* fallback before JS runs */
@@ -67,6 +68,7 @@ All colors MUST be HSL.
   }
 
   .dark {
+    /* manteniamo le stesse mapping in dark */
     --background: 15 25% 6%;
     --foreground: 41 89% 89%;
 
@@ -76,16 +78,16 @@ All colors MUST be HSL.
     --popover: 20 30% 8%;
     --popover-foreground: 41 89% 89%;
 
-    --primary: 15 75% 50%;
+    --primary: var(--roma-red);
     --primary-foreground: 41 89% 89%;
 
-    --secondary: 41 89% 89%;
+    --secondary: var(--roma-gold);
     --secondary-foreground: 15 25% 6%;
 
     --muted: 25 35% 12%;
     --muted-foreground: 41 60% 70%;
 
-    --accent: 41 89% 89%;
+    --accent: var(--roma-yellow);
     --accent-foreground: 15 25% 6%;
 
     --destructive: 0 62.8% 30.6%;
@@ -93,15 +95,15 @@ All colors MUST be HSL.
 
     --border: 25 35% 15%;
     --input: 25 35% 15%;
-    --ring: 15 75% 50%;
-    --sidebar-background: 15 75% 50%;
+    --ring: var(--roma-gold);
+    --sidebar-background: var(--roma-red);
     --sidebar-foreground: 41 89% 89%;
-    --sidebar-primary: 45 95% 68%;
+    --sidebar-primary: var(--roma-gold);
     --sidebar-primary-foreground: 15 25% 6%;
-    --sidebar-accent: 15 75% 45%;
+    --sidebar-accent: 342 74% 26%;
     --sidebar-accent-foreground: 41 89% 89%;
-    --sidebar-border: 15 75% 40%;
-    --sidebar-ring: 45 95% 68%;
+    --sidebar-border: 342 74% 28%;
+    --sidebar-ring: var(--roma-gold);
   }
 }
 
@@ -115,7 +117,7 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
   }
 }
 

@@ -81,14 +81,14 @@ const Index = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild size="lg" className="bg-[hsl(var(--roma-yellow))] text-black hover:brightness-110 shadow-roma">
+            <Button asChild size="lg" variant="secondary" className="text-black shadow-roma">
               <Link to="/eventi">Ultimi Eventi</Link>
             </Button>
             <Button
               asChild
               size="lg"
               variant="outline"
-              className="border-white/80 text-white hover:bg-white hover:text-[hsl(var(--roma-red))] shadow-none"
+              className="border-white text-white hover:bg-white hover:text-[hsl(var(--roma-red))] shadow-none"
             >
               <Link to="/community">Entra nella Community</Link>
             </Button>

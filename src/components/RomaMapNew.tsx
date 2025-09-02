@@ -5,6 +5,7 @@ import { places, Place } from '../data/places';
 // Environment
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN as string | undefined;
 const MAP_STYLE = (import.meta.env.VITE_MAPBOX_STYLE as string) || 'mapbox://styles/mapbox/streets-v12';
+const GOOGLE_PLACES_KEY = import.meta.env.VITE_GOOGLE_PLACES_KEY as string | undefined;
 
 // We'll load mapbox-gl lazily only if needed
 type MapboxModule = typeof import('mapbox-gl');
@@ -19,7 +20,8 @@ const categoryStyles: Record<string, { colorClass: string; label: string }> = {
   Sport: { colorClass: 'bg-red-600', label: 'Sport' },
   Club: { colorClass: 'bg-yellow-600', label: 'Club' },
   Ritrovo: { colorClass: 'bg-rose-600', label: 'Ritrovo' },
-  Natura: { colorClass: 'bg-green-600', label: 'Natura' }
+  Natura: { colorClass: 'bg-green-600', label: 'Natura' },
+  Rione: { colorClass: 'bg-amber-800', label: 'Rione' }
 };
 
 interface MarkerHandle {
@@ -43,6 +45,9 @@ const RomaMapNew: React.FC = () => {
   const [activeCategories, setActiveCategories] = useState<Set<string>>( 
     () => new Set(Array.from(new Set(places.map(p => p.category).filter(Boolean) as string[])))
   );
+  // Cache per foto Google: place.id -> url
+  const [photoById, setPhotoById] = useState<Record<string, string>>({});
+  const [coordsById, setCoordsById] = useState<Record<string, [number, number]>>({});
   const [errorMessage, setErrorMessage] = useState<string | null>(
     !MAPBOX_TOKEN ? 'Mapbox token assente. Imposta VITE_MAPBOX_TOKEN.' : null
   );
@@ -57,8 +62,22 @@ const RomaMapNew: React.FC = () => {
 
   const toggleCategory = (cat: string) => {
     setActiveCategories(prev => {
+      const allCount = allCategories.length;
+      // Se tutte le categorie sono attive, il primo click isola solo quella scelta
+      if (prev.size === allCount) {
+        return new Set([cat]);
+      }
+      // Comportamento toggle multi-selezione
       const next = new Set(prev);
-      next.has(cat) ? next.delete(cat) : next.add(cat);
+      if (next.has(cat)) {
+        next.delete(cat);
+        // Se nessuna rimane selezionata, ripristina tutte
+        if (next.size === 0) {
+          return new Set(allCategories);
+        }
+        return next;
+      }
+      next.add(cat);
       return next;
     });
   };
@@ -97,9 +116,11 @@ const RomaMapNew: React.FC = () => {
     (async () => {
       try {
         const mod = await import('mapbox-gl');
+        // mapbox-gl ESM exports a default; ensure we set accessToken on the default export
+        const mapbox: any = (mod as any)?.default ?? (mod as any);
         if (cancelled) return;
-        mapboxglRef = mod;
-        mapboxglRef.accessToken = MAPBOX_TOKEN;
+        mapbox.accessToken = MAPBOX_TOKEN;
+        mapboxglRef = mapbox;
         setLibLoaded(true);
       } catch (err: any) {
         if (!cancelled) setErrorMessage(err?.message || 'Impossibile caricare la libreria Mapbox');
@@ -108,6 +129,39 @@ const RomaMapNew: React.FC = () => {
     return () => { cancelled = true; };
   }, [shouldLoadLib, libLoaded]);
 
+  // Geocoding: ottieni coordinate per luoghi senza coords (Google Places)
+  const fetchPlaceCoords = useCallback(async (place: Place): Promise<[number, number] | null> => {
+    if (!GOOGLE_PLACES_KEY) return null;
+    try {
+      const resp = await fetch('https://places.googleapis.com/v1/places:searchText', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Goog-Api-Key': GOOGLE_PLACES_KEY,
+          'X-Goog-FieldMask': 'places.location,places.displayName'
+        },
+        body: JSON.stringify({
+          textQuery: `${place.name}, Roma`,
+          locationBias: {
+            rectangle: {
+              low: { latitude: 41.77, longitude: 12.35 },
+              high: { latitude: 42.02, longitude: 12.65 }
+            }
+          }
+        })
+      });
+      if (!resp.ok) return null;
+      const data: any = await resp.json();
+      const loc = data?.places?.[0]?.location;
+      if (loc?.longitude != null && loc?.latitude != null) {
+        return [Number(loc.longitude), Number(loc.latitude)];
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }, []);
+
   // Build markers
   const buildMarkers = useCallback(() => {
     if (!mapRef.current || !mapboxglRef) return;
@@ -115,22 +169,41 @@ const RomaMapNew: React.FC = () => {
     markersRef.current = [];
 
     searchFiltered.forEach(place => {
+      const coords = (place.coords as [number, number] | undefined) || coordsById[place.id];
+      if (!coords) {
+        if (GOOGLE_PLACES_KEY) {
+          fetchPlaceCoords(place).then(res => {
+            if (res) setCoordsById(prev => ({ ...prev, [place.id]: res }));
+          });
+        }
+        return; // skip finché non abbiamo coords
+      }
+
       const btn = document.createElement('button');
       const cat = place.category || 'Altro';
       const meta = categoryStyles[cat] || { colorClass: 'bg-red-700', label: cat };
       btn.type = 'button';
+      btn.style.cursor = 'pointer';
       btn.className = [
         'group rounded-full border border-white/70 shadow-md w-7 h-7 flex items-center justify-center',
         'focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black',
         'transition-transform hover:scale-110',
         selected?.id === place.id ? 'ring-2 ring-white ring-offset-2 ring-offset-black scale-110' : ''
       ].join(' ');
+      const dot = document.createElement('span');
+      dot.className = [
+        'block w-3.5 h-3.5 rounded-full border border-white',
+        meta.colorClass,
+        'shadow-[0_0_0_1.5px_rgba(0,0,0,0.2)]'
+      ].join(' ');
+      btn.appendChild(dot);
+
       btn.setAttribute('aria-label', place.name);
       btn.tabIndex = 0;
       btn.addEventListener('click', () => {
         setSelected(place);
         requestAnimationFrame(() => {
-          mapRef.current?.flyTo({ center: place.coords, zoom: 14, speed: 0.8, essential: true });
+          mapRef.current?.flyTo({ center: coords, zoom: 14, speed: 0.8, essential: true });
         });
       });
       btn.addEventListener('keydown', e => {
@@ -139,10 +212,10 @@ const RomaMapNew: React.FC = () => {
           btn.click();
         }
       });
-      const marker = new mapboxglRef!.Marker(btn).setLngLat(place.coords).addTo(mapRef.current);
+      const marker = new mapboxglRef!.Marker(btn).setLngLat(coords).addTo(mapRef.current);
       markersRef.current.push({ place, marker, element: btn });
     });
-  }, [searchFiltered, selected]);
+  }, [searchFiltered, selected, coordsById, fetchPlaceCoords]);
 
   // Init map after lib load
   useEffect(() => {
@@ -214,7 +287,8 @@ const RomaMapNew: React.FC = () => {
             setSelected(place);
             setSearchQuery(place.name);
             setHighlightIndex(-1);
-            mapRef.current?.flyTo({ center: place.coords, zoom: 14, speed: 0.9 });
+            const coords = (place.coords as [number, number] | undefined) || coordsById[place.id];
+            if (coords) mapRef.current?.flyTo({ center: coords, zoom: 14, speed: 0.9 });
         }
       }
     };
@@ -226,7 +300,8 @@ const RomaMapNew: React.FC = () => {
     setSelected(place);
     setSearchQuery(place.name);
     setHighlightIndex(-1);
-    mapRef.current?.flyTo({ center: place.coords, zoom: 14, speed: 0.9 });
+    const coords = (place.coords as [number, number] | undefined) || coordsById[place.id];
+    if (coords) mapRef.current?.flyTo({ center: coords, zoom: 14, speed: 0.9 });
     inputRef.current?.blur();
   };
 
@@ -235,6 +310,51 @@ const RomaMapNew: React.FC = () => {
     setHighlightIndex(-1);
     inputRef.current?.focus();
   };
+
+  // Recupera una foto da Google Places quando selezioni un luogo senza immagine nativa
+  const fetchPlacePhoto = useCallback(async (place: Place): Promise<string | null> => {
+    if (!GOOGLE_PLACES_KEY) return null;
+    try {
+      const resp = await fetch('https://places.googleapis.com/v1/places:searchText', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Goog-Api-Key': GOOGLE_PLACES_KEY,
+          'X-Goog-FieldMask': 'places.photos,places.displayName'
+        },
+        body: JSON.stringify({
+          textQuery: `${place.name}, Roma`,
+          locationBias: {
+            rectangle: {
+              low: { latitude: 41.77, longitude: 12.35 },
+              high: { latitude: 42.02, longitude: 12.65 }
+            }
+          }
+        })
+      });
+      if (!resp.ok) return null;
+      const data: any = await resp.json();
+      const photoName = data?.places?.[0]?.photos?.[0]?.name;
+      if (!photoName) return null;
+      return `https://places.googleapis.com/v1/${photoName}/media?maxWidthPx=800&key=${GOOGLE_PLACES_KEY}`;
+    } catch {
+      return null;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!selected) return;
+    const existing = selected.image || photoById[selected.id];
+    if (existing) return;
+    (async () => {
+      const url = await fetchPlacePhoto(selected);
+      if (url) setPhotoById(prev => ({ ...prev, [selected.id]: url }));
+    })();
+  }, [selected, photoById, fetchPlacePhoto]);
+
+  const selectedImageUrl = selected?.image
+    ? (selected.image.startsWith('http') ? selected.image : `${import.meta.env.BASE_URL.replace(/\/$/, '/')}${selected.image.replace(/^\//, '')}`)
+    : (selected ? photoById[selected.id] : undefined);
 
   const missingToken = !MAPBOX_TOKEN;
   const showMapViewport = !missingToken && shouldLoadLib;
@@ -252,10 +372,14 @@ const RomaMapNew: React.FC = () => {
       {missingToken && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-4 text-center bg-background/85 backdrop-blur">
           <img
-            src="/mock/stadium-olimpico.jpg"
+            src={`${import.meta.env.BASE_URL}mock/stadium-olimpico.svg`}
             alt="Mappa statica di Roma - fallback"
             className="w-full h-48 object-cover rounded shadow"
             loading="lazy"
+            onError={(e) => {
+              const t = e.target as HTMLImageElement;
+              t.src = `${import.meta.env.BASE_URL}placeholder.svg`;
+            }}
           />
           <p className="text-[11px] md:text-sm text-muted-foreground">
             Token Mapbox assente. Aggiungi VITE_MAPBOX_TOKEN per l'interattività.
@@ -337,28 +461,30 @@ const RomaMapNew: React.FC = () => {
             </div>
           </div>
 
-          <div className="pointer-events-auto rounded-md bg-background/80 backdrop-blur p-2 border border-border/60 shadow">
-            <p className="text-[10px] font-medium mb-1 uppercase tracking-wide text-muted-foreground">Filtra categorie</p>
-            <div className="flex flex-wrap gap-1">
-              {allCategories.map(cat => {
-                const active = activeCategories.has(cat);
-                const meta = categoryStyles[cat] || { colorClass: 'bg-slate-600', label: cat };
-                return (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => toggleCategory(cat)}
-                    className={[
-                      'px-2 py-1 rounded text-[11px] leading-none font-medium transition border',
-                      active
-                        ? `${meta.colorClass} text-white border-white/30`
-                        : 'bg-background/60 text-foreground border-border/60 hover:bg-background/80'
-                    ].join(' ')}
-                    aria-pressed={active}
-                    disabled={!isLoaded}
-                  >{meta.label}</button>
-                );
-              })}
+          <div className="pointer-events-auto origin-top-left scale-[0.6]">
+            <div className="rounded-md bg-background/80 backdrop-blur p-2 border border-border/60 shadow">
+              <p className="text-[10px] font-medium mb-1 uppercase tracking-wide text-muted-foreground">Filtra categorie</p>
+              <div className="flex flex-col gap-1">
+                {allCategories.map(cat => {
+                  const active = activeCategories.has(cat);
+                  const meta = categoryStyles[cat] || { colorClass: 'bg-slate-600', label: cat };
+                  return (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => toggleCategory(cat)}
+                      className={[
+                        'w-full px-2 py-1 rounded text-[11px] leading-none font-medium transition border text-left',
+                        active
+                          ? `${meta.colorClass} text-white border-white/30`
+                          : 'bg-background/60 text-foreground border-border/60 hover:bg-background/80'
+                      ].join(' ')}
+                      aria-pressed={active}
+                      disabled={!isLoaded}
+                    >{meta.label}</button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
@@ -371,8 +497,8 @@ const RomaMapNew: React.FC = () => {
             <button onClick={() => setSelected(null)} className="text-xs px-2 py-1 rounded bg-foreground text-background hover:opacity-80">Chiudi</button>
           </div>
           <div className="px-4 pb-4 overflow-y-auto custom-scrollbar">
-            {selected.image && (
-              <img src={selected.image} alt={selected.name} className="w-full h-40 object-cover rounded mb-3" />
+            {selectedImageUrl && (
+              <img src={selectedImageUrl} alt={selected.name} className="w-full h-40 object-cover rounded mb-3" />
             )}
             <p className="text-sm leading-relaxed text-muted-foreground mb-3">{selected.description}</p>
             {selected.category && (
@@ -392,8 +518,8 @@ const RomaMapNew: React.FC = () => {
               <h3 className="text-base font-semibold">{selected?.name}</h3>
               <button onClick={() => setSelected(null)} className="text-[10px] px-2 py-1 rounded bg-foreground text-background">Chiudi</button>
             </div>
-            {selected?.image && (
-              <img src={selected.image} alt={selected.name} className="w-full h-36 object-cover rounded mb-3" />
+            {selectedImageUrl && (
+              <img src={selectedImageUrl} alt={selected.name} className="w-full h-36 object-cover rounded mb-3" />
             )}
             <p className="text-[13px] leading-relaxed text-muted-foreground mb-2">{selected?.description}</p>
             {selected?.category && (

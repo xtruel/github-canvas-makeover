@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-labelledby="title desc">
+  <title id="title">Stadio Olimpico Placeholder</title>
+  <desc id="desc">Placeholder image for Stadio Olimpico in mock assets.</desc>
+  <defs>
+    <style>
+      .bg{fill:#0f172a}
+      .ring{fill:none;stroke:#f5c451;stroke-width:8}
+      .text{font:700 40px/1.2 'Inter',system-ui,Segoe UI,Roboto,Arial;fill:#f5c451}
+      .sub{font:500 18px/1.2 'Inter',system-ui,Segoe UI,Roboto,Arial;fill:#e5e7eb}
+    </style>
+  </defs>
+  <rect width="800" height="450" class="bg"/>
+  <circle cx="400" cy="225" r="160" class="ring"/>
+  <text x="50" y="80" class="text">Stadio Olimpico</text>
+  <text x="50" y="115" class="sub">mock/stadium-olimpico.svg</text>
+</svg>

@@ -11,9 +11,11 @@ export function Layout({ children }: LayoutProps) {
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
         <div className="flex-1 flex flex-col">
-          <header className="h-16 flex items-center border-b border-border/50 bg-card/50 backdrop-blur-sm">
-            <SidebarTrigger className="ml-4 text-roma-gold hover:text-roma-yellow" />
-            <h1 className="ml-4 text-xl font-bold text-roma-gold">Ovunque Romanisti</h1>
+          <header className="sticky top-0 z-50 h-16 flex items-center bg-gradient-roma text-white shadow-roma">
+            <SidebarTrigger className="ml-4 text-white hover:text-[hsl(var(--roma-gold))]" />
+            <h1 className="ml-4 text-xl font-bold uppercase tracking-wide">
+              Ovunque Romanisti
+            </h1>
           </header>
           <main className="flex-1 overflow-auto">
             {children}

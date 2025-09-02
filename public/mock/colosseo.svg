@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-labelledby="title desc">
+  <title id="title">Colosseo Placeholder</title>
+  <desc id="desc">Placeholder image for the Colosseum.</desc>
+  <defs>
+    <style>
+      .bg{fill:#111827}
+      .arch{fill:#f5c451}
+      .text{font:700 40px/1.2 'Inter',system-ui,Segoe UI,Roboto,Arial;fill:#f5c451}
+      .sub{font:500 18px/1.2 'Inter',system-ui,Segoe UI,Roboto,Arial;fill:#e5e7eb}
+    </style>
+  </defs>
+  <rect width="800" height="450" class="bg"/>
+  <g transform="translate(140,170)" fill="#f5c451">
+    <rect width="520" height="80" rx="10" class="arch"/>
+    <rect y="-50" width="520" height="40" rx="8" class="arch" opacity=".8"/>
+    <rect y="-90" width="520" height="30" rx="6" class="arch" opacity=".6"/>
+  </g>
+  <text x="40" y="80" class="text">Colosseo</text>
+  <text x="40" y="115" class="sub">mock/colosseo.svg</text>
+</svg>

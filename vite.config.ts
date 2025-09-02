@@ -19,4 +19,5 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  base: process.env.BASE_URL || "/", // base per GitHub Pages o custom domain
 }));

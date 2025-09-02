@@ -9,12 +9,15 @@ function fail(msg) {
   process.exit(1);
 }
 
-// Relax requirements only for deploy-preview so previews build even if token is missing.
+// Permettiamo di saltare il check in CI/GitHub Actions o quando esplicitamente richiesto
+const skip = process.env.SKIP_MAPBOX_CHECK === '1' || process.env.GITHUB_ACTIONS === 'true';
+
+// Relax requirements solo se in preview o se skip attivo
 if (!token || token === 'REPLACE_ME_WITH_ENV_TOKEN' || token === 'REPLACE_ME') {
-  if (context === 'deploy-preview') {
-    console.warn('[build] WARNING: VITE_MAPBOX_TOKEN mancante nel deploy-preview. La mappa mostrerà un errore a runtime, ma la build continua.');
+  if (context === 'deploy-preview' || skip) {
+    console.warn('[build] WARNING: VITE_MAPBOX_TOKEN mancante (preview/CI). La mappa mostrerà un errore a runtime, ma la build continua.');
   } else {
-    fail('Missing or placeholder VITE_MAPBOX_TOKEN. Imposta la variabile ambiente (Netlify) o aggiungila al file .env prima della build.');
+    fail('Missing or placeholder VITE_MAPBOX_TOKEN. Imposta la variabile ambiente o aggiungila al file .env prima della build.');
   }
 } else {
   if (!token.startsWith('pk.')) {

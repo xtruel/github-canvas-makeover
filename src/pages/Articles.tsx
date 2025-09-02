@@ -14,7 +14,7 @@ const Articles = () => {
       publishedDate: "2024-01-15",
       readTime: "8 min",
       views: 1247,
-      imageUrl: "/mock/roma-logo.jpg",
+      imageUrl: `${import.meta.env.BASE_URL}mock/roma-logo.svg`,
       category: "Tattica",
       featured: true
     },
@@ -27,7 +27,7 @@ const Articles = () => {
       publishedDate: "2024-01-14",
       readTime: "12 min",
       views: 2156,
-      imageUrl: "/mock/totti-celebration.jpg",
+      imageUrl: `${import.meta.env.BASE_URL}mock/totti-celebration.svg`,
       category: "Interviste",
       featured: false
     },
@@ -40,7 +40,7 @@ const Articles = () => {
       publishedDate: "2024-01-13",
       readTime: "6 min",
       views: 892,
-      imageUrl: "/mock/stadium-olimpico.jpg",
+      imageUrl: `${import.meta.env.BASE_URL}mock/stadium-olimpico.svg`,
       category: "Stadio",
       featured: false
     },
@@ -53,7 +53,7 @@ const Articles = () => {
       publishedDate: "2024-01-12",
       readTime: "10 min",
       views: 3421,
-      imageUrl: "/mock/roma-fans-2.jpg",
+      imageUrl: `${import.meta.env.BASE_URL}mock/roma-fans-2.svg`,
       category: "Interviste",
       featured: true
     },
@@ -66,7 +66,7 @@ const Articles = () => {
       publishedDate: "2024-01-11",
       readTime: "15 min",
       views: 1876,
-      imageUrl: "/mock/roma-fans-1.jpg",
+      imageUrl: `${import.meta.env.BASE_URL}mock/roma-fans-1.svg`,
       category: "Storia",
       featured: false
     },
@@ -79,7 +79,7 @@ const Articles = () => {
       publishedDate: "2024-01-10",
       readTime: "14 min",
       views: 2987,
-      imageUrl: "/mock/roma-logo.jpg",
+      imageUrl: `${import.meta.env.BASE_URL}mock/roma-logo.svg`,
       category: "Interviste",
       featured: false
     }
@@ -226,7 +226,7 @@ const Articles = () => {
                     className="w-full h-32 object-cover"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      target.src = "/placeholder.svg";
+                      target.src = `${import.meta.env.BASE_URL}placeholder.svg`;
                     }}
                   />
                   <Badge className={`absolute top-2 left-2 text-xs ${getBadgeColor(article.category)}`}>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-labelledby="title desc">
+  <title id="title">Roma Fans 2 Placeholder</title>
+  <desc id="desc">Placeholder image representing Roma supporters variant 2.</desc>
+  <defs>
+    <linearGradient id="g" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f5c451"/>
+      <stop offset="100%" stop-color="#7a1e1e"/>
+    </linearGradient>
+    <style>
+      .text{font:700 40px/1.2 'Inter',system-ui,Segoe UI,Roboto,Arial;fill:#111}
+      .sub{font:500 18px/1.2 'Inter',system-ui,Segoe UI,Roboto,Arial;fill:#222}
+    </style>
+  </defs>
+  <rect width="800" height="450" fill="url(#g)"/>
+  <text x="40" y="80" class="text">Roma Fans 2</text>
+  <text x="40" y="115" class="sub">mock/roma-fans-2.svg</text>
+</svg>

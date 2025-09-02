@@ -19,7 +19,7 @@ export const places: Place[] = [
     coords: [12.4922, 41.8902],
     description: 'Anfiteatro simbolo di Roma imperiale e degli spettacoli gladiatori.',
     category: 'Storico',
-    image: '/mock/colosseo.jpg'
+    image: '/mock/colosseo.svg'
   },
   {
     id: 'foro_romano',
@@ -125,5 +125,41 @@ export const places: Place[] = [
     coords: [12.4768, 41.9109],
     description: 'Ampia piazza monumentale e punto di incontro cittadino.',
     category: 'Ritrovo'
+  },
+  // Nuovi luoghi (immagini prese da Google al click, se configurato VITE_GOOGLE_PLACES_KEY)
+  {
+    id: 'trastevere',
+    name: 'Trastevere',
+    coords: [12.4683, 41.8897],
+    description: 'Quartiere pittoresco tra vicoli, locali e atmosfera romana autentica.',
+    category: 'Ritrovo'
+  },
+  {
+    id: 'villa_borghese',
+    name: 'Villa Borghese',
+    coords: [12.4861, 41.9147],
+    description: 'Grande parco cittadino con laghetti, musei e aree verdi.',
+    category: 'Natura'
+  },
+  {
+    id: 'piazza_venezia',
+    name: 'Piazza Venezia',
+    coords: [12.4829, 41.8969],
+    description: 'Snodo centrale dominato dall’Altare della Patria.',
+    category: 'Storico'
+  },
+  {
+    id: 'campo_de_fiori',
+    name: "Campo de' Fiori",
+    coords: [12.4722, 41.8956],
+    description: 'Piazza vivace con mercato diurno e locali serali.',
+    category: 'Ritrovo'
+  },
+  {
+    id: 'san_giovanni_laterano',
+    name: 'Basilica di San Giovanni in Laterano',
+    coords: [12.5057, 41.8859],
+    description: 'Cattedrale di Roma, tra le quattro basiliche papali.',
+    category: 'Religioso'
   }
 ];

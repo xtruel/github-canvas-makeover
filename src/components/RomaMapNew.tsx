@@ -7,6 +7,10 @@ import { places, Place } from '../data/places';
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || 'REPLACE_ME_WITH_ENV_TOKEN';
 mapboxgl.accessToken = MAPBOX_TOKEN;
 
+// Allow overriding the style via env var; fallback to a public, always-available style
+// (streets-v12 is stable and ideal for connectivity tests)
+const MAP_STYLE = (import.meta.env.VITE_MAPBOX_STYLE as string) || 'mapbox://styles/mapbox/streets-v12';
+
 // Category color metadata
 const categoryStyles: Record<string, { colorClass: string; label: string }> = {
   Storico: { colorClass: 'bg-amber-600', label: 'Storico' },
@@ -34,6 +38,11 @@ const RomaMapNew: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [selected, setSelected] = useState<Place | null>(null);
   const [activeCategories, setActiveCategories] = useState<Set<string>>(() => new Set(Array.from(new Set(places.map(p => p.category).filter(Boolean) as string[]))));
+
+  // Simple error state
+  const [errorMessage, setErrorMessage] = useState<string | null>(
+    MAPBOX_TOKEN.includes('REPLACE_ME_WITH_ENV_TOKEN') ? 'Token Mapbox mancante. Imposta VITE_MAPBOX_TOKEN.' : null
+  );
 
   // Search
   const [searchQuery, setSearchQuery] = useState('');
@@ -82,7 +91,6 @@ const RomaMapNew: React.FC = () => {
         'group rounded-full border border-white/70 shadow-md w-7 h-7 flex items-center justify-center',
         'focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-black',
         'transition-transform hover:scale-110',
-        meta.colorClass,
         selected?.id === place.id ? 'ring-2 ring-white ring-offset-2 ring-offset-black scale-110' : ''
       ].join(' ');
       btn.setAttribute('aria-label', place.name);
@@ -106,27 +114,37 @@ const RomaMapNew: React.FC = () => {
 
   // Init map once
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) return;
-    mapRef.current = new mapboxgl.Map({
-      container: containerRef.current,
-      style: 'mapbox://styles/furieromane/cmeeejl8900iu01s62io48hha',
-      center: [12.4922, 41.8902], // Central Rome
-      zoom: 11,
-      pitchWithRotate: false,
-      dragRotate: false,
-      attributionControl: true
-    });
+    if (!containerRef.current || mapRef.current || errorMessage) return;
 
-    mapRef.current.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right');
-
-    mapRef.current.once('load', () => setIsLoaded(true));
-  }, []);
+    try {
+      mapRef.current = new mapboxgl.Map({
+        container: containerRef.current,
+        style: MAP_STYLE,
+        center: [12.4922, 41.8902], // Central Rome
+        zoom: 11,
+        pitchWithRotate: false,
+        dragRotate: false,
+        attributionControl: true
+      });
+      mapRef.current.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right');
+      mapRef.current.once('load', () => setIsLoaded(true));
+      mapRef.current.on('error', (e) => {
+        // Mapbox sometimes emits { error: { message }}
+        const msg = (e?.error && (e.error.message || e.error.statusText)) || 'Errore generico caricamento mappa';
+        console.error('Mapbox error:', msg, e);
+        if (!errorMessage) setErrorMessage(msg);
+      });
+    } catch (err: any) {
+      console.error('Map init failed', err);
+      setErrorMessage(err?.message || 'Impossibile inizializzare la mappa');
+    }
+  }, [errorMessage]);
 
   // Rebuild markers when loaded / filters / search / selected highlight changes
   useEffect(() => {
-    if (!isLoaded) return;
+    if (!isLoaded || errorMessage) return;
     buildMarkers();
-  }, [isLoaded, buildMarkers]);
+  }, [isLoaded, buildMarkers, errorMessage]);
 
   // Resize handling for mobile orientation / container size
   useEffect(() => {
@@ -164,11 +182,11 @@ const RomaMapNew: React.FC = () => {
       } else if (e.key === 'Enter') {
         if (highlightIndex >= 0 && highlightIndex < suggestions.length) {
           e.preventDefault();
-            const place = suggestions[highlightIndex];
-            setSelected(place);
-            setSearchQuery(place.name);
-            setHighlightIndex(-1);
-            mapRef.current?.flyTo({ center: place.coords, zoom: 14, speed: 0.9 });
+          const place = suggestions[highlightIndex];
+          setSelected(place);
+          setSearchQuery(place.name);
+          setHighlightIndex(-1);
+          mapRef.current?.flyTo({ center: place.coords, zoom: 14, speed: 0.9 });
         }
       }
     };
@@ -193,9 +211,31 @@ const RomaMapNew: React.FC = () => {
   return (
     <div className="relative w-full h-[60vh] min-h-[420px] rounded-lg overflow-hidden border border-border/50 shadow-roma bg-muted">
       <div ref={containerRef} className="absolute inset-0" />
-      {!isLoaded && (
+      {!isLoaded && !errorMessage && (
         <div className="absolute inset-0 flex items-center justify-center text-xs md:text-sm text-muted-foreground backdrop-blur-sm bg-background/40">
           Caricamento mappa...
+        </div>
+      )}
+      {errorMessage && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center text-[11px] md:text-sm bg-background/85 backdrop-blur">
+          <p className="font-semibold">Errore mappa</p>
+          <p className="text-muted-foreground break-words max-w-xs">{errorMessage}</p>
+          <div className="flex gap-2">
+            {!MAPBOX_TOKEN.includes('REPLACE_ME_WITH_ENV_TOKEN') && (
+              <button
+                className="px-3 py-1 rounded bg-foreground text-background text-xs hover:opacity-80"
+                onClick={() => { setErrorMessage(null); mapRef.current?.reload(); }}
+              >Riprova</button>
+            )}
+            {MAPBOX_TOKEN.includes('REPLACE_ME_WITH_ENV_TOKEN') && (
+              <a
+                className="px-3 py-1 rounded bg-foreground text-background text-xs hover:opacity-80"
+                target="_blank" rel="noopener noreferrer"
+                href="https://account.mapbox.com/access-tokens/"
+              >Crea token</a>
+            )}
+          </div>
+          <p className="text-[10px] text-muted-foreground">Style: {MAP_STYLE}</p>
         </div>
       )}
 
@@ -210,8 +250,9 @@ const RomaMapNew: React.FC = () => {
               value={searchQuery}
               onChange={e => { setSearchQuery(e.target.value); setHighlightIndex(-1); }}
               placeholder="Cerca luogo..."
-              className="w-full h-8 px-2 pr-7 rounded-md text-[12px] md:text-[13px] bg-background/80 backdrop-blur border border-border/60 focus:outline-none focus:ring-1 focus:ring-foreground/60 placeholder:text-muted-foreground/60"
+              className="w-full h-8 px-2 pr-7 rounded-md text-[12px] md:text-[13px] bg-background/80 backdrop-blur border border-border/60 focus:outline-none focus:ring-1 focus:ring-foreground/60"
               aria-label="Cerca luogo sulla mappa"
+              disabled={!!errorMessage}
             />
             {searchQuery && (
               <button
@@ -220,7 +261,7 @@ const RomaMapNew: React.FC = () => {
                 className="absolute right-1 top-1 text-[10px] px-1 rounded bg-foreground/80 text-background hover:bg-foreground"
               >×</button>
             )}
-            {suggestions.length > 0 && (
+            {suggestions.length > 0 && !errorMessage && (
               <ul
                 ref={suggestionsRef}
                 className="absolute mt-1 left-0 right-0 rounded-md overflow-hidden border border-border/60 bg-background/95 backdrop-blur shadow-xl text-[12px] max-h-56 overflow-y-auto z-10"
@@ -234,12 +275,24 @@ const RomaMapNew: React.FC = () => {
                         type="button"
                         onClick={() => onSelectSuggestion(p)}
                         onMouseEnter={() => setHighlightIndex(i)}
-                        className={[ 'flex w-full items-center justify-between gap-2 px-2 py-1 text-left transition', i === highlightIndex ? 'bg-foreground text-background' : 'hover:bg-muted/70' ].join(' ')}
+                        className={[
+                          'flex w-full items-center justify-between gap-2 px-2 py-1 text-left transition',
+                          i === highlightIndex ? 'bg-foreground text-background' : 'hover:bg-muted/70'
+                        ].join(' ')}
                         role="option"
                         aria-selected={i === highlightIndex}
                       >
                         <span className="truncate">{p.name}</span>
-                        {meta && <span className={[ 'text-[10px] font-medium px-1.5 py-0.5 rounded', i === highlightIndex ? 'bg-background text-foreground' : 'bg-foreground text-background' ].join(' ')}>{meta.label}</span>}
+                        {meta && (
+                          <span
+                            className={[
+                              'text-[10px] font-medium px-1.5 py-0.5 rounded',
+                              i === highlightIndex ? 'bg-background text-foreground' : 'bg-foreground text-background'
+                            ].join(' ')}
+                          >
+                            {meta.label}
+                          </span>
+                        )}
                       </button>
                     </li>
                   );
@@ -261,8 +314,14 @@ const RomaMapNew: React.FC = () => {
                   key={cat}
                   type="button"
                   onClick={() => toggleCategory(cat)}
-                  className={[ 'px-2 py-1 rounded text-[11px] leading-none font-medium transition border', active ? `${meta.colorClass} text-white border-white/30` : 'bg-background/60 text-foreground/70 hover:text-foreground border-border/50' ].join(' ')}
+                  className={[
+                    'px-2 py-1 rounded text-[11px] leading-none font-medium transition border',
+                    active
+                      ? `${meta.colorClass} text-white border-white/30`
+                      : 'bg-background/60 text-foreground border-border/60 hover:bg-background/80'
+                  ].join(' ')}
                   aria-pressed={active}
+                  disabled={!!errorMessage}
                 >{meta.label}</button>
               );
             })}
@@ -271,8 +330,8 @@ const RomaMapNew: React.FC = () => {
       </div>
 
       {/* Desktop side panel */}
-      {selected && (
-        <div className="hidden md:flex flex-col absolute top-0 right-0 h-full w-[340px] bg-gradient-to-br from-background/95 to-background/85 backdrop-blur-lg border-l border-border/50 shadow-xl pointer-events-auto animate-in slide-in-from-right duration-300" role="dialog" aria-label={selected.name}>
+      {selected && !errorMessage && (
+        <div className="hidden md:flex flex-col absolute top-0 right-0 h-full w-[340px] bg-gradient-to-br from-background/95 to-background/85 backdrop-blur-lg border-l border-border/50 shadow-xl">
           <div className="p-4 flex items-start justify-between gap-4">
             <h3 className="text-lg font-semibold">{selected.name}</h3>
             <button onClick={() => setSelected(null)} className="text-xs px-2 py-1 rounded bg-foreground text-background hover:opacity-80">Chiudi</button>
@@ -290,7 +349,10 @@ const RomaMapNew: React.FC = () => {
       )}
 
       {/* Mobile bottom sheet */}
-      <div className={[ 'md:hidden pointer-events-none absolute left-0 right-0 bottom-0 px-2 pb-[env(safe-area-inset-bottom)] transition-transform duration-300', selected ? 'translate-y-0' : 'translate-y-[110%]' ].join(' ')} aria-hidden={!selected}>
+      <div className={[
+        'md:hidden pointer-events-none absolute left-0 right-0 bottom-0 px-2 pb-[env(safe-area-inset-bottom)] transition-transform duration-300',
+        selected && !errorMessage ? 'translate-y-0' : 'translate-y-[calc(100%_-_44px)]'
+      ].join(' ')}>
         <div className="pointer-events-auto rounded-t-xl border border-border/60 bg-background/95 backdrop-blur p-4 shadow-roma">
           <div className="flex items-start justify-between mb-2">
             <h3 className="text-base font-semibold">{selected?.name}</h3>
@@ -308,7 +370,7 @@ const RomaMapNew: React.FC = () => {
 
       {/* Footer hint */}
       <div className="absolute bottom-2 left-2 text-[10px] md:text-xs px-2 py-1 rounded bg-background/70 backdrop-blur border border-border/50 text-muted-foreground pointer-events-none">
-        Tocca un marcatore o cerca un luogo. Dati statici demo.
+        {errorMessage ? 'Impossibile caricare la mappa.' : 'Tocca un marcatore o cerca un luogo. Dati statici demo.'}
       </div>
     </div>
   );

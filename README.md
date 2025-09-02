@@ -207,35 +207,46 @@ curl -X POST http://localhost:4000/media/<assetId>/finalize \
 
 ---
 ## 8. Mapbox Map Integration (Frontend)
-The interactive map (component `RomaMapNew`) uses Mapbox GL JS.
+The interactive map (component `RomaMapNew`) uses Mapbox GL JS with a custom Roma-themed style.
 
 ### Env Variables (Vite)
 Create a `.env` in project root (or set in Netlify) with:
 ```
 VITE_MAPBOX_TOKEN=pk.YOUR_PUBLIC_MAPBOX_TOKEN
-# Optional: override style (default streets-v12)
-VITE_MAPBOX_STYLE=mapbox://styles/mapbox/streets-v12
+# Optional: override style (default is now custom Roma style)
+VITE_MAPBOX_STYLE=mapbox://styles/furieromane/cmeeejl8900iu01s62io48hha
 ```
+
+**Default Style**: The map now uses a custom Roma-themed style (`mapbox://styles/furieromane/cmeeejl8900iu01s62io48hha`) by default, instead of the previous `streets-v12`.
 
 Only variables prefixed with `VITE_` are exposed to the frontend.
 
 ### Local Run
-1. Copy `.env.example` → `.env` and fill the token.
-2. `npm run dev` → map should load.
+1. Copy `.env.example` → `.env` (it now contains a sample public token for immediate usage).
+2. `npm run dev` → map should load with the custom style.
+
+### Custom Style Instructions
+To create your own custom Mapbox style:
+1. Go to [Mapbox Studio](https://studio.mapbox.com/)
+2. Create a new style or customize an existing one
+3. Make the style public (required for the provided public token)
+4. Copy the style URL (format: `mapbox://styles/username/style_id`)
+5. Set `VITE_MAPBOX_STYLE` to your custom style URL
 
 ### Netlify Deployment Notes
 - Add the same variables in Site settings → Build & deploy → Environment.
+- **Important**: For production, consider rotating the token provided in `.env.example` and setting your own in Netlify environment variables.
 - Trigger a new deploy after adding/changing them.
-- If you see endless "Caricamento mappa...": open DevTools → Network → check for 401 on `api.mapbox.com/styles/v1/...`.
+- If you see endless loading with spinner: open DevTools → Network → check for 401/403/404 on `api.mapbox.com/styles/v1/...`.
 - Ensure the token has at least: Styles: Read, Tilesets: Read (default public token already has these).
 
 ### Troubleshooting
 | Symptom | Cause | Fix |
 | ------- | ----- | --- |
-| 401 Unauthorized | Bad token / domain restricted | Use default public token or update restrictions |
-| 403 Style not public | Custom style private | Make style public or switch to `streets-v12` |
-| 404 Style not found | Typo in style ID | Correct `VITE_MAPBOX_STYLE` |
-| Placeholder token string visible | Env var missing at build | Ensure `VITE_MAPBOX_TOKEN` set before deploy |
+| 401 Unauthorized | Bad token / domain restricted | Use provided public token or update restrictions |
+| 403 Style not public | Custom style private | Make style public or use default style |
+| 404 Style not found | Typo in style ID | Correct `VITE_MAPBOX_STYLE` or remove to use default |
+| Token missing error | Env var missing | Ensure `VITE_MAPBOX_TOKEN` set before deploy |
 
 ---
 ## 9. Preview / Deployment Notes

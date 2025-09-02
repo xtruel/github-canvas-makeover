@@ -4,12 +4,33 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { places, Place } from '../data/places';
 
 // Mapbox token from env (do not hardcode production keys)
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || 'REPLACE_ME_WITH_ENV_TOKEN';
-mapboxgl.accessToken = MAPBOX_TOKEN;
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN as string | undefined;
 
-// Allow overriding the style via env var; fallback to a public, always-available style
-// (streets-v12 is stable and ideal for connectivity tests)
-const MAP_STYLE = (import.meta.env.VITE_MAPBOX_STYLE as string) || 'mapbox://styles/mapbox/streets-v12';
+// Set custom style as default with override option
+const DEFAULT_MAP_STYLE = 'mapbox://styles/furieromane/cmeeejl8900iu01s62io48hha';
+const MAP_STYLE = import.meta.env.VITE_MAPBOX_STYLE || DEFAULT_MAP_STYLE;
+
+// Only set access token if we have one
+if (MAPBOX_TOKEN) {
+  mapboxgl.accessToken = MAPBOX_TOKEN;
+}
+
+// Helper function to format Mapbox errors with specific status codes
+const formatMapboxError = (error: unknown): string => {
+  const anyError = error as any;
+  const status = anyError?.status || anyError?.statusCode;
+  
+  switch (status) {
+    case 401:
+      return 'Token non valido o scaduto (401)';
+    case 403:
+      return 'Stile privato o accesso negato (403)';
+    case 404:
+      return 'Stile non trovato (404)';
+    default:
+      return anyError?.message || anyError?.statusText || 'Errore generico caricamento mappa';
+  }
+};
 
 // Category color metadata
 const categoryStyles: Record<string, { colorClass: string; label: string }> = {
@@ -39,9 +60,9 @@ const RomaMapNew: React.FC = () => {
   const [selected, setSelected] = useState<Place | null>(null);
   const [activeCategories, setActiveCategories] = useState<Set<string>>(() => new Set(Array.from(new Set(places.map(p => p.category).filter(Boolean) as string[]))));
 
-  // Simple error state
+  // Simple error state - check for missing token upfront
   const [errorMessage, setErrorMessage] = useState<string | null>(
-    MAPBOX_TOKEN.includes('REPLACE_ME_WITH_ENV_TOKEN') ? 'Token Mapbox mancante. Imposta VITE_MAPBOX_TOKEN.' : null
+    !MAPBOX_TOKEN ? 'Token Mapbox mancante (VITE_MAPBOX_TOKEN non impostato).' : null
   );
 
   // Search
@@ -116,6 +137,13 @@ const RomaMapNew: React.FC = () => {
   useEffect(() => {
     if (!containerRef.current || mapRef.current || errorMessage) return;
 
+    // Debug logging in development
+    if (import.meta.env.DEV && MAPBOX_TOKEN) {
+      console.log(`[Mapbox Debug] Token prefix: ${MAPBOX_TOKEN.substring(0, 10)}...`);
+      console.log(`[Mapbox Debug] Style: ${MAP_STYLE}`);
+      console.log(`[Mapbox Debug] Initializing map...`);
+    }
+
     try {
       mapRef.current = new mapboxgl.Map({
         container: containerRef.current,
@@ -126,17 +154,32 @@ const RomaMapNew: React.FC = () => {
         dragRotate: false,
         attributionControl: true
       });
+      
       mapRef.current.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right');
-      mapRef.current.once('load', () => setIsLoaded(true));
-      mapRef.current.on('error', (e) => {
-        // Mapbox sometimes emits { error: { message }}
-        const msg = (e?.error && (e.error.message || e.error.statusText)) || 'Errore generico caricamento mappa';
-        console.error('Mapbox error:', msg, e);
-        if (!errorMessage) setErrorMessage(msg);
+      
+      mapRef.current.once('load', () => {
+        if (import.meta.env.DEV) {
+          console.log('[Mapbox Debug] Map loaded successfully');
+        }
+        setIsLoaded(true);
       });
-    } catch (err: any) {
+      
+      mapRef.current.on('error', (e) => {
+        const formattedError = formatMapboxError(e?.error);
+        console.error('Mapbox error:', formattedError, e);
+        if (!errorMessage) {
+          setErrorMessage(formattedError);
+          // Dispose of partial map on severe errors
+          if (e?.error?.status && [401, 403, 404].includes(e.error.status)) {
+            mapRef.current?.remove();
+            mapRef.current = null;
+          }
+        }
+      });
+    } catch (err: unknown) {
       console.error('Map init failed', err);
-      setErrorMessage(err?.message || 'Impossibile inizializzare la mappa');
+      const errorObj = err as any;
+      setErrorMessage(errorObj?.message || 'Impossibile inizializzare la mappa');
     }
   }, [errorMessage]);
 
@@ -212,7 +255,8 @@ const RomaMapNew: React.FC = () => {
     <div className="relative w-full h-[60vh] min-h-[420px] rounded-lg overflow-hidden border border-border/50 shadow-roma bg-muted">
       <div ref={containerRef} className="absolute inset-0" />
       {!isLoaded && !errorMessage && (
-        <div className="absolute inset-0 flex items-center justify-center text-xs md:text-sm text-muted-foreground backdrop-blur-sm bg-background/40">
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-xs md:text-sm text-muted-foreground backdrop-blur-sm bg-background/40">
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-foreground border-t-transparent mb-2"></div>
           Caricamento mappa...
         </div>
       )}
@@ -221,13 +265,26 @@ const RomaMapNew: React.FC = () => {
           <p className="font-semibold">Errore mappa</p>
           <p className="text-muted-foreground break-words max-w-xs">{errorMessage}</p>
           <div className="flex gap-2">
-            {!MAPBOX_TOKEN.includes('REPLACE_ME_WITH_ENV_TOKEN') && (
+            {MAPBOX_TOKEN && (
               <button
                 className="px-3 py-1 rounded bg-foreground text-background text-xs hover:opacity-80"
-                onClick={() => { setErrorMessage(null); mapRef.current?.reload(); }}
+                onClick={() => { 
+                  setErrorMessage(null); 
+                  setIsLoaded(false);
+                  // If map exists, try to reload, otherwise let useEffect re-initialize
+                  if (mapRef.current) {
+                    try {
+                      mapRef.current.reload();
+                    } catch {
+                      // If reload fails, remove and re-initialize
+                      mapRef.current.remove();
+                      mapRef.current = null;
+                    }
+                  }
+                }}
               >Riprova</button>
             )}
-            {MAPBOX_TOKEN.includes('REPLACE_ME_WITH_ENV_TOKEN') && (
+            {!MAPBOX_TOKEN && (
               <a
                 className="px-3 py-1 rounded bg-foreground text-background text-xs hover:opacity-80"
                 target="_blank" rel="noopener noreferrer"
@@ -236,6 +293,9 @@ const RomaMapNew: React.FC = () => {
             )}
           </div>
           <p className="text-[10px] text-muted-foreground">Style: {MAP_STYLE}</p>
+          {import.meta.env.DEV && MAPBOX_TOKEN && (
+            <p className="text-[10px] text-muted-foreground">Token: {MAPBOX_TOKEN.substring(0, 10)}...</p>
+          )}
         </div>
       )}
 

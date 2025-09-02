@@ -21,6 +21,11 @@ if (style && !style.startsWith('mapbox://styles/')) {
 }
 
 console.log('[build] Mapbox token present (length: ' + token.length + ').');
+if (!style) {
+  console.log('[build] Using default custom style: mapbox://styles/furieromane/cmeeejl8900iu01s62io48hha');
+} else {
+  console.log('[build] Using custom style:', style);
+}
 console.log('[build] Env check passed. Proceeding with Vite build...');
 // Optionally you could add a lightweight fetch to validate the style endpoint, but
 // that would slow down builds and consume a request. Keeping it simple.

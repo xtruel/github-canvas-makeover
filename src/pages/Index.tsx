@@ -4,8 +4,11 @@ import { RomaMatches } from "@/components/RomaMatches";
 import RomaMap from "@/components/RomaMap";
 import { MapPin, Calendar, Users, Trophy, MessageCircle, Settings, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useMobilePlatform } from "@/hooks/useMobilePlatform";
 
 const Index = () => {
+  const isMobilePlatform = useMobilePlatform();
+  
   const features = [
     {
       title: "Mappa Romanisti",
@@ -100,7 +103,22 @@ const Index = () => {
             </p>
           </div>
           <div className="md:h-[500px] rounded-lg overflow-hidden shadow-roma border border-border/50">
-            <RomaMap />
+            {isMobilePlatform ? (
+              // Mobile placeholder to maintain layout consistency
+              <div className="h-full w-full bg-gradient-to-br from-roma-red/10 to-roma-gold/10 flex flex-col items-center justify-center p-8 text-center">
+                <MapPin className="h-16 w-16 text-roma-gold mb-4" />
+                <h3 className="text-xl font-bold text-foreground mb-2">Mappa Roma Giallorossa</h3>
+                <p className="text-muted-foreground mb-4">
+                  La mappa interattiva è ottimizzata per dispositivi desktop.
+                </p>
+                <Button asChild variant="outline" className="border-roma-gold text-roma-gold hover:bg-roma-gold hover:text-white">
+                  <Link to="/mappa">Visualizza Mappa Completa</Link>
+                </Button>
+              </div>
+            ) : (
+              // Desktop: Show full interactive map
+              <RomaMap />
+            )}
           </div>
         </div>
 

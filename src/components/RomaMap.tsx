@@ -32,8 +32,8 @@ const RomaMap = () => {
   const [activeFilters, setActiveFilters] = useState<string[]>(['historical', 'pub', 'club', 'neighborhood', 'stadium', 'roma-men', 'roma-women']);
   const markers = useRef<mapboxgl.Marker[]>([]);
 
-  // Token Mapbox
-  const MAPBOX_TOKEN = 'pk.eyJ1IjoiZnVyaWVyb21hbmUiLCJhIjoiY21lanVmMWVnMDFsdjJrczc2Mm12Y3QyNyJ9.J1I-1msTs5pOeccQAuQ4yg';
+  // Token Mapbox from environment variable
+  const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
   // Luoghi di Roma (data unchanged)
   const romaPlaces = [

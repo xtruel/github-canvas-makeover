@@ -60,11 +60,8 @@ const Community = () => {
               <p className="text-muted-foreground mb-4">
                 Scopri come funziona la community e le regole di partecipazione
               </p>
-        -              <Button asChild variant="secondary" className="w-full">
-        -                <Link to="/about-forum">Info Forum</Link>
-        -              </Button>
-        +              <Button variant="secondary" className="w-full">Linee guida</Button>
-            </CardContent>
+              <Button variant="secondary" className="w-full">Linee guida</Button>
+        </CardContent>
           </Card>
           
           <Card className="shadow-glow border-border/50">

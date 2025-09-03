@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, MessageCircle, Heart, FileText, Info, Upload } from "lucide-react";
+import { Heart, FileText, Info, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Community = () => {
@@ -64,22 +64,7 @@ const Community = () => {
         </CardContent>
           </Card>
           
-          <Card className="shadow-glow border-border/50">
-            <CardHeader>
-              <CardTitle className="text-roma-gold flex items-center gap-2">
-                <MessageCircle className="h-5 w-5" />
-                Chat Live
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground mb-4">
-                Chat in tempo reale durante le partite
-              </p>
-              <Button variant="secondary" className="w-full">
-                Accedi alla Chat
-              </Button>
-            </CardContent>
-          </Card>
+          {/* Chat Live rimossa su richiesta */}
           
           <Card className="shadow-glow border-border/50">
             <CardHeader>
@@ -123,7 +108,6 @@ const Community = () => {
             </div>
           </CardContent>
         </Card>
-+        {/* Forum feed removed */}
       </div>
     </div>
   );

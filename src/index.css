@@ -144,4 +144,9 @@ All colors MUST be HSL.
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  /* Hide Mapbox logo and attribution */
+  .mapboxgl-ctrl-logo {
+    display: none !important;
+  }
 }

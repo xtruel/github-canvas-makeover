@@ -13,15 +13,15 @@ let mapboxglRef: MapboxModule | null = null;
 
 // Category color metadata
 const categoryStyles: Record<string, { colorClass: string; label: string }> = {
-  Storico: { colorClass: 'bg-amber-600', label: 'Storico' },
-  Monumento: { colorClass: 'bg-orange-600', label: 'Monumento' },
+  Storico: { colorClass: 'bg-[hsl(var(--roma-pompeiano))]', label: 'Storico' },
+  Monumento: { colorClass: 'bg-[hsl(var(--roma-pompeiano))]', label: 'Monumento' },
   Arte: { colorClass: 'bg-purple-600', label: 'Arte' },
   Religioso: { colorClass: 'bg-indigo-600', label: 'Religioso' },
   Sport: { colorClass: 'bg-red-600', label: 'Sport' },
   Club: { colorClass: 'bg-yellow-600', label: 'Club' },
   Ritrovo: { colorClass: 'bg-rose-600', label: 'Ritrovo' },
   Natura: { colorClass: 'bg-green-600', label: 'Natura' },
-  Rione: { colorClass: 'bg-amber-800', label: 'Rione' }
+  Rione: { colorClass: 'bg-[hsl(var(--roma-pompeiano))]', label: 'Rione' }
 };
 
 interface MarkerHandle {

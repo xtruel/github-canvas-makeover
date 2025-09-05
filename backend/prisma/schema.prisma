@@ -7,62 +7,34 @@ generator client {
   provider = "prisma-client-js"
 }
 
-enum UserRole {
-  USER
-  ADMIN
-}
-
-enum MediaType {
-  IMAGE
-  VIDEO
-}
-
-enum MediaStatus {
-  PENDING
-  READY
-}
-
-enum ArticleStatus {
-  DRAFT
-  PUBLISHED
-}
-
-enum PostType {
-  TEXT
-  IMAGE
-  VIDEO
-}
-
-enum PostStatus {
-  PUBLISHED
-  HIDDEN
-}
+// Enums removed for SQLite compatibility
 
 model User {
   id             String          @id @default(cuid())
   email          String          @unique
   name           String?
-  role           UserRole       @default(USER)
+  role           String          @default("USER")
   passwordHash   String?
-  articles       Article[]
+  // articles     Article[]      // removed to avoid missing back relation
   posts          CommunityPost[]
+  comments       Comment[]
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
 }
 
 model MediaAsset {
-  id             String          @id @default(cuid())
-  type           MediaType
-  status         MediaStatus    @default(PENDING)
-  originalPath   String
-  originalUrl    String
-  mimeType       String
-  width          Int?
-  height         Int?
+  id              String          @id @default(cuid())
+  type            String
+  status          String          @default("PENDING")
+  originalPath    String
+  originalUrl     String
+  mimeType        String
+  width           Int?
+  height          Int?
   durationSeconds Int?
-  createdAt      DateTime       @default(now())
-  articleCover   Article[]       @relation("ArticleCover")
-  posts          CommunityPost[]
+  createdAt       DateTime       @default(now())
+  articleCover    Article[]       @relation("ArticleCover")
+  posts           CommunityPost[]
 }
 
 model Article {
@@ -70,25 +42,38 @@ model Article {
   title          String
   body           String
   slug           String          @unique
-  status         ArticleStatus   @default(DRAFT)
+  status         String          @default("DRAFT")
   language       String
   coverMediaId   String?
   coverMedia     MediaAsset?     @relation("ArticleCover", fields: [coverMediaId], references: [id])
   publishedAt    DateTime?
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
+  comments       Comment[]
 }
 
 model CommunityPost {
   id             String          @id @default(cuid())
-  userId        String
+  userId         String
   user           User            @relation(fields: [userId], references: [id])
-  type           PostType
+  type           String
   title          String
   body           String?
-  mediaId       String?
-  media          MediaAsset?     
-  status         PostStatus      @default(PUBLISHED)
+  mediaId        String?
+  media          MediaAsset?     @relation(fields: [mediaId], references: [id])
+  status         String          @default("PUBLISHED")
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
+}
+
+model Comment {
+  id         String   @id @default(cuid())
+  articleId  String
+  article    Article  @relation(fields: [articleId], references: [id])
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+  authorName String
+  body       String
+  createdAt  DateTime @default(now())
+  status     String   @default("PENDING")
 }

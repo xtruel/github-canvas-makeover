@@ -1,9 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart, FileText, Info, Upload } from "lucide-react";
+import { Heart, FileText, Info, Upload, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Community = () => {
+  const { role } = useAuth();
+  const isAdmin = role === 'ADMIN';
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-8 text-roma-gold">
@@ -33,81 +37,41 @@ const Community = () => {
           <Card className="shadow-glow border-border/50">
             <CardHeader>
               <CardTitle className="text-roma-gold flex items-center gap-2">
-                <Upload className="h-5 w-5" />
-                Carica Contenuti
+                {isAdmin ? <Upload className="h-5 w-5" /> : <Lock className="h-5 w-5" />}
+                {isAdmin ? 'Pubblica Articoli' : 'Area Riservata'}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                Condividi i tuoi momenti romanisti con la community
+                {isAdmin ? 'Carica e pubblica contenuti per la community' : 'Solo l\'amministratore può pubblicare articoli. Se sei l\'admin, accedi dall\'area riservata.'}
               </p>
-              <Button asChild variant="secondary" className="w-full">
-                <Link to="/upload">Carica Contenuti</Link>
-              </Button>
+              {isAdmin ? (
+                <Button asChild className="w-full">
+                  <Link to="/upload">Vai a Upload</Link>
+                </Button>
+              ) : (
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="/__admin_only__">Accedi Area Riservata</Link>
+                </Button>
+              )}
             </CardContent>
           </Card>
-        </div>
-        
-        <div className="grid md:grid-cols-3 gap-6">
+
           <Card className="shadow-glow border-border/50">
             <CardHeader>
               <CardTitle className="text-roma-gold flex items-center gap-2">
                 <Info className="h-5 w-5" />
-                Info Community
+                Linee guida
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                Scopri come funziona la community e le regole di partecipazione
+                Partecipa con rispetto: niente insulti, spam o contenuti fuori tema.
               </p>
-              <Button variant="secondary" className="w-full">Linee guida</Button>
-        </CardContent>
-          </Card>
-          
-          {/* Chat Live rimossa su richiesta */}
-          
-          <Card className="shadow-glow border-border/50">
-            <CardHeader>
-              <CardTitle className="text-roma-gold flex items-center gap-2">
-                <Heart className="h-5 w-5" />
-                Foto & Video
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground mb-4">
-                Condividi i tuoi momenti romanisti
-              </p>
-              <Button asChild variant="secondary" className="w-full">
-                <Link to="/upload">Carica Contenuti</Link>
-              </Button>
+              <Button variant="secondary" className="w-full">Scopri di più</Button>
             </CardContent>
           </Card>
         </div>
-        
-        <Card className="shadow-roma border-border/50">
-          <CardHeader>
-            <CardTitle className="text-primary">Ultime dal Forum</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {[
-                { autore: "RomanistaDoc", messaggio: "Che partita incredibile ieri sera! Daje Roma!", tempo: "2 ore fa" },
-                { autore: "GialloRosso92", messaggio: "Chi viene al raduno di domenica a Milano?", tempo: "4 ore fa" },
-                { autore: "CapitanTotti", messaggio: "Nostalgia per i bei tempi... Forza Roma sempre!", tempo: "6 ore fa" }
-              ].map((post, index) => (
-                <div key={index} className="border-b border-border/50 pb-4 last:border-0 last:pb-0">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <p className="text-roma-gold font-medium">{post.autore}</p>
-                      <p className="text-muted-foreground">{post.messaggio}</p>
-                    </div>
-                    <span className="text-sm text-roma-yellow/60">{post.tempo}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );

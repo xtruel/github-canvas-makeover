@@ -145,20 +145,34 @@ All colors MUST be HSL.
     display: none;
   }
 
-  /* Hide Mapbox logo and attribution */
-  /* Rimuovi completamente il logo Mapbox */
-.mapboxgl-ctrl-logo {
+  /* Hide Mapbox logo and attribution - DEFINITIVO */
+  /* Rimuovi completamente il logo Mapbox con tutti i selettori possibili */
+.mapboxgl-ctrl-logo,
+a.mapboxgl-ctrl-logo,
+.mapbox-logo,
+.mapboxgl-ctrl-bottom-left .mapboxgl-ctrl-logo,
+.mapboxgl-ctrl-bottom-right .mapboxgl-ctrl-logo,
+.mapboxgl-ctrl-group .mapboxgl-ctrl-logo {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
   width: 0 !important;
   height: 0 !important;
   pointer-events: none !important;
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
 }
 
-/* Rimuovi anche eventuali contenitori del logo */
-.mapboxgl-ctrl-bottom-left .mapboxgl-ctrl-logo,
-.mapboxgl-ctrl-bottom-right .mapboxgl-ctrl-logo {
+/* Nascondi anche i contenitori dei controlli se contengono solo il logo */
+.mapboxgl-ctrl-bottom-left:has(.mapboxgl-ctrl-logo),
+.mapboxgl-ctrl-bottom-right:has(.mapboxgl-ctrl-logo) {
   display: none !important;
+}
+
+/* Fallback per browser che non supportano :has() */
+.mapboxgl-ctrl-bottom-left,
+.mapboxgl-ctrl-bottom-right {
+  opacity: 0 !important;
 }
 }

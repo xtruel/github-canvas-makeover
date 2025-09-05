@@ -228,7 +228,7 @@ const RomaMapNew: React.FC = () => {
         zoom: 11,
         pitchWithRotate: false,
         dragRotate: false,
-        attributionControl: true
+        attributionControl: false
       });
       mapRef.current.addControl(new mapboxglRef.NavigationControl({ showCompass: false }), 'bottom-right');
       mapRef.current.once('load', () => setIsLoaded(true));
@@ -409,7 +409,7 @@ const RomaMapNew: React.FC = () => {
                 value={searchQuery}
                 onChange={e => { setSearchQuery(e.target.value); setHighlightIndex(-1); }}
                 placeholder="Cerca luogo..."
-                className="w-full h-8 px-2 pr-7 rounded-md text-[12px] md:text-[13px] bg-background/80 backdrop-blur border border-border/60 focus:outline-none focus:ring-1 focus:ring-foreground/60"
+                className="w-full h-8 px-2 pr-7 rounded-md text-[12px] md:text-[13px] text-center bg-background/80 backdrop-blur border border-border/60 focus:outline-none focus:ring-1 focus:ring-foreground/60"
                 aria-label="Cerca luogo sulla mappa"
                 disabled={!isLoaded}
               />

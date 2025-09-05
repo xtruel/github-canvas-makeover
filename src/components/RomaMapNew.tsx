@@ -461,7 +461,7 @@ const RomaMapNew: React.FC = () => {
             </div>
           </div>
 
-          <div className="pointer-events-auto origin-top-left scale-[0.6]">
+          <div className="pointer-events-auto origin-top-left scale-[0.642]">
             <div className="rounded-md bg-background/80 backdrop-blur p-2 border border-border/60 shadow">
               <p className="text-[10px] font-medium mb-1 uppercase tracking-wide text-muted-foreground">Filtra categorie</p>
               <div className="flex flex-col gap-1">

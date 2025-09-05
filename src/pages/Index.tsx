@@ -167,26 +167,26 @@ const Index = () => {
         </div>
 
         {/* Stats Section */}
-        <Card className="shadow-roma border-border/50 bg-gradient-to-r from-[hsl(var(--roma-red))]/20 to-[hsl(var(--roma-gold))]/20">
+        <Card className="bg-gradient-to-r from-[hsl(var(--roma-red))] from-50% to-[hsl(var(--roma-gold))] to-50% text-white shadow-roma border-none">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl text-roma-gold mb-4">Forza Roma Sempre</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-3 gap-8 text-center">
-              <div>
-                <div className="text-3xl font-bold text-roma-gold">1927</div>
-                <div className="text-muted-foreground">Fondata</div>
+              <CardTitle className="text-2xl text-white mb-4">Forza Roma Sempre</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-3 gap-8 text-center">
+                <div>
+                  <div className="text-3xl font-bold text-white">1927</div>
+                  <div className="text-white/80">Fondata</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-white">3</div>
+                  <div className="text-white/80">Scudetti</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-white">∞</div>
+                  <div className="text-white/80">Passione</div>
+                </div>
               </div>
-              <div>
-                <div className="text-3xl font-bold text-roma-yellow">3</div>
-                <div className="text-muted-foreground">Scudetti</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-roma-gold">∞</div>
-                <div className="text-muted-foreground">Passione</div>
-              </div>
-            </div>
-          </CardContent>
+            </CardContent>
         </Card>
       </div>
     </div>

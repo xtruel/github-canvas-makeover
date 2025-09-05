@@ -37,15 +37,15 @@ All colors MUST be HSL.
     --input: 25 35% 15%;
     --ring: var(--roma-gold);
 
-    /* Roma Brand Colors (AS Roma) */
-    --roma-red: 342 74% 31%;     /* #8A1538 */
+    /* Roma Brand Colors (AS Roma) - Pantone Ufficiali */
+    --roma-red: 342 100% 28%;    /* Rosso Roma 202 C - RGB(142,0,28) */
     --roma-yellow: 46 100% 55%;  /* giallo acceso per hover/highlight */
-    --roma-gold: 45 100% 50%;    /* Giallo oro - #FFD700 */
+    --roma-gold: 51 100% 50%;    /* Giallo Roma 130 C - RGB(255,179,0) */
     --roma-pompeiano: 9 85% 45%; /* Rosso pompeiano - #CC4125 */
     --roma-dark: 15 25% 6%;
     
     /* Gradients */
-    --gradient-roma: linear-gradient(135deg, hsl(var(--roma-red)), hsl(var(--roma-gold)));
+    --gradient-roma: linear-gradient(135deg, hsl(342 100% 28%), hsl(51 100% 50%));
     --gradient-dark: linear-gradient(180deg, hsl(var(--roma-dark)), hsl(25 35% 12%));
     
     /* Shadows */

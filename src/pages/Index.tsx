@@ -60,9 +60,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section with Roma Gradient */}
-      <div className="relative bg-gradient-roma text-white py-20 px-4">
-        <div className="absolute inset-0 bg-black/10" />
+      {/* Hero Section with Roma Official Colors */}
+      <div className="relative bg-[hsl(var(--roma-red))] text-white py-20 px-4">
+        <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--roma-red))] to-[hsl(var(--roma-gold))] opacity-90" />
         <div className="container relative mx-auto text-center">
           <div className="mb-8">
             <img
@@ -167,7 +167,7 @@ const Index = () => {
         </div>
 
         {/* Stats Section */}
-        <Card className="shadow-roma border-border/50 bg-gradient-to-r from-roma-red/10 to-roma-gold/10">
+        <Card className="shadow-roma border-border/50 bg-gradient-to-r from-[hsl(var(--roma-red))]/20 to-[hsl(var(--roma-gold))]/20">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl text-roma-gold mb-4">Forza Roma Sempre</CardTitle>
           </CardHeader>

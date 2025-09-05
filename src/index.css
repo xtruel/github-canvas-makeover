@@ -145,34 +145,45 @@ All colors MUST be HSL.
     display: none;
   }
 
-  /* Hide Mapbox logo and attribution - DEFINITIVO */
-  /* Rimuovi completamente il logo Mapbox con tutti i selettori possibili */
-.mapboxgl-ctrl-logo,
-a.mapboxgl-ctrl-logo,
-.mapbox-logo,
-.mapboxgl-ctrl-bottom-left .mapboxgl-ctrl-logo,
-.mapboxgl-ctrl-bottom-right .mapboxgl-ctrl-logo,
-.mapboxgl-ctrl-group .mapboxgl-ctrl-logo {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  width: 0 !important;
-  height: 0 !important;
-  pointer-events: none !important;
-  position: absolute !important;
-  left: -9999px !important;
-  top: -9999px !important;
-}
-
-/* Nascondi anche i contenitori dei controlli se contengono solo il logo */
-.mapboxgl-ctrl-bottom-left:has(.mapboxgl-ctrl-logo),
-.mapboxgl-ctrl-bottom-right:has(.mapboxgl-ctrl-logo) {
-  display: none !important;
-}
-
-/* Fallback per browser che non supportano :has() */
-.mapboxgl-ctrl-bottom-left,
-.mapboxgl-ctrl-bottom-right {
-  opacity: 0 !important;
-}
+  /* Posiziona il logo Mapbox in basso al centro */
+  .mapboxgl-ctrl-bottom-left,
+  .mapboxgl-ctrl-bottom-right {
+    display: none !important;
+  }
+  
+  /* Crea un nuovo contenitore per il logo centrato */
+  .mapboxgl-map {
+    position: relative;
+  }
+  
+  .mapboxgl-map::after {
+    content: '';
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCA2MCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTAgMGg2MHYyMEgweiIgZmlsbD0iIzAwMCIvPgo8dGV4dCB4PSIzMCIgeT0iMTQiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TWFwYm94PC90ZXh0Pgo8L3N2Zz4K');
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 1000;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+  
+  /* Alternativa: mostra il logo originale ma riposizionato */
+  .mapboxgl-ctrl-logo {
+    position: fixed !important;
+    bottom: 10px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 1000 !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: auto !important;
+    height: auto !important;
+    pointer-events: auto !important;
+  }
 }

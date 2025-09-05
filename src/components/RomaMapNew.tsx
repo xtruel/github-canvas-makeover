@@ -529,13 +529,7 @@ const RomaMapNew: React.FC = () => {
         </div>
       )}
 
-      <div className="absolute bottom-2 left-2 text-[10px] md:text-xs px-2 py-1 rounded bg-background/70 backdrop-blur border border-border/50 text-muted-foreground pointer-events-none">
-        {missingToken
-          ? 'Token mancante (fallback statico).'
-          : errorMessage
-          ? 'Impossibile caricare la mappa.'
-          : 'Tocca un marcatore o cerca un luogo.'}
-      </div>
+
     </div>
   );
 };

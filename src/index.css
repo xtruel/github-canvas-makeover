@@ -146,7 +146,19 @@ All colors MUST be HSL.
   }
 
   /* Hide Mapbox logo and attribution */
-  .mapboxgl-ctrl-logo {
-    display: none !important;
-  }
+  /* Rimuovi completamente il logo Mapbox */
+.mapboxgl-ctrl-logo {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Rimuovi anche eventuali contenitori del logo */
+.mapboxgl-ctrl-bottom-left .mapboxgl-ctrl-logo,
+.mapboxgl-ctrl-bottom-right .mapboxgl-ctrl-logo {
+  display: none !important;
+}
 }

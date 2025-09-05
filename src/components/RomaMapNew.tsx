@@ -225,12 +225,12 @@ const RomaMapNew: React.FC = () => {
         container: containerRef.current,
         style: MAP_STYLE,
         center: [12.4922, 41.8902],
-        zoom: 11,
+        zoom: 12,
         pitchWithRotate: false,
         dragRotate: false,
         attributionControl: false
       });
-      mapRef.current.addControl(new mapboxglRef.NavigationControl({ showCompass: false }), 'bottom-right');
+      mapRef.current.addControl(new mapboxglRef.NavigationControl({ showCompass: false }), 'top-right');
       mapRef.current.once('load', () => setIsLoaded(true));
       mapRef.current.on('error', (e: any) => {
         const msg = (e?.error && (e.error.message || e.error.statusText)) || 'Errore generico caricamento mappa';
@@ -360,7 +360,7 @@ const RomaMapNew: React.FC = () => {
   const showMapViewport = !missingToken && shouldLoadLib;
 
   return (
-    <div className="relative w-full h-[60vh] min-h-[420px] rounded-lg overflow-hidden border border-border/50 shadow-roma bg-muted">
+    <div className="relative w-full h-[70vh] min-h-[500px] rounded-lg overflow-hidden border border-border/50 shadow-roma bg-muted">
       <div ref={containerRef} className="absolute inset-0" />
 
       {showMapViewport && libLoaded && !isLoaded && !errorMessage && (

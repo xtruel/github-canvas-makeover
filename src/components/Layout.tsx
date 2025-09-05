@@ -11,7 +11,7 @@ export function Layout({ children }: LayoutProps) {
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
         <div className="flex-1 flex flex-col">
-          <header className="sticky top-0 z-50 h-16 flex items-center bg-gradient-roma text-white shadow-roma">
+          <header className="sticky top-0 z-50 h-16 flex items-center bg-[hsl(var(--roma-red))] text-white shadow-roma">
             <SidebarTrigger className="ml-4 text-white hover:text-[hsl(var(--roma-gold))]" />
             <h1 className="ml-4 text-xl font-bold uppercase tracking-wide">
               Ovunque Romanisti

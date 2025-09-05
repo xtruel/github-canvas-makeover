@@ -62,7 +62,7 @@ const Index = () => {
     <div className="min-h-screen">
       {/* Hero Section with Roma Official Colors */}
       <div className="relative bg-[hsl(var(--roma-red))] text-white py-20 px-4">
-        <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--roma-red))] to-[hsl(var(--roma-gold))] opacity-90" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--roma-red))] from-50% to-[hsl(var(--roma-gold))] to-50% opacity-90" />
         <div className="container relative mx-auto text-center">
           <div className="mb-8">
             <img

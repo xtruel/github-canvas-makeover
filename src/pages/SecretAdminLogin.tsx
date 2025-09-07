@@ -7,11 +7,12 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
 
 const SecretAdminLogin = () => {
-  const { role, loginAdmin } = useAuth();
+  const { role, loginAdmin, loginWithGoogle } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   if (role === 'ADMIN') {
     return <Navigate to="/upload" replace />;
@@ -24,6 +25,14 @@ const SecretAdminLogin = () => {
     const res = await loginAdmin(username, password);
     setLoading(false);
     if (!res.ok) setError(res.error || 'Errore di autenticazione');
+  };
+
+  const handleGoogleLogin = async () => {
+    setError(null);
+    setGoogleLoading(true);
+    const res = await loginWithGoogle();
+    setGoogleLoading(false);
+    if (!res.ok) setError(res.error || 'Errore durante il login con Google');
   };
 
   return (
@@ -49,10 +58,28 @@ const SecretAdminLogin = () => {
                 <AlertCircle className="h-4 w-4" /> {error}
               </div>
             )}
-            <Button type="submit" disabled={loading} className="w-full">
+            <Button type="submit" disabled={loading || googleLoading} className="w-full">
               {loading ? 'Accesso in corso...' : 'Entra'}
             </Button>
           </form>
+          
+          <div className="relative my-4">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">oppure</span>
+            </div>
+          </div>
+          
+          <Button 
+            onClick={handleGoogleLogin} 
+            disabled={loading || googleLoading} 
+            variant="outline" 
+            className="w-full"
+          >
+            {googleLoading ? 'Accesso in corso...' : 'Accedi con Google'}
+          </Button>
           <p className="text-xs text-muted-foreground mt-4">
             Pagina non indicizzata e accessibile solo con link diretto.
           </p>

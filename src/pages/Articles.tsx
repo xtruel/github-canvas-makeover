@@ -1,17 +1,37 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, User, Eye, Bookmark, Share2 } from "lucide-react";
+import { Calendar, Clock, User, Eye, Bookmark, Share2, Plus } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-
-// Backend API base (optional) – falls back to localhost:4000 if not set
-const API_BASE = (import.meta as any).env?.VITE_API_BASE || (window as any).__API_BASE__ || "http://localhost:4000";
+import { useState } from "react";
+import { articleService, Article } from "../services/articleService";
+import { ArticleEditor } from "../components/ArticleEditor";
+import { useAuth } from "../contexts/AuthContext";
+import { toast } from "../hooks/use-toast";
 
 const Articles = () => {
+  const { user } = useAuth();
+  const [showEditor, setShowEditor] = useState(false);
+  const [editingArticle, setEditingArticle] = useState<Article | undefined>(undefined);
+  const [selectedCategory, setSelectedCategory] = useState('Tutte');
+
+  // Fetch articles from Firebase
+  const { data: articles = [], isLoading, isError, refetch } = useQuery<Article[]>({
+    queryKey: ["articles"],
+    queryFn: async () => {
+      try {
+        return await articleService.getPublishedArticles();
+      } catch (error) {
+        console.error('Error fetching articles:', error);
+        throw error;
+      }
+    },
+  });
+
   const mockArticles = [
     {
-      id: 1,
+      id: "1",
       type: "article",
       title: "Roma: Il Nuovo Progetto Tecnico di De Rossi",
       excerpt:
@@ -25,7 +45,7 @@ const Articles = () => {
       featured: true,
     },
     {
-      id: 2,
+      id: "2",
       type: "interview",
       title: "Intervista Esclusiva: Pellegrini Racconta la Sua Roma",
       excerpt:
@@ -39,7 +59,7 @@ const Articles = () => {
       featured: false,
     },
     {
-      id: 3,
+      id: "3",
       type: "article",
       title: "Stadio Olimpico: I Lavori di Ristrutturazione",
       excerpt:
@@ -96,56 +116,101 @@ const Articles = () => {
     },
   ];
 
-  type ArticleAPI = {
-    id: string;
-    title: string;
-    body: string;
-    slug: string;
-    status: "DRAFT" | "PUBLISHED";
-    language: string;
-    coverMediaId?: string | null;
-    publishedAt?: string | null;
-    createdAt?: string;
-  };
+  // Use Firebase articles or fallback to mock data
+  const displayArticles = articles.length > 0 ? articles : mockArticles;
+  
+  // Filter articles by category
+  const filteredArticles = selectedCategory === 'Tutte' 
+    ? displayArticles 
+    : displayArticles.filter(article => {
+        if (articles.length > 0) {
+          // For Firebase articles, filter by tags
+          return article.tags?.includes(selectedCategory);
+        } else {
+          // For mock articles, filter by category
+          return (article as any).category === selectedCategory;
+        }
+      });
 
-  // Fetch from backend (public: GET /articles)
-  const { data: apiArticles, isLoading, isError } = useQuery<ArticleAPI[]>({
-    queryKey: ["articles"],
-    queryFn: async () => {
-      const res = await fetch(`${API_BASE}/articles`, { credentials: "include" });
-      if (!res.ok) throw new Error("Errore caricamento articoli");
-      return res.json();
-    },
+  // Convert Firebase articles to UI format
+  const uiArticles = filteredArticles.map((article, i) => {
+    if (articles.length > 0) {
+      // Firebase article
+      return {
+        id: article.id,
+        type: "article",
+        title: article.title,
+        excerpt: article.excerpt || (article.content.length > 220 ? article.content.slice(0, 220) + "…" : article.content),
+        author: article.author,
+        publishedDate: article.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+        readTime: "5 min",
+        views: 0,
+        imageUrl: article.imageUrl || `${import.meta.env.BASE_URL}mock/roma-logo.svg`,
+        category: article.tags?.[0] || "Articoli",
+        featured: i < 2,
+        slug: article.slug,
+      };
+    } else {
+      // Mock article
+      return article as any;
+    }
   });
 
-  // Normalize into UI shape
-  const isBackend = !!(apiArticles && apiArticles.length);
-  const uiArticles = isBackend
-    ? apiArticles!.map((a, i) => ({
-        id: a.id,
-        type: "article",
-        title: a.title,
-        excerpt: a.body.length > 220 ? a.body.slice(0, 220) + "…" : a.body,
-        author: "Redazione",
-        publishedDate: a.publishedAt || a.createdAt || new Date().toISOString(),
-        readTime: undefined as any,
-        views: undefined as any,
-        imageUrl: `${import.meta.env.BASE_URL}mock/roma-logo.svg`,
-        category: "Articoli",
-        featured: i < 2,
-        slug: a.slug,
-      }))
-    : mockArticles;
+  // Generate categories from articles
+  const allTags = articles.length > 0 
+    ? [...new Set(articles.flatMap(article => article.tags || []))]
+    : ['Interviste', 'Tattica', 'Storia', 'Stadio'];
+    
+  const categories = [
+    { name: "Tutte", count: displayArticles.length, active: selectedCategory === "Tutte" },
+    ...allTags.map(tag => ({
+      name: tag,
+      count: displayArticles.filter(article => 
+        articles.length > 0 
+          ? article.tags?.includes(tag)
+          : (article as any).category === tag
+      ).length,
+      active: selectedCategory === tag
+    }))
+  ];
 
-  const categories = isBackend
-    ? [{ name: "Tutte", count: uiArticles.length, active: true }]
-    : [
-        { name: "Tutte", count: mockArticles.length, active: true },
-        { name: "Interviste", count: mockArticles.filter((a) => a.type === "interview").length, active: false },
-        { name: "Tattica", count: mockArticles.filter((a) => a.category === "Tattica").length, active: false },
-        { name: "Storia", count: mockArticles.filter((a) => a.category === "Storia").length, active: false },
-        { name: "Stadio", count: mockArticles.filter((a) => a.category === "Stadio").length, active: false },
-      ];
+  // Handler functions
+  const handleNewArticle = () => {
+    setEditingArticle(undefined);
+    setShowEditor(true);
+  };
+
+  const handleEditArticle = (article: any) => {
+    setEditingArticle(article as Article);
+    setShowEditor(true);
+  };
+
+  const handleSaveArticle = (article: Article) => {
+    setShowEditor(false);
+    setEditingArticle(undefined);
+    refetch(); // Refresh articles list
+    toast({
+      title: "Successo",
+      description: "Articolo salvato con successo"
+    });
+  };
+
+  const handleCancelEdit = () => {
+    setShowEditor(false);
+    setEditingArticle(undefined);
+  };
+
+  if (showEditor) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <ArticleEditor
+          article={editingArticle}
+          onSave={handleSaveArticle}
+          onCancel={handleCancelEdit}
+        />
+      </div>
+    );
+  }
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -173,15 +238,23 @@ const Articles = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-roma-gold mb-2">Articoli & Interviste</h1>
-        <p className="text-muted-foreground">
-          {isLoading
-            ? "Caricamento articoli…"
-            : isError
-            ? "Impossibile caricare gli articoli dal server. Mostro una selezione."
-            : "Approfondimenti, analisi e interviste esclusive dal mondo giallorosso"}
-        </p>
+      <div className="mb-8 flex justify-between items-start">
+        <div>
+          <h1 className="text-4xl font-bold text-roma-gold mb-2">Articoli & Interviste</h1>
+          <p className="text-muted-foreground">
+            {isLoading
+              ? "Caricamento articoli…"
+              : isError
+              ? "Impossibile caricare gli articoli dal server. Mostro una selezione."
+              : "Approfondimenti, analisi e interviste esclusive dal mondo giallorosso"}
+          </p>
+        </div>
+        {user?.role === 'ADMIN' && (
+          <Button onClick={handleNewArticle} className="bg-roma-gold text-black hover:bg-roma-yellow">
+            <Plus className="w-4 h-4 mr-2" />
+            Nuovo Articolo
+          </Button>
+        )}
       </div>
 
       {/* Categories Filter */}
@@ -192,6 +265,7 @@ const Articles = () => {
             variant={category.active ? "default" : "outline"}
             size="sm"
             className={category.active ? "bg-roma-gold text-black hover:bg-roma-yellow" : ""}
+            onClick={() => setSelectedCategory(category.name)}
           >
             {category.name} ({category.count})
           </Button>
